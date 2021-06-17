@@ -501,6 +501,23 @@ def setup():
         set_up = True
     return redirect('http://127.0.0.1:5000/', code=302)
 
+@app.route('/tripinfo')
+def trip_info():
+    substring = "@bu.edu"
+    if (current_user.is_authenticated) and substring in current_user.email:
+        if request.method=="POST":
+            return render_template("trip_info.html")
+        else:
+            return render_template("trip_info.html")
+
+        return render_template('OLDhomepage_cleantech.html',trips=trips) 
+    else:
+        return redirect('http://127.0.0.1:5000/login2', code=302)
+
+
+    
+
+
 
 #http://127.0.0.1:5000/
 @app.route('/')
@@ -517,7 +534,7 @@ def begin():
         if list1 is None:
             cursor.execute("INSERT INTO User (user_id,name, email) VALUES ('{0}','{1}','{2}')".format(current_user.user_id,current_user.name,current_user.email))
         conn.commit()
-        cursor.execute("SELECT starting_place,destination,date,time,user.name,seats_avail FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
+        cursor.execute("SELECT starting_place,destination,date,time,user.name,seats_avail, trip_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
         trips=cursor.fetchall()
         return render_template('OLDhomepage_cleantech.html',trips=trips) #redirect('http://127.0.0.1:5000/cleantech/', code=302)
     elif (current_user.is_authenticated):
