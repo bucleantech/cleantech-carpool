@@ -33,7 +33,7 @@ curs=conn.cursor()
 curs.execute("""
 CREATE TABLE IF NOT EXISTS user (
   user_id TEXT PRIMARY KEY,
-  name TEXT NOT NULL,
+  TEXT NOT NULL,
   emissions_avoided int,
   email TEXT UNIQUE NOT NULL,
   venmo TEXT UNIQUE
@@ -501,16 +501,51 @@ def setup():
         set_up = True
     return redirect('http://127.0.0.1:5000/', code=302)
 
-@app.route('/tripinfo')
+@app.route('/tripinfo', methods=['GET', 'POST'])
 def trip_info():
     substring = "@bu.edu"
     if (current_user.is_authenticated) and substring in current_user.email:
-        if request.method=="POST":
-            return render_template("trip_info.html")
+        cursor=conn.cursor()
+        if request.method=='POST':
+            answer=request.form.get("reserve")
+            tripid=request.args.get("tripid")
+            cursor.execute("SELECT starting_place, destination, date, time, seats_avail, user_id FROM trips WHERE trip_id='{0}'".format(tripid))
+            information=cursor.fetchone()
+            userid=current_user.user_id
+            if information[5]==userid:
+                cursor.execute("SELECT starting_place,destination,date,time,user.name,seats_avail, trip_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
+                trips=cursor.fetchall()
+                return render_template('OLDhomepage_cleantech.html',trips=trips, testcode="Owner can not sign up for their own trip")
+            elif information[4]==0:
+                cursor.execute("SELECT starting_place,destination,date,time,user.name,seats_avail, trip_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
+                trips=cursor.fetchall()
+                return render_template('OLDhomepage_cleantech.html',trips=trips, testcode="No more seats available")
+            else:
+                cursor.execute("UPDATE trips SET trips.seats_avail=trips.seats_avail-1 WHERE trips.trip_id='{0}'".format(tripid))
+                if information[4]==8:
+                    cursor.execute("UPDATE trips SET trips.passanger1='{0}'WHERE trip_id='{1}'".format(userid, tripid))
+                elif information[4]==7:
+                    cursor.execute("UPDATE trips SET trips.passanger2='{0}'WHERE trip_id='{1}'".format(userid, tripid))
+                elif information[4]==6:
+                    cursor.execute("UPDATE trips SET trips.passanger3='{0}'WHERE trip_id='{1}'".format(userid, tripid))
+                elif information[4]==5:
+                    cursor.execute("UPDATE trips SET trips.passanger4='{0}'WHERE trip_id='{1}'".format(userid, tripid))
+                elif information[4]==4:
+                    cursor.execute("UPDATE trips SET trips.passanger5='{0}'WHERE trip_id='{1}'".format(userid, tripid))
+                elif information[4]==3:
+                    cursor.execute("UPDATE trips SET trips.passanger6='{0}'WHERE trip_id='{1}'".format(userid, tripid))
+                elif information[4]==2:
+                    cursor.execute("UPDATE trips SET trips.passanger7='{0}'WHERE trip_id='{1}'".format(userid, tripid))
+                else:
+                    cursor.execute("UPDATE trips SET trips.passanger8='{0}'WHERE trip_id='{1}'".format(userid, tripid))
+                cursor.execute("SELECT starting_place,destination,date,time,user.name,seats_avail, trip_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
+                trips=cursor.fetchall()
+                return render_template('OLDhomepage_cleantech.html',trips=trips, testcode="Successfully Signed Up")
         else:
-            return render_template("trip_info.html")
-
-        return render_template('OLDhomepage_cleantech.html',trips=trips) 
+            tripid=request.args.get("tripid")
+            cursor.execute("SELECT starting_place, destination, date, time, seats_avail FROM trips WHERE trip_id='{0}'".format(tripid))
+            information=cursor.fetchone()
+            return render_template("trip_info.html", info=information)
     else:
         return redirect('http://127.0.0.1:5000/login2', code=302)
 
