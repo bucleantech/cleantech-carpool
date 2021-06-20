@@ -99,20 +99,21 @@ button{
 }
 </style>
 </head>
-
-    <div class="header">
-        <h1> <b>Available Rides</b> </h1>
+<div class="header">
+    <h1> <b>Available Rides</b> </h1>
+</div>
+<div class="main">
+    <form>
+    <div class="route-container">
+        <h1>From <b><input type="text" id="start" name="start"><br></b> to <b><input type="text" id="dest" name="dest"><br></b></h1>
     </div>
-    <div class="main">
-        <div class="route-container">
-            <h1>From <b>{start}</b> to <b>{dest}</b></h1>
-        </div>
-        <div class="timedate-container">
-            <h1>Leaves <b>{date}</b> at <b>{time}</b></h1>
-        </div>
-        <div class="seats-container">
-            <h1>Seats Available <b>{seats}</b></h1>
-        </div>
-         <button type="button">Reserve Seat</button>
+    <div class="timedate-container">
+        <h1>Leaves on <b><input type="text" id="date" name="date"><br></b> at <b><input type="text" id="time" name="time"><br></b></h1>
     </div>
+    <div class="seats-container">
+        <h1>Seats Available: <b><input type="text" id="seats" name="seats"><br></b></h1>
+    </form>
+    </div>
+    <button type="button">Reserve Seat</button>
+</div>
 </html>
