@@ -98,22 +98,36 @@ button{
     font-size: 30px;
 }
 </style>
+
 </head>
-<div class="header">
-    <h1> <b>Available Rides</b> </h1>
-</div>
-<div class="main">
-    <form>
-    <div class="route-container">
-        <h1>From <b><input type="text" id="start" name="start"><br></b> to <b><input type="text" id="dest" name="dest"><br></b></h1>
+
+    <div class="header">
+        <h1> <b>Available Rides</b> </h1>
     </div>
-    <div class="timedate-container">
-        <h1>Leaves on <b><input type="text" id="date" name="date"><br></b> at <b><input type="text" id="time" name="time"><br></b></h1>
+    {% if trip %}
+    <center>Edit</center>
+
+    {% endif %}
+    <div class="main">
+        <div class="route-container">
+            <h1>From <b>{{info[0]}}</b> to <b>{{info[1]}}</b></h1>
+        </div>
+        <div class="timedate-container">
+            <h1>Leaves <b>{{info[2]}}</b> at <b>{{info[3]}}</b></h1>
+        </div>
+        <div class="seats-container">
+            <h1>Seats Available <b>{{info[4]}}</b></h1>
+        </div>
+        <form method="POST">
+
+         <center>
+            <input type="submit" value="Reserve Seat">
+        
+        </center>
+         </form>
     </div>
-    <div class="seats-container">
-        <h1>Seats Available: <b><input type="text" id="seats" name="seats"><br></b></h1>
-    </form>
-    </div>
-    <button type="button">Reserve Seat</button>
-</div>
+    {% if message %}
+<center>{{message}}</center>
+
+{% endif %}
 </html>

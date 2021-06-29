@@ -505,13 +505,12 @@ def setup():
 def trip_info():
     substring = "@bu.edu"
     if (current_user.is_authenticated) and substring in current_user.email:
+        userid=current_user.user_id
         cursor=conn.cursor()
         if request.method=='POST':
-            answer=request.form.get("reserve")
             tripid=request.args.get("tripid")
             cursor.execute("SELECT starting_place, destination, date, time, seats_avail, user_id FROM trips WHERE trip_id='{0}'".format(tripid))
             information=cursor.fetchone()
-            userid=current_user.user_id
             if information[5]==userid:
                 cursor.execute("SELECT starting_place,destination,date,time,user.name,seats_avail, trip_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
                 trips=cursor.fetchall()
@@ -543,9 +542,10 @@ def trip_info():
                 return render_template('OLDhomepage_cleantech.html',trips=trips, testcode="Successfully Signed Up")
         else:
             tripid=request.args.get("tripid")
-            cursor.execute("SELECT starting_place, destination, date, time, seats_avail FROM trips WHERE trip_id='{0}'".format(tripid))
+            cursor.execute("SELECT starting_place, destination, date, time, seats_avail, user_id FROM trips WHERE trip_id='{0}'".format(tripid))
             information=cursor.fetchone()
-            return render_template("trip_info.html", info=information)
+            if information[5]==userid:   
+                return render_template("trip_info.html", info=information, trip=True)
     else:
         return redirect('http://127.0.0.1:5000/login2', code=302)
 
