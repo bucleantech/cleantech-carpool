@@ -550,7 +550,13 @@ def trip_info():
         return redirect('http://127.0.0.1:5000/login2', code=302)
 
 
-    
+
+@app.route('/viewprofile')
+def viewprofile():
+    if request.method=='POST':
+        return render_template('user_profile.html')
+    else:
+        return render_template('user_profile.html')
 
 
 
