@@ -515,16 +515,24 @@ def trip_info():
             cursor.execute("SELECT starting_place, destination, date, time, seats_avail, user_id FROM trips WHERE trip_id='{0}'".format(tripid))
             information=cursor.fetchone()
             if information[5]==userid:
-                start=request.form.get("from")
-                finish=request.form.get("to")
-                begindate=request.form.get("leaves")
-                begintime=request.form.get("at")
-                seatsavail=request.form.get("seatsavail")
-                cursor.execute("UPDATE trips SET starting_place='{0}', destination='{1}', date='{2}', time='{3}', seats_avail='{4}' WHERE trip_id='{5}'".format(start,finish,begindate,begintime,seatsavail,tripid))
-                conn.commit()
-                cursor.execute("SELECT starting_place,destination,date,time,user.name,seats_avail, trip_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
-                trips=cursor.fetchall()
-                return render_template('OLDhomepage_cleantech.html', trips=trips, testcode="SUCCESSFULLY Updated")
+                if request.form.get("edit"):
+                    start=request.form.get("from")
+                    finish=request.form.get("to")
+                    begindate=request.form.get("leaves")
+                    begintime=request.form.get("at")
+                    seatsavail=request.form.get("seatsavail")
+                    cursor.execute("UPDATE trips SET starting_place='{0}', destination='{1}', date='{2}', time='{3}', seats_avail='{4}' WHERE trip_id='{5}'".format(start,finish,begindate,begintime,seatsavail,tripid))
+                    conn.commit()
+                    cursor.execute("SELECT starting_place,destination,date,time,user.name,seats_avail, trip_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
+                    trips=cursor.fetchall()
+                    return render_template('OLDhomepage_cleantech.html', trips=trips, testcode="SUCCESSFULLY Updated")
+                else:
+                    cursor.execute("DELETE FROM trips WHERE trip_id='{0}'".format(tripid))
+                    cursor.execute("SELECT starting_place,destination,date,time,user.name,seats_avail, trip_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
+                    trips=cursor.fetchall()
+                    conn.commit()
+                    return render_template('OLDhomepage_cleantech.html', trips=trips, testcode="SUCCESSFULLY Deleted")
+
             else:
                 if information[4]==0:
                     cursor.execute("SELECT starting_place,destination,date,time,user.name,seats_avail, trip_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
