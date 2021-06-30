@@ -144,21 +144,22 @@ button{
     <div class="flex-child photo">
         <figure>
             <img src='http://placehold.it/350x350' alt='profile-photo' />
-            <figcaption>Name</figcaption>
+            <figcaption>{{info[0]}}</figcaption>
         </figure>
     </div>
 
     <div class="flex-child info">
-        <form>
+        <form method="POST">
             <div class="info-container">
-                <h1>Boston University <b><input type="text" id="college" name="college"><br></b> Class of <b><input type="text" id="year" name="year"><br></b></h1>
+                <h1>College <b><input type="text" id="college" name="college" value="Boston University"}><br></b> Class of <b><input type="text" id="year" name="year" value={{info[1]}}><br></b></h1>
             </div>
             <div class="email-container">
-                <h1>Email <b><input type="text" id="email" name="email"><br></b></h1>
+                <h1>Email <b><input type="text" id="email" name="email" value={{info[2]}}><br></b></h1>
             </div>
             <div class="bio-container">
-                <h1>Bio goes here: <b><input type="text" id="bio" name="bio"><br></b></h1>
+                <h1>Bio goes here: <b><input type="text" id="bio" name="bio" value={{info[3]}}><br></b></h1>
             </div>
+            <center><input type="submit" value="Edit"></center>
         </form>
     </div>
 </div>

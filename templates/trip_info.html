@@ -105,9 +105,32 @@ button{
         <h1> <b>Available Rides</b> </h1>
     </div>
     {% if trip %}
-    <center>Edit</center>
+    <center>
+        <div class="main">
+        <form method="POST">
+            <div class="route-container">
+                <h1>From <b><input type="text" name="from" value="{{info[0]}}"}><br></b> </h1>
+               </div>
+               <div class="route-container">
+                <h1>To <b><input type="text" name="to" value={{info[1]}}><br></b></h1>
+                </div>
+                <div class="route-container">
+                <h1> Leaves <b><input type="date" name="leaves" value={{info[2]}}><br></b></h1>
+                </div>
+                <div class="route-container">
+                <h1> At <b><input type="time" name="at" value={{info[3]}}><br></b></h1>
+                </div>
+                <div class="route-container">
+                <h1> Seats Available <b><input type="text" name="seatsavail" value={{info[4]}}><br></b></h1>
+                </div>
+                <input type="submit" value="Edit">
+                
+        </form>
+    </div>
 
-    {% endif %}
+    </center>
+
+    {% else %}
     <div class="main">
         <div class="route-container">
             <h1>From <b>{{info[0]}}</b> to <b>{{info[1]}}</b></h1>
@@ -126,6 +149,7 @@ button{
         </center>
          </form>
     </div>
+    {% endif %}
     {% if message %}
 <center>{{message}}</center>
 
