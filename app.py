@@ -238,6 +238,7 @@ def enteratrip():
     if (current_user.is_authenticated) and substring in current_user.email:
         if request.method=='POST':
             cursor=conn.cursor()
+            start=request.form.get("citystart")
             dest=request.form.get("city")
             date=request.form.get("date")
             time=request.form.get("time")
@@ -250,7 +251,7 @@ def enteratrip():
                 tid=1
             else:
                 tid=tid+1
-            cursor.execute("INSERT INTO trips (trip_id,user_id,starting_place,destination,date,vehicle,comments,active,time,seats_avail) VALUES ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}')".format(tid,uid,'Boston',dest,date,model,'NONE',1,time,seats_avail))
+            cursor.execute("INSERT INTO trips (trip_id,user_id,starting_place,destination,date,vehicle,comments,active,time,seats_avail) VALUES ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}')".format(tid,uid,start,dest,date,model,'NONE',1,time,seats_avail))
             conn.commit()
             cursor.execute("SELECT starting_place,destination,date,time,user.name FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
             trips=cursor.fetchall()
