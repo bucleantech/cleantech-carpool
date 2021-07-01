@@ -515,6 +515,8 @@ def trip_info():
             tripid=request.args.get("tripid")
             cursor.execute("SELECT starting_place, destination, date, time, seats_avail, user_id FROM trips WHERE trip_id='{0}'".format(tripid))
             information=cursor.fetchone()
+            cursor.execute("SELECT passanger1, passanger2, passanger3,passanger4,passanger5,passanger6,passanger7,passanger8 FROM trips WHERE trip_id='{0}'".format(tripid))
+            passengerinfo=cursor.fetchone()
             if information[5]==userid:
                 if request.form.get("edit"):
                     start=request.form.get("from")
@@ -533,6 +535,28 @@ def trip_info():
                     trips=cursor.fetchall()
                     conn.commit()
                     return render_template('OLDhomepage_cleantech.html', trips=trips, testcode="SUCCESSFULLY Deleted")
+            elif userid in passengerinfo:
+                if passengerinfo[0] == userid:
+                    cursor.execute("UPDATE trips SET passanger1=NULL WHERE trip_id='{0}'".format(tripid))
+                elif passengerinfo[1]==userid:
+                    cursor.execute("UPDATE trips SET passanger2=NULL WHERE trip_id='{0}'".format(tripid))
+                elif passengerinfo[2]==userid:
+                    cursor.execute("UPDATE trips SET passanger3=NULL WHERE trip_id='{0}'".format(tripid))
+                elif passengerinfo[3]==userid:
+                    cursor.execute("UPDATE trips SET passanger4=NULL WHERE trip_id='{0}'".format(tripid))
+                elif passengerinfo[4]==userid:
+                    cursor.execute("UPDATE trips SET passanger5=NULL WHERE trip_id='{0}'".format(tripid))
+                elif passengerinfo[5]==userid:
+                    cursor.execute("UPDATE trips SET passanger6=NULL WHERE trip_id='{0}'".format(tripid))
+                elif passengerinfo[6]==userid:
+                    cursor.execute("UPDATE trips SET passanger7=NULL WHERE trip_id='{0}'".format(tripid))
+                else:
+                    cursor.execute("UPDATE trips SET passanger8=NULL WHERE trip_id='{0}'".format(tripid))
+                cursor.execute("UPDATE trips SET seats_avail=seats_avail+1 WHERE trip_id='{0}'".format(tripid))
+                conn.commit()
+                cursor.execute("SELECT starting_place,destination,date,time,user.name,seats_avail, trip_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
+                trips=cursor.fetchall()
+                return render_template('OLDhomepage_cleantech.html', trips=trips, testcode="Successfully Canceled Reservation")
 
             else:
                 if information[4]==0:
@@ -540,6 +564,22 @@ def trip_info():
                     trips=cursor.fetchall()
                     return render_template('OLDhomepage_cleantech.html', trips=trips, testcode="NO SEATS AVAILABLE")
                 else:
+                    if passengerinfo[0] is None:
+                        cursor.execute("UPDATE trips SET passanger1='{0}' WHERE trip_id='{1}'".format(userid,tripid))
+                    elif passengerinfo[1] is None:
+                        cursor.execute("UPDATE trips SET passanger2='{0}' WHERE trip_id='{1}'".format(userid,tripid))
+                    elif passengerinfo[2] is None:
+                        cursor.execute("UPDATE trips SET passanger3='{0}' WHERE trip_id='{1}'".format(userid,tripid))
+                    elif passengerinfo[3] is None:
+                        cursor.execute("UPDATE trips SET passanger4='{0}' WHERE trip_id='{1}'".format(userid,tripid))
+                    elif passengerinfo[4] is None:
+                        cursor.execute("UPDATE trips SET passanger5='{0}' WHERE trip_id='{1}'".format(userid,tripid))
+                    elif passengerinfo[5] is None:
+                        cursor.execute("UPDATE trips SET passanger6='{0}' WHERE trip_id='{1}'".format(userid,tripid))
+                    elif passengerinfo[6] is None:
+                        cursor.execute("UPDATE trips SET passanger7='{0}' WHERE trip_id='{1}'".format(userid,tripid))
+                    else:
+                        cursor.execute("UPDATE trips SET passanger8='{0}' WHERE trip_id='{1}'".format(userid,tripid))
                     cursor.execute("UPDATE trips SET seats_avail=seats_avail-1 WHERE trip_id='{0}'".format(tripid))
                     conn.commit()
                     cursor.execute("SELECT starting_place,destination,date,time,user.name,seats_avail, trip_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
@@ -552,7 +592,11 @@ def trip_info():
             if information[5]==userid:   
                 return render_template("trip_info.html", info=information, trip=True)
             else:
-                return render_template("trip_info.html", info=information)
+                cursor.execute("SELECT passanger1, passanger2, passanger3,passanger4,passanger5,passanger6,passanger7,passanger8 FROM trips WHERE trip_id='{0}'".format(tripid))
+                passengerinfo=cursor.fetchone()
+                if userid in passengerinfo:
+                    return render_template("trip_info.html", info=information, text="Cancel Reservation")
+                return render_template("trip_info.html", info=information, text="Reserve Seat")
     else:
 
         return redirect('http://127.0.0.1:5000/login2', code=302)
