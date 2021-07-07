@@ -611,7 +611,9 @@ def viewprofile():
         bio=request.form.get("bio")
         cursor.execute("UPDATE user SET classof='{0}', bio='{1}' WHERE user_id='{2}'".format(classyear, bio, uid))
         conn.commit()
-        return render_template('OLDhomepage_cleantech.html')
+        cursor.execute("SELECT starting_place,destination,date,time,user.name,seats_avail, trip_id, user.user_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
+        trips=cursor.fetchall()
+        return render_template('OLDhomepage_cleantech.html', trips=trips)
     else:
         return render_template('user_profile.html', info=information)
 
@@ -622,7 +624,10 @@ def viewotherprofile():
     getuserid=request.args.get("uid")
     cursor.execute("SELECT name, classof, email, bio FROM user WHERE user_id='{0}'".format(getuserid))
     information=cursor.fetchone()
-    return render_template('user_profile.html', info=information)
+    if uid==getuserid:
+        return render_template('user_profile.html', info=information)
+    else:
+        return render_template('other_profile.html', info=information)
 
 
 
