@@ -3,164 +3,262 @@
 <head>
     <title>Profile Page</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> -->
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/trip_info.css') }}">
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <meta charset="UTF-8">
-
+​
    <style>
    .body{
-    margin: 0px;
-    padding: 0px;
-}
-.header {
-    width: 100%;
-    text-align: center;
-
-    background: #FFFFFF;
-    box-shadow: 0px 4px 3px rgba(0, 0, 0, 0.25);
-}
-.main{
-    position: relative;
-    width: 100%;
-    height: 924px;
-    left: 0px;
-    padding-top: 30px;
-
-    font-family: Roboto;
-    font-style: normal;
-    font-weight: normal;
-    color: #000000;
-
-    background: #CC0000;
-    box-shadow: 0px -4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 33px 33px 0px 0px;
-
-    display: flex;
-}
-
-h1{
-    font-family: Roboto;
-    font-style: normal;
-    font-weight: normal;
-    font-size: px;
-    color: #000000;
-}
-.info-container{
-    width: 600px;
-    height: 96px;
-    margin: 30px auto;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    background: #FFFFFF;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 33px;
-}
-.email-container{
-    width: 600px;
-    height: 96px;
-    margin: 30px auto;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    background: #FFFFFF;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 33px;
-}
-.bio-container{
-    width: 600px;
-    height: 96px;
-    margin: 30px auto;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    background: #FFFFFF;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 33px; 
-}
-
-.flex-child {
-    flex: 1;
-    border: 5px solid white;
-}  
-
-figure {
-    display: inline-block;
-    overflow:hidden;
-    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-    border-radius: 33px;  
-    margin: 25px auto;
-    margin-left: 100px;
-}
-
-figcaption {
-    position: absolute;
-    height: 65px;
-    width:100%;
-    bottom: 0;
-
-    background: #FFFFFF;
-    border: 1px solid #C4C4C4;
-    box-sizing: border-box;
-    border-radius: 0px 0px 33px 33px;
-
-    bottom: 0px;
-    transition: bottom 0.5s ease;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-
-button{
-    width: 736px;
-    height: 96px;
-    margin: 30px auto;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    background: #FFFFFF;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 33px;
-    font-family : inherit;
-    font-size: 30px;
-}
-</style>
+        margin: 0px;
+        padding: 0px;
+    }
+    .header {
+        width: 100%;
+        text-align: center;
+​
+        background: #FFFFFF;
+        box-shadow: 0px 4px 3px rgba(0, 0, 0, 0.25);
+    }
+    .main{
+        position: relative;
+        width: 100%;
+        height: 2000px;
+        left: 0px;
+        padding-top: 30px;
+​
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: normal;
+        color: #000000;
+​
+        background: #CC0000;
+        box-shadow: 0px -4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 33px 33px 0px 0px;
+​
+        text-align:center
+    }
+    h1{
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 30px;
+        color: #000000;
+    }
+    .info-container{
+        width: 650px;
+        height: 96px;
+        margin: 30px auto;
+​
+        display: flex;
+        justify-content: center;
+        align-items: center;
+​
+        background: #FFFFFF;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 33px;
+    }
+    .email-container{
+        width:650px;
+        height: 96px;
+        margin: 30px auto;
+​
+        display: flex;
+        justify-content: center;
+        align-items: center;
+​
+        background: #FFFFFF;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 33px;
+    }
+    .bio-container{
+        width: 650px;
+        height: 96px;
+        margin: 30px auto;
+​
+        display: flex;
+        justify-content: center;
+        align-items: center;
+​
+        background: #FFFFFF;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 33px; 
+    }
+​
+    .flex-child photo{
+        display:inline-block
+    }  
+​
+    .flex-child info{
+        display:inline-block
+    }  
+​
+    .created-trips{
+         display:inline-blocks
+         margin-top: 30px auto;
+    }
+    .table{
+        margin-left: auto;
+        margin-right: auto;
+        caption-side: top;
+        margin: 50px auto;
+        border-spacing: 0;
+    }
+    th, td { 
+       padding: 8px;
+       background: #FFFFFF;
+       text-align: center;
+       border: 1px solid #CC0000;
+       border-bottom-width: 0px;
+    }
+    thead { 
+        background-color: #000000; 
+        color: #000000;
+        padding:4px; 
+        line-height:30px 
+    }
+    tbody tr:nth-child(even){
+        background: #000000;
+    }
+    tbody tr:nth-child(odd){ 
+        background: #000000;
+    }
+    tr:first-child td, tr:first-child th {
+        border-top-left-radius: 12px; border-top-right-radius: 12px;
+    }
+    tr:last-child td {
+        border-bottom: 1px solid #CC0000;
+        border-bottom-left-radius: 12px; border-bottom-right-radius: 12px;
+    }
+    table{ 
+        border-spacing: 0; border: 0; margin:0px; width:100%; padding:5px
+    }
+    td.pd{
+        border-bottom-left-radius: 12px; border-bottom-right-radius: 12px;
+    }
+    td.pu{
+        border-top-left-radius: 12px; border-top-right-radius: 12px
+    }
+​
+    figure {
+        display: inline-block;
+        overflow:hidden;
+        filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+        border-radius: 33px;  
+        margin: 25px auto;
+  
+        align-items: center;
+        justify-content: center;
+    }
+    figcaption {
+        position: absolute;
+        height: 65px;
+        width:100%;
+        bottom: 0;
+​
+        background: #FFFFFF;
+        border: 1px solid #C4C4C4;
+        box-sizing: border-box;
+        border-radius: 0px 0px 33px 33px;
+​
+        bottom: 0px;
+        transition: bottom 0.5s ease;
+​
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+ 
+    style-button{
+        width: 736px;
+        height: 96px;
+        margin: 30px auto;
+​
+        display: flex;
+        justify-content: center;
+        align-items: center;
+​
+        background: #FFFFFF;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 33px;
+        font-family : inherit;
+        font-size: 30px;
+    }
+    </style>
 </head>
-<div class="header">
-    <h1> <b>Profile Page</b> </h1>
-</div>
-
-<div class="main">
-    <div class="flex-child photo">
-        <figure>
-            <img src='http://placehold.it/350x350' alt='profile-photo' />
-            <figcaption>{{info[0]}}</figcaption>
-        </figure>
+​
+<body>
+<!--
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #d00000;">
+        <a class="navbar-brand" href={{ url_for('begin') }}>Insert Logo</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+​
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href={{ url_for('about') }}>About</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href={{ url_for('enteratrip') }}>Enter a Trip</a>
+            </li> 
+              <li class="nav-item active">
+                <a class="nav-link" href={{ url_for('viewprofile') }}>View My Profile</a>
+            </li> 
+            </ul>
+            <a href={{ url_for('logout') }} class="btn btn-outline-light my-2 my-sm-0">Logout</a>
+        </div>
+    </nav>
+    -->
+​
+    <div class="header">
+        <h1> <b>Profile Page</b> </h1>
     </div>
-
-    <div class="flex-child info">
-        <form method="POST">
-            <div class="info-container">
-                <h1>College <b><input type="text" id="college" name="college" value="Boston University"}><br></b> Class of <b><input type="text" id="year" name="year" value={{info[1]}}><br></b></h1>
-            </div>
-            <div class="email-container">
-                <h1>Email <b><input type="text" id="email" name="email" value={{info[2]}}><br></b></h1>
-            </div>
-            <div class="bio-container">
-                <h1>Bio goes here: <b><input type="text" id="bio" name="bio" value={{info[3]}}><br></b></h1>
-            </div>
-            <center><input type="submit" value="Save"></center>
-        </form>
+​
+    <div class="main">
+        <div class="flex-child photo">
+            <figure>
+                <img src='http://placehold.it/350x350' alt='profile-photo' />
+                <figcaption>{{info[0]}}</figcaption>
+            </figure>
+        </div>
+​
+        <div class="flex-child info">
+            <form method="POST">
+                <div class="info-container">
+                    <h1>College <b><input type="text" id="college" name="college" value="Boston University"}><br></b> Class of <b><input type="text" id="year" name="year" value={{info[1]}}><br></b></h1>
+                </div>
+                <div class="email-container">
+                    <h1>Email <b><input type="text" id="email" name="email" value={{info[2]}}><br></b></h1>
+                </div>
+                <div class="bio-container">
+                    <h1>Bio goes here: <b><input type="text" id="bio" name="bio" value={{info[3]}}><br></b></h1>
+                </div>
+                <center>
+                    <input type="submit" value="Edit">
+                    <a href={{ url_for('begin') }}><button type="button">Back</button></a>
+                </center>
+            </form>
+        </div>
+​
+        <div class="created-trips">
+            <table class="table">
+                <tr>
+                    <th>Date and Time</th>
+                    <th>Starting Point</th>
+                    <th>Destination</th>
+                    <th>Driver</th>
+                </tr>
+                <tr>
+                    <td>Trip Date/Time Info</td>
+                    <td>Starting Point Name</td>
+                    <td>Destination Name</td>
+                    <td>Driver Name</td>
+                </tr>
+            </table>
+        </div>
     </div>
-</div>
+</body> 
 </html>
