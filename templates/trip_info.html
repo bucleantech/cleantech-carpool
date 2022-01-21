@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Trip Info</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/trip_info.css') }}">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta charset="UTF-8">
+
+   <style>
+   .body{
+    margin: 0px;
+    padding: 0px;
+}
+.header {
+    width: 100%;
+    text-align: center;
+
+    background: #FFFFFF;
+    box-shadow: 0px 4px 3px rgba(0, 0, 0, 0.25);
+}
+.main{
+    position: relative;
+    width: 100%;
+    height: 2000px;
+    left: 0px;
+    padding-top: 30px;
+
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    color: #000000;
+
+    background: #CC0000;
+    box-shadow: 0px -4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 33px 33px 0px 0px;
+}
+
+h1{
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 30px;
+    color: #000000;
+}
+.route-container{
+    width: 736px;
+    height: 96px;
+    margin: 30px auto;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: #FFFFFF;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 33px;
+}
+.timedate-container{
+    width: 736px;
+    height: 96px;
+    margin: 30px auto;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: #FFFFFF;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 33px;
+}
+.seats-container{
+    width: 736px;
+    height: 96px;
+    margin: 30px auto;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: #FFFFFF;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 33px; 
+}
+
+</style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #d00000;">
+        <a class="navbar-brand" href={{ url_for('begin') }}><img src="{{ url_for('static',filename='images/rhett_rides_logo.png') }}" height=50 width=70 alt="logo"/></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    ​
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href={{ url_for('about') }}>About</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href={{ url_for('example') }}>Example</a>
+              </li> 
+            <li class="nav-item active">
+                <a class="nav-link" href={{ url_for('enteratrip') }}>Enter a Trip</a>
+            </li> 
+                <li class="nav-item active">
+                <a class="nav-link" href={{ url_for('viewprofile') }}>View My Profile</a>
+            </li> 
+            </ul>
+            <a href={{ url_for('logout') }} class="btn btn-outline-light my-2 my-sm-0">Logout</a>
+        </div>
+    </nav>
+
+    <div class="header">
+        <h1> <b>Available Rides</b> </h1>
+    </div>
+    {% if trip %}
+    <center>
+        <div class="main">
+        <form method="POST">
+            <div class="route-container">
+                <h1>From <b><input type="text" name="from" value="{{info[0]}}"}><br></b> </h1>
+               </div>
+               <div class="route-container">
+                <h1>To <b><input type="text" name="to" value={{info[1]}}><br></b></h1>
+                </div>
+                <div class="route-container">
+                <h1> Leaves <b><input type="date" name="leaves" value={{info[2]}}><br></b></h1>
+                </div>
+                <div class="route-container">
+                <h1> At <b><input type="time" name="at" value={{info[3]}}><br></b></h1>
+                </div>
+                <div class="route-container">
+                <h1> Seats Available <b><input type="text" name="seatsavail" value={{info[4]}}><br></b></h1>
+                </div>
+                <input type="submit" name="edit" value="Save">
+                <input type="submit" name="delete" value="Delete Trip">
+                <a href={{ url_for('begin') }}><button type="button">Back</button></a>
+                
+        </form>
+    </div>
+
+    </center>
+
+    {% else %}
+    <div class="main">
+        <div class="route-container">
+            <h1>From <b>{{info[0]}}</b> to <b>{{info[1]}}</b></h1>
+        </div>
+        <div class="timedate-container">
+            <h1>Leaves <b>{{info[2]}}</b> at <b>{{info[3]}}</b></h1>
+        </div>
+        <div class="seats-container">
+            <h1>Seats Available <b>{{info[4]}}</b></h1>
+        </div>
+        <form method="POST">
+
+         <center>
+            <input type="submit" value="{{text}}">
+            <a href={{ url_for('begin') }}><button type="button">Back</button></a>
+        
+        </center>
+         </form>
+    </div>
+    {% endif %}
+    {% if message %}
+<center>{{message}}</center>
+
+{% endif %}
+</body>
+</html>

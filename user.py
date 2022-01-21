@@ -90,8 +90,9 @@ class User(UserMixin):
             return None
 
         user = User(
-            user_id=user[0], name=user[1], email=user[2]
+            user_id=user[0], name=user[1], email=user[3]
             #where is the user array?
+            #It is in schema.sql?
         )
         return user
 

@@ -1,1 +1,1 @@
-secret goes here
+SECRET GOES HERE 
