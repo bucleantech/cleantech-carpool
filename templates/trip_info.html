@@ -3,6 +3,7 @@
 <head>
     <title>Trip Info</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/trip_info.css') }}">
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <meta charset="UTF-8">
@@ -22,7 +23,7 @@
 .main{
     position: relative;
     width: 100%;
-    height: 924px;
+    height: 2000px;
     left: 0px;
     padding-top: 30px;
 
@@ -40,7 +41,7 @@ h1{
     font-family: Roboto;
     font-style: normal;
     font-weight: normal;
-    font-size: px;
+    font-size: 30px;
     color: #000000;
 }
 .route-container{
@@ -84,8 +85,33 @@ h1{
 }
 
 </style>
-
 </head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #d00000;">
+        <a class="navbar-brand" href={{ url_for('begin') }}>Insert Logo</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    ​
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href={{ url_for('about') }}>About</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href={{ url_for('example') }}>Example</a>
+              </li> 
+            <li class="nav-item active">
+                <a class="nav-link" href={{ url_for('enteratrip') }}>Enter a Trip</a>
+            </li> 
+                <li class="nav-item active">
+                <a class="nav-link" href={{ url_for('viewprofile') }}>View My Profile</a>
+            </li> 
+            </ul>
+            <a href={{ url_for('logout') }} class="btn btn-outline-light my-2 my-sm-0">Logout</a>
+        </div>
+    </nav>
 
     <div class="header">
         <h1> <b>Available Rides</b> </h1>
@@ -143,4 +169,5 @@ h1{
 <center>{{message}}</center>
 
 {% endif %}
+</body>
 </html>
