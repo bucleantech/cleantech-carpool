@@ -89,7 +89,7 @@ h1{
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #d00000;">
-        <a class="navbar-brand" href={{ url_for('begin') }}>Insert Logo</a>
+        <a class="navbar-brand" href={{ url_for('begin') }}><img src="{{ url_for('static',filename='images/rhett_rides_logo.png') }}" height=50 width=70 alt="logo"/></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -135,6 +135,11 @@ h1{
                 <div class="route-container">
                 <h1> Seats Available <b><input type="text" name="seatsavail" value={{info[4]}}><br></b></h1>
                 </div>
+                {% if passengerinfo|length > 0 %}
+                <div class="route-container">
+                    <h1> Passengers <b><input type="text" name="passengers" value={{passengerinfo}}><br></b></h1>
+                </div>
+                {% endif %}
                 <input type="submit" name="edit" value="Save">
                 <input type="submit" name="delete" value="Delete Trip">
                 <a href={{ url_for('begin') }}><button type="button">Back</button></a>

@@ -586,11 +586,21 @@ def trip_info():
             tripid=request.args.get("tripid")
             cursor.execute("SELECT starting_place, destination, date, time, seats_avail, user_id FROM trips WHERE trip_id='{0}'".format(tripid))
             information=cursor.fetchone()
+            cursor.execute("SELECT passanger1, passanger2, passanger3,passanger4,passanger5,passanger6,passanger7,passanger8 FROM trips WHERE trip_id='{0}'".format(tripid))
+            passengerinfo=cursor.fetchone()
+            passengeridlist = [];
+            passengernamelist = [];
+            for passenger in passengerinfo:
+                if passenger != None:
+                    passengeridlist.append(passenger);
+            if len(passengeridlist) != 0:
+                for passenger in passengeridlist:
+                    cursor.execute("SELECT name FROM user WHERE user_id='{0}'".format(passenger))
+                    passengername = cursor.fetchone()[0]
+                    passengernamelist.append(passengername)
             if information[5]==userid:   
-                return render_template("trip_info.html", info=information, trip=True)
+                return render_template("trip_info.html", info=information, passengerinfo=passengernamelist, trip=True)
             else:
-                cursor.execute("SELECT passanger1, passanger2, passanger3,passanger4,passanger5,passanger6,passanger7,passanger8 FROM trips WHERE trip_id='{0}'".format(tripid))
-                passengerinfo=cursor.fetchone()
                 if userid in passengerinfo:
                     return render_template("trip_info.html", info=information, text="Cancel Reservation")
                 return render_template("trip_info.html", info=information, text="Reserve Seat")
@@ -604,7 +614,11 @@ def viewprofile():
     uid=current_user.user_id
     cursor.execute("SELECT name, classof, email, bio FROM user WHERE user_id='{0}'".format(uid))
     information=cursor.fetchone()
+<<<<<<< HEAD
     cursor.execute("SELECT starting_place,destination,date,time, user.name, seats_avail, trip_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE user.user_id ='{0}' OR trips.passanger1 ='{0}' OR trips.passanger2 ='{0}' OR trips.passanger3 ='{0}' OR trips.passanger4 ='{0}' OR trips.passanger5 ='{0}' OR trips.passanger6 ='{0}' OR trips.passanger7 ='{0}' OR trips.passanger8 ='{0}'".format(uid))   #taken from Akhil's code
+=======
+    cursor.execute("SELECT starting_place,destination,date,time, user.name, seats_avail, trip_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE user.user_id ='{0}' OR trips.passanger1 ='{0}' OR trips.passanger2 ='{0}' OR trips.passanger3 ='{0}' OR trips.passanger4 ='{0}' OR trips.passanger5 ='{0}' OR trips.passanger6 ='{0}' OR trips.passanger7 ='{0}' OR trips.passanger8 ='{0}'".format(uid))
+>>>>>>> 84815933d0176ac246ac3299cb24740835865e7c
     trips=cursor.fetchall()
     if request.method=='POST':
         classyear=request.form.get("year")
@@ -618,7 +632,11 @@ def viewprofile():
             print("start: ", trip[0])
         return render_template('OLDhomepage_cleantech.html', trips=trips)
     else:
+<<<<<<< HEAD
         return render_template('user_profile.html', info=information, trips=trips)
+=======
+        return render_template('user_profile.html', info=information, trips = trips)
+>>>>>>> 84815933d0176ac246ac3299cb24740835865e7c
 
 @app.route('/viewotherprofile', methods=['GET'])
 def viewotherprofile():
