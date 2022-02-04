@@ -95,8 +95,12 @@
     }  
 
     .created-trips{
-         display: inline-blocks;
-         margin-top: 30px auto;
+        display: inline-blocks;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 30px auto;
+        padding-left: 50px;
+        padding-right: 50px;
     }
     .table{
         margin-left: auto;
@@ -105,6 +109,7 @@
         margin: 50px auto;
         border-spacing: 0;
     }
+    
     th, td { 
        padding: 8px;
        background: #FFFFFF;
@@ -132,10 +137,10 @@
         border-bottom-left-radius: 12px; border-bottom-right-radius: 12px;
     }
     table{ 
-        border-spacing: 0; border: 0; margin:0px; width:100%; padding:5px
+        border-spacing: 0px; border: 0; margin:0px; width:100%; padding:5px
     }
     td.pd{
-        border-bottom-left-radius: 12px; border-bottom-right-radius: 12px;
+        border-bottom-left-radius: 12px; border-bottom-right-radius: 12px
     }
     td.pu{
         border-top-left-radius: 12px; border-top-right-radius: 12px
@@ -254,12 +259,16 @@
                     <th>Destination</th>
                     <th>Driver</th>
                 </tr>
-                <tr>
-                    <td>Trip Date/Time Info</td>
-                    <td>Starting Point Name</td>
-                    <td>Destination Name</td>
-                    <td>Driver Name</td>
-                </tr>
+                {% if trips %}
+		            {% for trip in trips %}
+		            <tr>
+		            <td>{{trip[2]}} ~ {{trip[3]}}</td>
+		            <td>{{trip[0]}}</td>
+		            <td>{{trip[1]}}</td>
+		            <td>{{trip[4]}}</td>
+		            </tr>
+		            {% endfor %}
+                {% endif %}
             </table>
         </div>
     </div>
