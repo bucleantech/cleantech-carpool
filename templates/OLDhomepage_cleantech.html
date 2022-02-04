@@ -52,9 +52,9 @@
 		<th>Driver</th>
     <th>Seats Available</th>
 	</tr>
-	<br>
-	{% if trips %}
+<br>
 
+	{% if trips %}
 		{% for trip in trips %}
 		<tr>
 		<td><a href='/tripinfo?tripid={{trip[6]}}'>{{trip[0]}}</a></td>

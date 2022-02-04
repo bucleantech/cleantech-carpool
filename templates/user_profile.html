@@ -260,6 +260,16 @@
                     <td>Destination Name</td>
                     <td>Driver Name</td>
                 </tr>
+                {% if trips %}
+		            {% for trip in trips %}
+		            <tr>
+                    <td>{{trip[2]}} ~ {{trip[3]}}</td>
+		            <td>{{trip[0]}}</td>
+		            <td>{{trip[1]}}</td>
+		            <td>{{trip[4]}}</td>
+		            </tr>
+		            {% endfor %}
+                {% endif %}
             </table>
         </div>
     </div>

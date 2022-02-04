@@ -598,14 +598,14 @@ def trip_info():
 
         return redirect('http://127.0.0.1:5000/login2', code=302)
 
-
-
 @app.route('/viewprofile', methods=['GET', 'POST'])
 def viewprofile():
     cursor=conn.cursor()
     uid=current_user.user_id
     cursor.execute("SELECT name, classof, email, bio FROM user WHERE user_id='{0}'".format(uid))
     information=cursor.fetchone()
+    cursor.execute("SELECT starting_place,destination,date,time, user.name, seats_avail, trip_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE user.user_id ='{0}' OR trips.passanger1 ='{0}' OR trips.passanger2 ='{0}' OR trips.passanger3 ='{0}' OR trips.passanger4 ='{0}' OR trips.passanger5 ='{0}' OR trips.passanger6 ='{0}' OR trips.passanger7 ='{0}' OR trips.passanger8 ='{0}'".format(uid))   #taken from Akhil's code
+    trips=cursor.fetchall()
     if request.method=='POST':
         classyear=request.form.get("year")
         bio=request.form.get("bio")
@@ -613,9 +613,12 @@ def viewprofile():
         conn.commit()
         cursor.execute("SELECT starting_place,destination,date,time,user.name,seats_avail, trip_id, user.user_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
         trips=cursor.fetchall()
+        print(trips)
+        for trip in trips:
+            print("start: ", trip[0])
         return render_template('OLDhomepage_cleantech.html', trips=trips)
     else:
-        return render_template('user_profile.html', info=information)
+        return render_template('user_profile.html', info=information, trips=trips)
 
 @app.route('/viewotherprofile', methods=['GET'])
 def viewotherprofile():
