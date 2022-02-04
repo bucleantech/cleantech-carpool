@@ -586,11 +586,21 @@ def trip_info():
             tripid=request.args.get("tripid")
             cursor.execute("SELECT starting_place, destination, date, time, seats_avail, user_id FROM trips WHERE trip_id='{0}'".format(tripid))
             information=cursor.fetchone()
+            cursor.execute("SELECT passanger1, passanger2, passanger3,passanger4,passanger5,passanger6,passanger7,passanger8 FROM trips WHERE trip_id='{0}'".format(tripid))
+            passengerinfo=cursor.fetchone()
+            passengeridlist = [];
+            passengernamelist = [];
+            for passenger in passengerinfo:
+                if passenger != None:
+                    passengeridlist.append(passenger);
+            if len(passengeridlist) != 0:
+                for passenger in passengeridlist:
+                    cursor.execute("SELECT name FROM user WHERE user_id='{0}'".format(passenger))
+                    passengername = cursor.fetchone()[0]
+                    passengernamelist.append(passengername)
             if information[5]==userid:   
-                return render_template("trip_info.html", info=information, trip=True)
+                return render_template("trip_info.html", info=information, passengerinfo=passengernamelist, trip=True)
             else:
-                cursor.execute("SELECT passanger1, passanger2, passanger3,passanger4,passanger5,passanger6,passanger7,passanger8 FROM trips WHERE trip_id='{0}'".format(tripid))
-                passengerinfo=cursor.fetchone()
                 if userid in passengerinfo:
                     return render_template("trip_info.html", info=information, text="Cancel Reservation")
                 return render_template("trip_info.html", info=information, text="Reserve Seat")
