@@ -524,13 +524,13 @@ def trip_info():
                     conn.commit()
                     cursor.execute("SELECT starting_place,destination,date,time,user.name,seats_avail,trip_id, user.user_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
                     trips=cursor.fetchall()
-                    return render_template('OLDhomepage_cleantech.html', trips=trips, testcode="SUCCESSFULLY Updated")
+                    return render_template('homepage_cleantech.html', trips=trips, testcode="SUCCESSFULLY Updated")
                 else:
                     cursor.execute("DELETE FROM trips WHERE trip_id='{0}'".format(tripid))
                     cursor.execute("SELECT starting_place,destination,date,time,user.name,seats_avail, trip_id, user.user_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
                     trips=cursor.fetchall()
                     conn.commit()
-                    return render_template('OLDhomepage_cleantech.html', trips=trips, testcode="SUCCESSFULLY Deleted")
+                    return render_template('homepage_cleantech.html', trips=trips, testcode="SUCCESSFULLY Deleted")
             elif userid in passengerinfo:
                 if passengerinfo[0] == userid:
                     cursor.execute("UPDATE trips SET passanger1=NULL WHERE trip_id='{0}'".format(tripid))
@@ -552,13 +552,13 @@ def trip_info():
                 conn.commit()
                 cursor.execute("SELECT starting_place,destination,date,time,user.name,seats_avail, trip_id, user.user_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
                 trips=cursor.fetchall()
-                return render_template('OLDhomepage_cleantech.html', trips=trips, testcode="Successfully Canceled Reservation")
+                return render_template('homepage_cleantech.html', trips=trips, testcode="Successfully Canceled Reservation")
 
             else:
                 if information[4]==0:
                     cursor.execute("SELECT starting_place,destination,date,time,user.name,seats_avail, trip_id, user.user_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
                     trips=cursor.fetchall()
-                    return render_template('OLDhomepage_cleantech.html', trips=trips, testcode="NO SEATS AVAILABLE")
+                    return render_template('homepage_cleantech.html', trips=trips, testcode="NO SEATS AVAILABLE")
                 else:
                     if passengerinfo[0] is None:
                         cursor.execute("UPDATE trips SET passanger1='{0}' WHERE trip_id='{1}'".format(userid,tripid))
@@ -580,7 +580,7 @@ def trip_info():
                     conn.commit()
                     cursor.execute("SELECT starting_place,destination,date,time,user.name,seats_avail, trip_id, user.user_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
                     trips=cursor.fetchall()
-                    return render_template('OLDhomepage_cleantech.html', trips=trips, testcode="Successfully Signed Up")
+                    return render_template('homepage_cleantech.html', trips=trips, testcode="Successfully Signed Up")
         else:
             tripid=request.args.get("tripid")
             cursor.execute("SELECT starting_place, destination, date, time, seats_avail, user_id FROM trips WHERE trip_id='{0}'".format(tripid))
@@ -615,10 +615,10 @@ def viewprofile():
     information=cursor.fetchone()
     cursor.execute("SELECT starting_place,destination,date,time, user.name, seats_avail, trip_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE user.user_id ='{0}' OR trips.passanger1 ='{0}' OR trips.passanger2 ='{0}' OR trips.passanger3 ='{0}' OR trips.passanger4 ='{0}' OR trips.passanger5 ='{0}' OR trips.passanger6 ='{0}' OR trips.passanger7 ='{0}' OR trips.passanger8 ='{0}'".format(uid))
     trips=cursor.fetchall()
-    # cursor.execute("SELECT starting_place,destination, addtime(convert(date,DATETIME),time) AS DATETime, user.name, seats_avail, trip_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE user.user_id ='{0}' OR trips.passanger1 ='{0}' OR trips.passanger2 ='{0}' OR trips.passanger3 ='{0}' OR trips.passanger4 ='{0}' OR trips.passanger5 ='{0}' OR trips.passanger6 ='{0}' OR trips.passanger7 ='{0}' OR trips.passanger8 ='{0}'".format(uid))
-    # pasttrips=cursor.fetchall()
-    # for trip in pasttrips:
-    #     print(trip[2])
+    cursor.execute("SELECT starting_place,destination,date,time, user.name, seats_avail, trip_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE user.user_id ='{0}' OR trips.passanger1 ='{0}' OR trips.passanger2 ='{0}' OR trips.passanger3 ='{0}' OR trips.passanger4 ='{0}' OR trips.passanger5 ='{0}' OR trips.passanger6 ='{0}' OR trips.passanger7 ='{0}' OR trips.passanger8 ='{0}' AND (date < CURRENT_DATE() OR date == CURRENT_DATE() AND time < CURRENT_TIME())".format(uid))
+    pasttrips=cursor.fetchall()
+    for trip in pasttrips:
+        print(trip[2])
     if request.method=='POST':
         classyear=request.form.get("year")
         bio=request.form.get("bio")
@@ -626,7 +626,7 @@ def viewprofile():
         conn.commit()
         cursor.execute("SELECT starting_place,destination,date,time,user.name,seats_avail, trip_id, user.user_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
         trips=cursor.fetchall()
-        return render_template('OLDhomepage_cleantech.html', trips=trips)
+        return render_template('homepage_cleantech.html', trips=trips)
     else:
         return render_template('user_profile.html', info=information, trips = trips)
 
@@ -667,7 +667,7 @@ def begin():
         conn.commit()
         cursor.execute("SELECT starting_place,destination,date,time,user.name,seats_avail, trip_id, user.user_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
         trips=cursor.fetchall()
-        return render_template('OLDhomepage_cleantech.html',trips=trips) #redirect('http://127.0.0.1:5000/cleantech/', code=302)
+        return render_template('homepage_cleantech.html',trips=trips) #redirect('http://127.0.0.1:5000/cleantech/', code=302)
     elif (current_user.is_authenticated):
         return redirect('http://127.0.0.1:5000/nobu', code=302)
     else:

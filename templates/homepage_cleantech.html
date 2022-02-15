@@ -43,29 +43,64 @@
 
 <h1>Available Rides</h1>
 
-<table>
-	<tr>
-		<th>From</th>
-		<th>To</th>
-		<th>Date</th>
-		<th>Time</th>
-		<th>Driver</th>
-    <th>Seats Available</th>
-	</tr>
-<br>
+<table class = "style-table">
+  <thead>
+    <tr>
+      <th>Departure</th>
+      <th>Starting From...</th>
+      <th>Going To...</th>
+      <th>Driver</th>
+      <th>Seats Available</th>
+    </tr>
+  </thead>
+</table>
 
-	{% if trips %}
+<div class="policy-container">
+  <div class="policy-table">
+    {% if trips %}
+		  {% for trip in trips %}
+      <a href='/tripinfo?tripid={{trip[6]}}' style="text-decoration: none;">
+        <div class="policy">
+          <span>{{trip[2]}} ~ {{trip[3]}}</span>
+          <span>{{trip[0]}}</span>
+          <span>{{trip[1]}}</span>
+          <span>{{trip[4]}}</span>
+          <span>{{trip[5]}}</span>
+        </div>
+      </a> 
+      {% endfor %}
+  {% endif %}
+  </div>
+</div>
+
+
+
+
+<!-- <table class = "style-table">
+	<thead>
+    <tr>
+      <th>Departure</th>
+      <th>Starting From...</th>
+      <th>Going To...</th>
+      <th>Driver</th>
+      <th>Seats Available</th>
+    </tr>
+  </thead>
+	<tbody>
+  {% if trips %}
 		{% for trip in trips %}
-		<tr>
-		<td><a href='/tripinfo?tripid={{trip[6]}}'>{{trip[0]}}</a></td>
-		<td>{{trip[1]}}</td>
-		<td>{{trip[2]}}</td>
-		<td>{{trip[3]}}</td>
-		<td>  <a href='/viewotherprofile?uid={{trip[7]}}'>{{trip[4]}}</a></td>
-    <td>{{trip[5]}}</td>
-		</tr>
+    <tr class="style-row">
+      <td id = "one">{{trip[2]}} ~ {{trip[3]}}</td>
+      <td id = "two"><a href='/tripinfo?tripid={{trip[6]}}'>{{trip[0]}}</a></td>
+      <td id = "three">{{trip[1]}}</td>
+      <td id = "four"><a href='/viewotherprofile?uid={{trip[7]}}'>{{trip[4]}}</a></td>
+      <td id = "five"><a>{{trip[5]}}</a></td>
+    </tr>
 		{% endfor %}
-{% endif %}
+  {% endif %}
+  </tbody>
+</table> -->
+	
 
 </div>
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
