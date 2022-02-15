@@ -259,23 +259,10 @@
                     <th>Destination</th>
                     <th>Driver</th>
                 </tr>
-<<<<<<< HEAD
-                <tr>
-                    <td>Trip Date/Time Info</td>
-                    <td>Starting Point Name</td>
-                    <td>Destination Name</td>
-                    <td>Driver Name</td>
-                </tr>
-                {% if trips %}
-		            {% for trip in trips %}
-		            <tr>
-                    <td>{{trip[2]}} ~ {{trip[3]}}</td>
-=======
                 {% if trips %}
 		            {% for trip in trips %}
 		            <tr>
 		            <td>{{trip[2]}} ~ {{trip[3]}}</td>
->>>>>>> 84815933d0176ac246ac3299cb24740835865e7c
 		            <td>{{trip[0]}}</td>
 		            <td>{{trip[1]}}</td>
 		            <td>{{trip[4]}}</td>
@@ -284,6 +271,5 @@
                 {% endif %}
             </table>
         </div>
-    </div>
 </body> 
 </html>
