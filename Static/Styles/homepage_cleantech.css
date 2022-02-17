@@ -60,10 +60,10 @@ h1 {
 	border-spacing: 0px;
 }
 
-.policy-table {
-	width: 95%;
+.info-table {
+	width: 94%;
 	margin-left: 5%;
-    margin: 25px 0;
+    margin: 0px 0px -20px 10px;
 	color: black;
 	text-align: center;
 }.center { /*background: rgb(245,245,245);*/
@@ -74,7 +74,7 @@ h1 {
 	/*border: 2px solid #d00000;*/
 }
   
-.headings, .policy {
+.headings, .info {
 	display: -webkit-box;
 	display: -ms-flexbox;
 	display: flex;
@@ -86,10 +86,7 @@ h1 {
 }
 
 
-
-
-
-.policy {
+.info {
 	border-radius: 2em;
 	background-color: white;
 	margin-bottom: 20px;
@@ -102,12 +99,12 @@ h1 {
 	
 }
 
-.policy:hover {
+.info:hover {
 	background-color: #ddd;
 }
   
 span {
-	flex-basis: 33.333%;
+	flex-basis: 20%;
 }
   
 

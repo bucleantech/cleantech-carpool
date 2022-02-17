@@ -55,12 +55,12 @@
   </thead>
 </table>
 
-<div class="policy-container">
-  <div class="policy-table">
+<div class="info-container">
+  <div class="info-table">
     {% if trips %}
 		  {% for trip in trips %}
       <a href='/tripinfo?tripid={{trip[6]}}' style="text-decoration: none;">
-        <div class="policy">
+        <div class="info">
           <span>{{trip[2]}} ~ {{trip[3]}}</span>
           <span>{{trip[0]}}</span>
           <span>{{trip[1]}}</span>
