@@ -251,8 +251,11 @@
             </form>
         </div>
 ​
-        <div class="created-trips">
+        <div class="upcoming-trips">
             <table class="table">
+                <tr>
+                <th colspan = "4">Upcoming Trips</th>
+                </tr>
                 <tr>
                     <th>Date and Time</th>
                     <th>Starting Point</th>
@@ -266,6 +269,30 @@
 		            <td>{{trip[0]}}</td>
 		            <td>{{trip[1]}}</td>
 		            <td>{{trip[4]}}</td>
+		            </tr>
+		            {% endfor %}
+                {% endif %}
+            </table>
+        </div>
+
+        <div class="past-trips">
+            <table class="table">
+                <tr>
+                <th colspan = "4">Past Trips</th>
+                </tr>
+                <tr>
+                    <th>Date and Time</th>
+                    <th>Starting Point</th>
+                    <th>Destination</th>
+                    <th>Driver</th>
+                </tr>
+                {% if past_trips %}
+		            {% for past_trip in past_trips %}
+		            <tr>
+		            <td>{{past_trip[2]}} ~ {{past_trip[3]}}</td>
+		            <td>{{past_trip[0]}}</td>
+		            <td>{{past_trip[1]}}</td>
+		            <td>{{past_trip[4]}}</td>
 		            </tr>
 		            {% endfor %}
                 {% endif %}

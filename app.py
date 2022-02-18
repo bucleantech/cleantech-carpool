@@ -252,9 +252,9 @@ def enteratrip():
                 tid=tid+1
             cursor.execute("INSERT INTO trips (trip_id,user_id,starting_place,destination,date,vehicle,comments,active,time,seats_avail) VALUES ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}')".format(tid,uid,start,dest,date,model,'NONE',1,time,seats_avail))
             conn.commit()
-            return render_template('Enter_a_trip_cleantech.html')   #Naomi- changed 'enter_a_trip_cleantech.html' to 'Enter_a_trip_cleantech.html'
+            return render_template('Enter_a_trip_cleantech.html')
         else:
-            return render_template('Enter_a_trip_cleantech.html')   #Naomi- changed 'enter_a_trip_cleantech.html' to 'Enter_a_trip_cleantech.html'
+            return render_template('Enter_a_trip_cleantech.html')
     else:
         return redirect('http://127.0.0.1:5000/nobu', code=302)
 
@@ -613,12 +613,10 @@ def viewprofile():
     uid=current_user.user_id
     cursor.execute("SELECT name, classof, email, bio FROM user WHERE user_id='{0}'".format(uid))
     information=cursor.fetchone()
-    cursor.execute("SELECT starting_place,destination,date,time, user.name, seats_avail, trip_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE user.user_id ='{0}' OR trips.passanger1 ='{0}' OR trips.passanger2 ='{0}' OR trips.passanger3 ='{0}' OR trips.passanger4 ='{0}' OR trips.passanger5 ='{0}' OR trips.passanger6 ='{0}' OR trips.passanger7 ='{0}' OR trips.passanger8 ='{0}'".format(uid))
+    cursor.execute("SELECT starting_place,destination,date,time, user.name, seats_avail, trip_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE ((user.user_id ='{0}' OR trips.passanger1 ='{0}' OR trips.passanger2 ='{0}' OR trips.passanger3 ='{0}' OR trips.passanger4 ='{0}' OR trips.passanger5 ='{0}' OR trips.passanger6 ='{0}' OR trips.passanger7 ='{0}' OR trips.passanger8 ='{0}') AND (date >= CURRENT_DATE OR ((date == CURRENT_DATE) AND (time > CURRENT_TIME))))".format(uid))
     trips=cursor.fetchall()
-    cursor.execute("SELECT starting_place,destination,date,time, user.name, seats_avail, trip_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE user.user_id ='{0}' OR trips.passanger1 ='{0}' OR trips.passanger2 ='{0}' OR trips.passanger3 ='{0}' OR trips.passanger4 ='{0}' OR trips.passanger5 ='{0}' OR trips.passanger6 ='{0}' OR trips.passanger7 ='{0}' OR trips.passanger8 ='{0}' AND (date < CURRENT_DATE() OR date == CURRENT_DATE() AND time < CURRENT_TIME())".format(uid))
-    pasttrips=cursor.fetchall()
-    for trip in pasttrips:
-        print(trip[2])
+    cursor.execute("SELECT starting_place,destination,date,time, user.name, seats_avail, trip_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE ((user.user_id ='{0}' OR trips.passanger1 ='{0}' OR trips.passanger2 ='{0}' OR trips.passanger3 ='{0}' OR trips.passanger4 ='{0}' OR trips.passanger5 ='{0}' OR trips.passanger6 ='{0}' OR trips.passanger7 ='{0}' OR trips.passanger8 ='{0}') AND (date < CURRENT_DATE OR ((date == CURRENT_DATE) AND (time < CURRENT_TIME))))".format(uid))
+    past_trips=cursor.fetchall()
     if request.method=='POST':
         classyear=request.form.get("year")
         bio=request.form.get("bio")
@@ -628,7 +626,7 @@ def viewprofile():
         trips=cursor.fetchall()
         return render_template('homepage_cleantech.html', trips=trips)
     else:
-        return render_template('user_profile.html', info=information, trips = trips)
+        return render_template('user_profile.html', info=information, trips = trips, past_trips=past_trips)
 
 @app.route('/viewotherprofile', methods=['GET'])
 def viewotherprofile():
