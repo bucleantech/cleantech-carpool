@@ -135,10 +135,12 @@ h1{
                 <div class="route-container">
                 <h1> Seats Available <b><input type="text" name="seatsavail" value={{info[4]}}><br></b></h1>
                 </div>
-                {% if passengerinfo|length > 0 %}
-                <div class="route-container">
-                    <h1> Passengers <b><input type="text" name="passengers" value={{passengerinfo}}><br></b></h1>
-                </div>
+                {% if passengernum > 0 %}
+                    {% for passenger in passengerinfo %}
+                        <div class="route-container">
+                            <h1> Passengers <b><input type="text" name="passengers" value={{passenger}}><br></b></h1>
+                        </div>
+                    {% endfor %}
                 {% endif %}
                 <input type="submit" name="edit" value="Save">
                 <input type="submit" name="delete" value="Delete Trip">

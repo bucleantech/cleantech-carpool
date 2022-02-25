@@ -602,7 +602,7 @@ def trip_info():
                     passengername = cursor.fetchone()[0]
                     passengernamelist.append(passengername)
             if information[5]==userid:   
-                return render_template("trip_info.html", info=information, passengerinfo=passengernamelist, trip=True)
+                return render_template("trip_info.html", info=information, passengerinfo=passengernamelist, passengernum = len(passengernamelist), trip=True)
             else:
                 if userid in passengerinfo:
                     return render_template("trip_info.html", info=information, text="Cancel Reservation")
