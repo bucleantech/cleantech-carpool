@@ -522,13 +522,15 @@ def trip_info():
                     seatsavail=request.form.get("seatsavail")
                     cursor.execute("UPDATE trips SET starting_place='{0}', destination='{1}', date='{2}', time='{3}', seats_avail='{4}' WHERE trip_id='{5}'".format(start,finish,begindate,begintime,seatsavail,tripid))
                     conn.commit()
-                    cursor.execute("SELECT starting_place,destination,date,time,user.name,seats_avail,trip_id, user.user_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
+                    cursor.execute("SELECT starting_place,destination,date,time,user.name, user.email, seats_avail, trip_id, user.user_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
                     trips=cursor.fetchall()
+                    # print(trips)
                     return render_template('homepage_cleantech.html', trips=trips, testcode="SUCCESSFULLY Updated")
                 else:
                     cursor.execute("DELETE FROM trips WHERE trip_id='{0}'".format(tripid))
-                    cursor.execute("SELECT starting_place,destination,date,time,user.name,seats_avail, trip_id, user.user_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
+                    cursor.execute("SELECT starting_place,destination,date,time,user.name, user.email, seats_avail, trip_id, user.user_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
                     trips=cursor.fetchall()
+                    # print(trips)
                     conn.commit()
                     return render_template('homepage_cleantech.html', trips=trips, testcode="SUCCESSFULLY Deleted")
             elif userid in passengerinfo:
@@ -550,13 +552,14 @@ def trip_info():
                     cursor.execute("UPDATE trips SET passanger8=NULL WHERE trip_id='{0}'".format(tripid))
                 cursor.execute("UPDATE trips SET seats_avail=seats_avail+1 WHERE trip_id='{0}'".format(tripid))
                 conn.commit()
-                cursor.execute("SELECT starting_place,destination,date,time,user.name,seats_avail, trip_id, user.user_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
+                cursor.execute("SELECT starting_place,destination,date,time,user.name, user.email, seats_avail, trip_id, user.user_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
                 trips=cursor.fetchall()
+                # print(trips)
                 return render_template('homepage_cleantech.html', trips=trips, testcode="Successfully Canceled Reservation")
 
             else:
                 if information[4]==0:
-                    cursor.execute("SELECT starting_place,destination,date,time,user.name,seats_avail, trip_id, user.user_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
+                    cursor.execute("SELECT starting_place,destination,date,time,user.name, user.email, seats_avail, trip_id, user.user_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
                     trips=cursor.fetchall()
                     return render_template('homepage_cleantech.html', trips=trips, testcode="NO SEATS AVAILABLE")
                 else:
@@ -578,8 +581,9 @@ def trip_info():
                         cursor.execute("UPDATE trips SET passanger8='{0}' WHERE trip_id='{1}'".format(userid,tripid))
                     cursor.execute("UPDATE trips SET seats_avail=seats_avail-1 WHERE trip_id='{0}'".format(tripid))
                     conn.commit()
-                    cursor.execute("SELECT starting_place,destination,date,time,user.name,seats_avail, trip_id, user.user_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
+                    cursor.execute("SELECT starting_place,destination,date,time,user.name, user.email, seats_avail, trip_id, user.user_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
                     trips=cursor.fetchall()
+                    # print(trips)
                     return render_template('homepage_cleantech.html', trips=trips, testcode="Successfully Signed Up")
         else:
             tripid=request.args.get("tripid")
@@ -663,7 +667,7 @@ def begin():
             conn.commit()
             cursor.execute("INSERT INTO trips (trip_id, user_id, starting_place, destination, seats_avail,vehicle, comments, active) VALUES ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}')".format(0,1,"Miami","Boston",8,"Honda","No new comments",1))
         conn.commit()
-        cursor.execute("SELECT starting_place,destination,date,time,user.name,seats_avail, trip_id, user.user_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
+        cursor.execute("SELECT starting_place,destination,date,time,user.name,user.email,seats_avail, trip_id, user.user_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
         trips=cursor.fetchall()
         return render_template('homepage_cleantech.html',trips=trips) #redirect('http://127.0.0.1:5000/cleantech/', code=302)
     elif (current_user.is_authenticated):
