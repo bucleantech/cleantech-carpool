@@ -252,9 +252,9 @@ def enteratrip():
                 tid=tid+1
             cursor.execute("INSERT INTO trips (trip_id,user_id,starting_place,destination,date,vehicle,comments,active,time,seats_avail) VALUES ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}')".format(tid,uid,start,dest,date,model,'NONE',1,time,seats_avail))
             conn.commit()
-            return render_template('Enter_a_trip_cleantech.html')
+            return render_template('enter_a_trip_cleantech.html')
         else:
-            return render_template('Enter_a_trip_cleantech.html')
+            return render_template('enter_a_trip_cleantech.html')
     else:
         return redirect('http://127.0.0.1:5000/nobu', code=302)
 
@@ -352,7 +352,7 @@ def make_trip(usr_id, comments):
             #usr.save_trip(usr.user_id, usr, date, stops, passangers, vehicle, starting_location, ending_location, comments)
             #trp = trip('Never', 'Tesla' '42.348097D-71.105963', '40.748298D-73.984827', 2, comments) #never instantiate a trip in this ever
             #usr.my_trips.append(trp)
-            return render_template('Enter_a_trip_cleantech.html')
+            return render_template('enter_a_trip_cleantech.html')
             
             whereto = 'http://127.0.0.1:5000/cleantech/user/'+str(usr.id)
             return redirect(whereto, code=302)
