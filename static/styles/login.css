@@ -1,0 +1,38 @@
+html, body {
+    height: 100%;
+    width: 100%;
+    font-family: 'Roboto', sans-serif;
+    font-size: 24px;
+}
+
+.container,
+.row-big {
+    height: 100%;
+    width: 100%;
+}
+
+.row {
+    text-align: center;
+}
+
+.big-col {
+    height: 100%;
+    width: 50%;
+    margin-left: 2.5%;
+    margin-right: 2.5%;
+}
+
+.logo {
+    height: 30%;
+}
+
+.small-row {
+    height: 50%;
+}
+
+.btn {
+    background: #FFFFFF;
+    border: 1px solid #000000;
+    box-sizing: border-box;
+    border-radius: 0px;
+}
