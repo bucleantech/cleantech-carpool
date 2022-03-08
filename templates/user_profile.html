@@ -115,7 +115,9 @@
     }  
 
     
-    .style-table {
+    .trips-table {
+        border-radius: 30px;
+        /* background-color:green; */
         width: 95%;
         margin-left: 5%;
         margin: 25px 0;
@@ -124,7 +126,9 @@
         border-collapse: separate;
         border-spacing: 15px;
         border: none
-    }.center { /*background: rgb(245,245,245);*/
+    }
+    
+    .center { /*background: rgb(245,245,245);*/
         margin-left: 5%;
         /*margin-right: 5%;*/
         margin-top: 30px;
@@ -132,23 +136,29 @@
         /*border: 2px solid #d00000;*/
     }
 
-    .style-table thead tr th {
-        border-radius: 30px 30px 30px 30px;
+    .trips-table thead tr th {
+        border-radius: 30px; /*30px 30px 30px 30px;*/
         border: 1px gray;
         border-spacing: 20px;
     }
 
+    .trips-table thead {
+        border-radius: 30px;
+        background-color: transparent;
+    }
 
-    .style-table tr {
-        background-color: white;
+    .trips-table tr {
+        background-color: transparent;
         box-shadow: 10px ;
     }
 
-    .style-table td, th {
+    .trips-table td, .trips-table th {
         padding: 10px;	
+        border-radius: 30px;
+        background-color: white;
     }
 
-    .style-table th {
+    .trips-table th {
         padding-top: 12px;
         padding-bottom: 15px;
         text-align: center;
@@ -158,7 +168,7 @@
         color: black;
     }
 
-    .style-table tbody tr{
+    .trips-table tbody tr{
         border-spacing: 0px;
     }
 
@@ -168,11 +178,12 @@
         margin: 0px 0px -20px 10px;
         color: black;
         text-align: center;
+    
     }.center { /*background: rgb(245,245,245);*/
         margin-left: 5%;
         /*margin-right: 5%;*/
         margin-top: 30px;
-        height: 700px;
+        height: 300px;
         text-align: center;
         /*border: 2px solid #d00000;*/
     }
@@ -325,9 +336,12 @@
         </div>
 ​
         <div class="center">
-            <table class = "style-table">
+            <table class = "trips-table">
                 <thead>
                 <tr>
+                    <th colspan="4">Upcoming Trips</th>
+                </tr>
+                    <tr>
                     <th>Most Recent</th>
                     <th>All Point A's</th>
                     <th>All Point B's</th>
@@ -351,7 +365,38 @@
                 </div>
             </div>
         </div>
-        
+
+        <div class="center"> 
+            <!-- \* just added *\ -->
+            <table class = "trips-table">
+                <thead>
+                <tr>
+                    <th colspan="4">Past Trips</th>
+                </tr>
+                <tr>
+                    <th>Most Recent</th>
+                    <th>All Point A's</th>
+                    <th>All Point B's</th>
+                    <th>All Drivers</th>
+                </tr>
+                </thead>
+            </table>
+            
+            <div class="tripinfo-container">
+                <div class="tripinfo-table">
+                {% if past_trips %}
+                    {% for past_trip in past_trips %}
+                    <div class="tripinfo">
+                        <span>{{past_trip[2]}} ~ {{past_trip[3]}}</span>
+                        <span>{{past_trip[0]}}</span>
+                        <span>{{past_trip[1]}}</span>
+                        <span>{{past_trip[4]}}</span>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+                </div>
+            </div>
+        </div>
     </div>
 </body> 
 </html>
