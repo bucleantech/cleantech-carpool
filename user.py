@@ -209,5 +209,4 @@ class User(UserMixin):
             trp.trip_id = i[0]
             returned_trips.append(trp)
         return returned_trips
-        
-
+    

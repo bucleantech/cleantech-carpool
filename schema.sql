@@ -42,3 +42,8 @@ CREATE TABLE car (
     capacity int4,
     fuel_efficiency TEXT NOT NULL,
 );
+
+CREATE TABLE user_profile (
+	user_id TEXT PRIMARY KEY,
+	profile_url TEXT NOT NULL 
+)

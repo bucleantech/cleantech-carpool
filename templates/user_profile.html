@@ -86,9 +86,29 @@
         border-radius: 33px; 
     }
 ​
-    .flex-child photo{
-        display:inline-block
-    }  
+    .flex-child-photo{
+        display:inline-flex
+    }
+
+    .photo-container{
+        width: 350px;
+        height: 350px;
+        margin: 30px auto;
+
+        display: inline-block;
+        justify-content: center;
+        align-items: center;
+
+        background: #FFFFFF;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 33px;
+        background-position: center;
+        background-size: cover;
+    }
+
+    .photo-container img{
+        border-radius: 33px;
+    }
 ​
     .flex-child info{
         display:inline-block
@@ -267,15 +287,27 @@
     </div>
 ​
     <div class="main">
-        <div class="flex-child photo">
-            <figure>
-                <img src='http://placehold.it/350x350' alt='profile-photo' />
-                <figcaption>{{info[0]}}</figcaption>
-            </figure>
-        </div>
-​
         <div class="flex-child info">
-            <form method="POST">
+            <form method="POST" enctype="multipart/form-data">
+                <div class = "photo-container" id = "photo-displayed" name = "photo-displayed">
+                    <img src="{{ url_for('static', filename='uploads/' + profile[0]) }}" width="350" height="350">  
+                </div>
+                <div>
+                    <input type ="file" id = "file" name = "file" accept="image/*">
+                </div>
+                <!-- <script>
+                    const imageInput = document.querySelector("#image_input")
+                    var uploadedImage = "";
+                    imageInput.addEventListener("change", function(){
+                        const reader = new FileReader();
+                        reader.addEventListener("load", () => {
+                            uploadedImage = reader.result;
+                            console.log(uploadedImage)
+                            document.querySelector("#photo-displayed").style.backgroundImage = `url(${uploadedImage})`
+                        });
+                        reader.readAsDataURL(this.files[0])
+                    })
+                </script> -->
                 <div class="info-container">
                     <h1>College <b><input type="text" id="college" name="college" value="Boston University"}><br></b> Class of <b><input type="text" id="year" name="year" value={{info[1]}}><br></b></h1>
                 </div>

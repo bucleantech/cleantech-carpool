@@ -7,9 +7,12 @@ Created on Mon Sep  9 14:21:53 2019
 """
 
 #example from https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world
+import profile
 import sqlite3
 import json
 import os #for supressing https warnings
+import urllib.request
+from werkzeug.utils import secure_filename
 
 from flask import Flask, request, redirect, url_for, render_template, session, flash
 from flask_login import LoginManager, current_user, login_required, login_user, logout_user
@@ -23,7 +26,10 @@ from user import User, trip
 
 #https://stackoverflow.com/questions/22947905/flask-example-with-post
 app = Flask(__name__)
+UPLOAD_FOLDER = 'Static/uploads/'
 app.secret_key = 'super-duper-secret'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 set_up = False #if server has been initalized
 
 yall : List[User] = []
@@ -81,6 +87,13 @@ CREATE TABLE IF NOT EXISTS car (
     capacity int4,
     fuel_efficiency TEXT NOT NULL
 );
+""")
+
+curs.execute("""
+CREATE TABLE IF NOT EXISTS user_profile (
+    user_id TEXT PRIMARY KEY,
+	profile_url TEXT NOT NULL
+);  
 """)
 
 client_id = ''
@@ -608,26 +621,51 @@ def trip_info():
 
         return redirect('http://127.0.0.1:5000/login2', code=302)
 
-
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/viewprofile', methods=['GET', 'POST'])
 def viewprofile():
     cursor=conn.cursor()
     uid=current_user.user_id
+    cursor.execute("SELECT user_id FROM user_profile WHERE user_id='{0}'".format(uid))
+    count = cursor.fetchone()
+    if count[0]:
+        print("ok")
+    else:
+        default_url = 'default-profile-pic.jpg'
+        cursor.execute("INSERT INTO user_profile (user_id, profile_url) VALUES ('{0}', '{1}')".format(uid, default_url))
     cursor.execute("SELECT name, classof, email, bio FROM user WHERE user_id='{0}'".format(uid))
     information=cursor.fetchone()
     cursor.execute("SELECT starting_place,destination,date,time, user.name, seats_avail, trip_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE user.user_id ='{0}' OR trips.passanger1 ='{0}' OR trips.passanger2 ='{0}' OR trips.passanger3 ='{0}' OR trips.passanger4 ='{0}' OR trips.passanger5 ='{0}' OR trips.passanger6 ='{0}' OR trips.passanger7 ='{0}' OR trips.passanger8 ='{0}'".format(uid))
     trips=cursor.fetchall()
+    cursor.execute("SELECT profile_url FROM user_profile WHERE user_id='{0}'".format(uid))
+    profilepic = cursor.fetchone()
+    print(profilepic)
     if request.method=='POST':
+        filename = ""
+        file = request.files["file"]
+        if file.filename == '':
+            print('No image selected for uploading')
+            return redirect(request.url)
+        if file and allowed_file(file.filename): 
+           filename = secure_filename(file.filename)
+           file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         classyear=request.form.get("year")
         bio=request.form.get("bio")
         cursor.execute("UPDATE user SET classof='{0}', bio='{1}' WHERE user_id='{2}'".format(classyear, bio, uid))
+        cursor.execute("UPDATE user_profile SET profile_url='{0}' WHERE user_id='{1}'".format(filename, uid))
         conn.commit()
         cursor.execute("SELECT starting_place,destination,date,time,user.name,seats_avail, trip_id, user.user_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
         trips=cursor.fetchall()
         return render_template('homepage_cleantech.html', trips=trips)
     else:
-        return render_template('user_profile.html', info=information, trips = trips)
+        return render_template('user_profile.html', info=information, trips = trips, profile = profilepic)
+
+
+@app.route('/display/<filename>')
+def display_image(filename):
+    return redirect(url_for('static', filename = 'uploads/' + filename), code = 301)
 
 @app.route('/viewotherprofile', methods=['GET'])
 def viewotherprofile():
