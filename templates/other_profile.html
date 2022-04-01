@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Profile Page</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/trip_info.css') }}">
@@ -48,7 +47,7 @@ h1{
 }
 .info-container{
     width: 600px;
-    height: 96px;
+    height: 100px;
     margin: 30px auto;
 
     display: flex;
@@ -61,7 +60,7 @@ h1{
 }
 .email-container{
     width: 600px;
-    height: 96px;
+    height: 100px;
     margin: 30px auto;
 
     display: flex;
@@ -74,7 +73,7 @@ h1{
 }
 .bio-container{
     width: 600px;
-    height: 96px;
+    height: 100px;
     margin: 30px auto;
 
     display: flex;
@@ -176,14 +175,17 @@ button{
         </div>
     
         <div class="flex-child info">
+                <div class="username-container">
+                    <h1>{{info[0]}}</h1>
+                </div>
                 <div class="info-container">
                     <h1>College <b>Boston University<br></b> Class of <b>{{info[1]}}<br></b></h1>
                 </div>
                 <div class="email-container">
-                    <h1>Email <b>{{info[2]}}</b></h1><br>
+                    <h1>{{info[2]}}</h1><br>
                 </div>
                 <div class="bio-container">
-                    <h1>Bio goes here: <b>{{info[3]}}
+                    <h1>{{info[3]}}
                 </div>
         </div>
     </div>

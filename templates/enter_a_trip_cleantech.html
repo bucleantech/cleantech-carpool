@@ -39,6 +39,7 @@
 		  </div>
 	</nav>
 	{{trip1}}
+	<center>
 	<div class="wrapper">
 		<div>
 			<h1>Trip Information</h1>
@@ -47,9 +48,6 @@
 
 		<form action="#" method="post">
 
-			<div>
-			<strong>Destination</strong>
-			</div>
 			<div>
 				<strong>Starting Point</strong>
 				</div>
@@ -150,18 +148,27 @@
 				<input class="vehicle" name = model type="text"placeholder="Model" required> 
 			</label>
 			
+			<label> Driver:
+				<select class="driver" name=Driver required>
+					<option value="me">Me</option>
+					<option value="uber">Uber</option>
+					<option value="other">Other</option>
+				</select>
+			</label>
+
 			<label> Seats Available:
 				<input class="vehicle" name=seats type="number" placeholder="Enter a number" required>
 			</label>
 			</div>
 
 			<div>
-				<input type="submit" />
+				<input type="submit" value="Create trip"/>
 			</div>
 
 		</form>
-	</label>
+	<!-- </label> -->
 	</div>
+</center>
 
 	</body>
 </html>

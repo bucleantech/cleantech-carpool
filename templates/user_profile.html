@@ -297,11 +297,12 @@
         <h1> <b>Profile Page</b> </h1>
     </div>
 ​
+{% if trips %}
     <div class="main">
         <div class="flex-child info">
             <form method="POST" enctype="multipart/form-data">
                 <div class = "photo-container" id = "photo-displayed" name = "photo-displayed">
-                    <img src="{{ url_for('static', filename='uploads/' + profile[0]) }}" width="350" height="350">  
+                    <img src="{{ url_for('static', filename='uploads/' + info[0]) }}" width="350" height="350">  
                 </div>
                 <div>
                     <input type ="file" id = "file" name = "file" accept="image/*">
@@ -338,9 +339,9 @@
         <div class="center">
             <table class = "trips-table">
                 <thead>
-                <tr>
+                <!-- <tr>
                     <th colspan="4">Upcoming Trips</th>
-                </tr>
+                </tr> -->
                     <tr>
                     <th>Most Recent</th>
                     <th>All Point A's</th>
@@ -352,7 +353,7 @@
             
             <div class="tripinfo-container">
                 <div class="tripinfo-table">
-                {% if trips %}
+                <!-- {% if trips %} -->
                     {% for trip in trips %}
                     <div class="tripinfo">
                         <span>{{trip[2]}} ~ {{trip[3]}}</span>
@@ -361,41 +362,27 @@
                         <span>{{trip[4]}}</span>
                     </div>
                     {% endfor %}
-                {% endif %}
+                <!-- {% endif %} -->
                 </div>
             </div>
         </div>
-
-        <div class="center"> 
-            <!-- \* just added *\ -->
-            <table class = "trips-table">
-                <thead>
-                <tr>
-                    <th colspan="4">Past Trips</th>
-                </tr>
-                <tr>
-                    <th>Most Recent</th>
-                    <th>All Point A's</th>
-                    <th>All Point B's</th>
-                    <th>All Drivers</th>
-                </tr>
-                </thead>
-            </table>
-            
-            <div class="tripinfo-container">
-                <div class="tripinfo-table">
-                {% if past_trips %}
-                    {% for past_trip in past_trips %}
-                    <div class="tripinfo">
-                        <span>{{past_trip[2]}} ~ {{past_trip[3]}}</span>
-                        <span>{{past_trip[0]}}</span>
-                        <span>{{past_trip[1]}}</span>
-                        <span>{{past_trip[4]}}</span>
-                    </div>
-                    {% endfor %}
-                {% endif %}
-                </div>
-            </div>
+    </div>
+{% endif %}
+<div class="main">
+        <div class = "photo-container" id = "photo-displayed" name = "photo-displayed">
+            <img src="{{ url_for('static', filename='uploads/' + info[0]) }}" width="350" height="350">  
+        </div>
+        <div>
+            <input type ="file" id = "file" name = "file" accept="image/*">
+        </div>
+        <div class="info-container">
+            <h1>Boston University, Class of {{info[1]}}</h1>
+        </div>
+        <div class="email-container">
+            <h1>{{info[2]}}</h1>
+        </div>
+        <div class="bio-container">
+            <h1>{{info[3]}}</h1>
         </div>
     </div>
 </body> 

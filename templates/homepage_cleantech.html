@@ -41,7 +41,7 @@
 <p>Your email is {{current_user.email}}!</p>
 <p>Your id is {{current_user.user_id}}!</p>
 
-<h1>Available Rides</h1>
+<h1><b>Available Rides</b></h1>
 
 <table class = "trips-table">
   <thead>
@@ -59,7 +59,7 @@
   <div class="info-table">
     {% if trips %}
 		  {% for trip in trips %}
-      <a href='/tripinfo?tripid={{trip[6]}}' style="text-decoration: none;">
+      <a href='/tripinfo?tripid={{trip[7]}}' style="text-decoration: none;">
         <div class="info">
           <span>{{trip[2]}} ~ {{trip[3]}}</span>
           <span>{{trip[0]}}</span>

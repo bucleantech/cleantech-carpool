@@ -84,6 +84,20 @@ h1{
     border-radius: 33px; 
 }
 
+.driver-container{
+    width: 736px;
+    height: 96px;
+    margin: 30px auto;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: #FFFFFF;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 33px; 
+}
+
 </style>
 </head>
 
@@ -163,6 +177,10 @@ h1{
             <h1>Seats Available <b>{{info[4]}}</b></h1>
         </div>
         <form method="POST">
+        <div class="driver-container">
+            <a href='/viewotherprofile/{{info[7]}}'> <class="btn btn-outline-light my-2 my-sm-0"> {{info[5]}}</a>
+            <!-- <h1>Driver <b>{{info[5]}}</b></h1> -->
+        </div>
 
          <center>
             <input type="submit" value="{{text}}">

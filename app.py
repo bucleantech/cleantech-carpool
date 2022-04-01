@@ -67,6 +67,7 @@ CREATE TABLE IF NOT EXISTS trips (
 	vehicle TEXT NOT NULL,
 	comments TEXT NOT NULL,
     active INTEGER NOT NULL,
+    tripDriver TEXT NOT NULL,
 	FOREIGN KEY(user_id) REFERENCES user(user_id)
 );
 """)
@@ -258,12 +259,13 @@ def enteratrip():
             uid=current_user.user_id
             seats_avail=request.form.get("seats")
             cursor.execute("SELECT max(trip_id) FROM trips")
+            driver=request.form.get("driver")
             tid=cursor.fetchall()[0][0]
             if tid is None:
                 tid=1
             else:
                 tid=tid+1
-            cursor.execute("INSERT INTO trips (trip_id,user_id,starting_place,destination,date,vehicle,comments,active,time,seats_avail) VALUES ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}')".format(tid,uid,start,dest,date,model,'NONE',1,time,seats_avail))
+            cursor.execute("INSERT INTO trips (trip_id,user_id,starting_place,destination,date,vehicle,comments,active,time,seats_avail,tripDriver) VALUES ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}')".format(tid,uid,start,dest,date,model,'NONE',1,time,seats_avail,driver))
             conn.commit()
             return render_template('enter_a_trip_cleantech.html')
         else:
@@ -537,13 +539,11 @@ def trip_info():
                     conn.commit()
                     cursor.execute("SELECT starting_place,destination,date,time,user.name, user.email, seats_avail, trip_id, user.user_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
                     trips=cursor.fetchall()
-                    # print(trips)
                     return render_template('homepage_cleantech.html', trips=trips, testcode="SUCCESSFULLY Updated")
                 else:
                     cursor.execute("DELETE FROM trips WHERE trip_id='{0}'".format(tripid))
                     cursor.execute("SELECT starting_place,destination,date,time,user.name, user.email, seats_avail, trip_id, user.user_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
                     trips=cursor.fetchall()
-                    # print(trips)
                     conn.commit()
                     return render_template('homepage_cleantech.html', trips=trips, testcode="SUCCESSFULLY Deleted")
             elif userid in passengerinfo:
@@ -567,7 +567,6 @@ def trip_info():
                 conn.commit()
                 cursor.execute("SELECT starting_place,destination,date,time,user.name, user.email, seats_avail, trip_id, user.user_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
                 trips=cursor.fetchall()
-                # print(trips)
                 return render_template('homepage_cleantech.html', trips=trips, testcode="Successfully Canceled Reservation")
 
             else:
@@ -596,14 +595,15 @@ def trip_info():
                     conn.commit()
                     cursor.execute("SELECT starting_place,destination,date,time,user.name, user.email, seats_avail, trip_id, user.user_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
                     trips=cursor.fetchall()
-                    # print(trips)
                     return render_template('homepage_cleantech.html', trips=trips, testcode="Successfully Signed Up")
         else:
             tripid=request.args.get("tripid")
-            cursor.execute("SELECT starting_place, destination, date, time, seats_avail, user_id FROM trips WHERE trip_id='{0}'".format(tripid))
+            cursor.execute("SELECT starting_place, destination, date, time, seats_avail, user.name, user.email, user.user_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trip_id='{0}'".format(tripid))
             information=cursor.fetchone()
+            print("trip info: ", information)    # prints None for Shrewsbury trip info
             cursor.execute("SELECT passanger1, passanger2, passanger3,passanger4,passanger5,passanger6,passanger7,passanger8 FROM trips WHERE trip_id='{0}'".format(tripid))
             passengerinfo=cursor.fetchone()
+            print("passengerinfo: ", passengerinfo)  # prints None for Shrewsbury passenger info
             passengeridlist = [];
             passengernamelist = [];
             for passenger in passengerinfo:
@@ -624,35 +624,29 @@ def trip_info():
 
         return redirect('http://127.0.0.1:5000/login2', code=302)
 
-<<<<<<< HEAD
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-=======
->>>>>>> c2710356c073780a94573e132e6095e35ae9c7e5
 @app.route('/viewprofile', methods=['GET', 'POST'])
 def viewprofile():
     cursor=conn.cursor()
     uid=current_user.user_id
     cursor.execute("SELECT user_id FROM user_profile WHERE user_id='{0}'".format(uid))
     count = cursor.fetchone()
-    if count[0]:
+    print(count)
+    # if count[0]:
+    if (count):
         print("ok")
     else:
         default_url = 'default-profile-pic.jpg'
         cursor.execute("INSERT INTO user_profile (user_id, profile_url) VALUES ('{0}', '{1}')".format(uid, default_url))
     cursor.execute("SELECT name, classof, email, bio FROM user WHERE user_id='{0}'".format(uid))
     information=cursor.fetchone()
-    cursor.execute("SELECT starting_place,destination,date,time, user.name, seats_avail, trip_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE ((user.user_id ='{0}' OR trips.passanger1 ='{0}' OR trips.passanger2 ='{0}' OR trips.passanger3 ='{0}' OR trips.passanger4 ='{0}' OR trips.passanger5 ='{0}' OR trips.passanger6 ='{0}' OR trips.passanger7 ='{0}' OR trips.passanger8 ='{0}') AND (date > CURRENT_DATE OR ((date == CURRENT_DATE) AND (time > CURRENT_TIME))))".format(uid))
+    cursor.execute("SELECT starting_place,destination,date,time, user.name, seats_avail, trip_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE (user.user_id ='{0}' OR trips.passanger1 ='{0}' OR trips.passanger2 ='{0}' OR trips.passanger3 ='{0}' OR trips.passanger4 ='{0}' OR trips.passanger5 ='{0}' OR trips.passanger6 ='{0}' OR trips.passanger7 ='{0}' OR trips.passanger8 ='{0}')".format(uid))
     trips=cursor.fetchall()
-<<<<<<< HEAD
     cursor.execute("SELECT profile_url FROM user_profile WHERE user_id='{0}'".format(uid))
     profilepic = cursor.fetchone()
     print(profilepic)
-=======
-    cursor.execute("SELECT starting_place,destination,date,time, user.name, seats_avail, trip_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE ((user.user_id ='{0}' OR trips.passanger1 ='{0}' OR trips.passanger2 ='{0}' OR trips.passanger3 ='{0}' OR trips.passanger4 ='{0}' OR trips.passanger5 ='{0}' OR trips.passanger6 ='{0}' OR trips.passanger7 ='{0}' OR trips.passanger8 ='{0}') AND (date < CURRENT_DATE OR ((date == CURRENT_DATE) AND (time < CURRENT_TIME))))".format(uid))
-    past_trips=cursor.fetchall()
->>>>>>> c2710356c073780a94573e132e6095e35ae9c7e5
     if request.method=='POST':
         filename = ""
         file = request.files["file"]
@@ -663,7 +657,9 @@ def viewprofile():
            filename = secure_filename(file.filename)
            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         classyear=request.form.get("year")
+        print("classyear = ", classyear)
         bio=request.form.get("bio")
+        print("bio = ", bio)
         cursor.execute("UPDATE user SET classof='{0}', bio='{1}' WHERE user_id='{2}'".format(classyear, bio, uid))
         cursor.execute("UPDATE user_profile SET profile_url='{0}' WHERE user_id='{1}'".format(filename, uid))
         conn.commit()
@@ -671,28 +667,25 @@ def viewprofile():
         trips=cursor.fetchall()
         return render_template('homepage_cleantech.html', trips=trips)
     else:
-<<<<<<< HEAD
         return render_template('user_profile.html', info=information, trips = trips, profile = profilepic)
 
 
 @app.route('/display/<filename>')
 def display_image(filename):
     return redirect(url_for('static', filename = 'uploads/' + filename), code = 301)
-=======
-        return render_template('user_profile.html', info=information, trips = trips, past_trips=past_trips)
->>>>>>> c2710356c073780a94573e132e6095e35ae9c7e5
 
-@app.route('/viewotherprofile', methods=['GET'])
-def viewotherprofile():
+@app.route('/viewotherprofile/<driverid>', methods=['GET'])
+def viewotherprofile(driverid):
+    uid = current_user.user_id
     cursor=conn.cursor()
-    uid=current_user.user_id
-    getuserid=request.args.get("uid")
-    cursor.execute("SELECT name, classof, email, bio FROM user WHERE user_id='{0}'".format(getuserid))
+    cursor.execute("SELECT name, classof, email, bio FROM user WHERE user_id='{0}'".format(driverid))
     information=cursor.fetchone()
-    if uid==getuserid:
-        return render_template('user_profile.html', info=information)
+    cursor.execute("SELECT starting_place,destination,date,time, user.name, seats_avail, trip_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE (user.user_id ='{0}' OR trips.passanger1 ='{0}' OR trips.passanger2 ='{0}' OR trips.passanger3 ='{0}' OR trips.passanger4 ='{0}' OR trips.passanger5 ='{0}' OR trips.passanger6 ='{0}' OR trips.passanger7 ='{0}' OR trips.passanger8 ='{0}')".format(uid))
+    trips = cursor.fetchall()
+    if uid==driverid:
+        return render_template('user_profile.html', info=information, trips=trips)
     else:
-        return render_template('other_profile.html', info=information)
+        return render_template('user_profile.html', info=information)
 
 
 
@@ -715,7 +708,7 @@ def begin():
         if list2 is None:
             cursor.execute("INSERT INTO user (user_id, name, email) VALUES ('{0}', '{1}', '{2}')".format(1,"test","test@bu.edu"))
             conn.commit()
-            cursor.execute("INSERT INTO trips (trip_id, user_id, starting_place, destination, seats_avail,vehicle, comments, active) VALUES ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}')".format(0,1,"Miami","Boston",8,"Honda","No new comments",1))
+            cursor.execute("INSERT INTO trips (trip_id, user_id, starting_place, destination, seats_avail,vehicle, comments, active, tripDriver) VALUES ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}')".format(0,1,"Miami","Boston",8,"Honda","No new comments",1,"me"))
         conn.commit()
         cursor.execute("SELECT starting_place,destination,date,time,user.name,user.email,seats_avail, trip_id, user.user_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
         trips=cursor.fetchall()
