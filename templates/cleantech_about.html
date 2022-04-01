@@ -6,7 +6,7 @@
 	<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles/cleantech_about.css')}}">
 </head>
 <body>
-	<nav class="navbar navbar-expand-lg navbar-light">
+	<!-- <nav class="navbar navbar-expand-lg navbar-light">
     <a class="navbar-brand" href={{ url_for('begin') }}><img src="{{ url_for('static',filename='images/rhett_rides_logo.png') }}" height=50 width=70 alt="logo"/></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -29,7 +29,39 @@
       </ul>
         <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Sign Up/Login</button>   
     </div>
-  </nav>
+  </nav> -->
+  <section id="navbar">
+      <div class="container-fluid">
+        <div class="row">
+          <a class="navbar-brand col d-flex justify-content-center" href={{ url_for('begin') }}>
+            <div class="nav-element">
+              <img src="{{ url_for('static',filename='images/rhett_rides_logo.png') }}" width=180 alt="logo"/>
+            </div>
+          </a>
+          <div class="col d-flex justify-content-center align-items-center nav-col">
+            <div class="nav-element">
+              <a class="nav-link" href={{ url_for('begin') }}>Available Rides</a>
+            </div>
+          </div>
+          <div class="col d-flex justify-content-center align-items-center nav-col">
+            <div class="nav-element">
+              <a class="nav-link" href={{ url_for('viewprofile') }}>My Rides</a>
+            </div>    
+          </div>
+          <div class="col d-flex justify-content-center align-items-center nav-col">
+            <div class="nav-element">
+              <a class="nav-link" href={{ url_for('about') }}>About Us</a>
+            </div>          
+          </div>
+          <div class="col d-flex justify-content-center align-items-center nav-col">
+            <div class="nav-element d-flex flex-row" >
+              <a class="nav-link" href={{ url_for('logout') }}>Logout</a>
+              <img src="{{ url_for('static', filename='images/account.png')}}" width=50 alt="profile picture" />
+            </div>
+          </div>
+        </div>
+      </div>
+  </section>
 
   <div class="container">
     <div class="row mt-5 mb-3">
