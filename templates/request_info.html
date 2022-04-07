@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/trip_info.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    
+    <style>
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .center-textBox {
+            position: relative;
+            display: block;
+            margin : 0 auto;
+            width: 500px;
+            height: 300px;
+        }
+        .center-btn{
+            display: block;
+            position: relative;
+            margin : 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #d00000;">
+        <a class="navbar-brand" href={{ url_for('begin') }}><img src="{{ url_for('static',filename='images/rhett_rides_logo.png') }}" height=50 width=70 alt="logo"/></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    ​
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href={{ url_for('about') }}>About</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href={{ url_for('example') }}>Example</a>
+              </li> 
+            <li class="nav-item active">
+                <a class="nav-link" href={{ url_for('enteratrip') }}>Enter a Trip</a>
+            </li> 
+                <li class="nav-item active">
+                <a class="nav-link" href={{ url_for('viewprofile') }}>View My Profile</a>
+            </li> 
+            </ul>
+            <a href={{ url_for('logout') }} class="btn btn-outline-light my-2 my-sm-0">Logout</a>
+        </div>
+    </nav>
+    <div class="header">
+        <h1> <b>Request Info</b> </h1>
+    </div>
+    <div>
+        <form method="POST" enctype="multipart/form-data">
+            <h3 class="center">Message:</h3>
+            <textarea class="center-textBox"></textarea><br>
+            <a href={{ url_for('begin') }} style="text-decoration: none;"><button type="button" class="center-btn">Submit</button></a>
+        </form>
+    </div>
+</body>
+</html>

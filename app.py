@@ -12,6 +12,7 @@ import sqlite3
 import json
 import os #for supressing https warnings
 import urllib.request
+from flask_mail import Mail, Message
 from werkzeug.utils import secure_filename
 
 from flask import Flask, request, redirect, url_for, render_template, session, flash
@@ -26,11 +27,20 @@ from user import User, trip
 
 #https://stackoverflow.com/questions/22947905/flask-example-with-post
 app = Flask(__name__)
+mail = Mail(app)
 UPLOAD_FOLDER = 'Static/uploads/'
 app.secret_key = 'super-duper-secret'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 set_up = False #if server has been initalized
+
+app.config['MAIL_SERVER']='smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'bucleantechclub@gmail.com'
+app.config['MAIL_PASSWORD'] = 'Rhettrecycles1!'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+mail = Mail(app)
 
 yall : List[User] = []
 all_trips : List[trip] = []
@@ -519,6 +529,17 @@ def setup():
         set_up = True
     return redirect('http://127.0.0.1:5000/', code=302)
 
+def sendMsg(recipientEmail, msgTxt):
+    msg = Message(
+                'Hello',
+                sender ='bucleantechclub@gmail.com',
+                recipients = [recipientEmail]
+            )
+    msg.body = msgTxt
+    mail.send(msg)
+    return 'Sent'
+
+
 @app.route('/tripinfo', methods=['GET', 'POST'])
 def trip_info():
     substring = "@bu.edu"
@@ -570,6 +591,25 @@ def trip_info():
                 conn.commit()
                 cursor.execute("SELECT starting_place,destination,date,time,user.name, user.email, seats_avail, trip_id, user.user_id, tripDriver FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
                 trips=cursor.fetchall()
+
+                cursor.execute("SELECT user.email, user.name FROM trips JOIN user ON user.user_id=trips.user_id WHERE trip_id='{0}'".format(tripid))
+                trip_creator_email_data = cursor.fetchall()
+                trip_creator_email = trip_creator_email_data[0][0]
+                trip_creator_name = trip_creator_email_data[0][1]
+                print(trip_creator_email)
+                print(trip_creator_name)
+                conn.commit()
+                cursor.execute("SELECT user.email, user.name FROM user WHERE user_id='{0}'".format(userid))
+                user_data = cursor.fetchall()
+                user_email = user_data[0][0]
+                user_name = user_data[0][1]
+                print(user_email)
+                print(user_name)
+
+                msgTxt = "Passenger " + user_name + " (" + user_email + ") " + "decided to cancel their registration."
+
+                print(sendMsg(trip_creator_email, msgTxt))
+
                 return render_template('homepage_cleantech.html', trips=trips, testcode="Successfully Canceled Reservation")
 
             else:
@@ -626,6 +666,10 @@ def trip_info():
     else:
 
         return redirect('http://127.0.0.1:5000/login2', code=302)
+
+@app.route('/requestInfo')
+def requestInfo():
+    return render_template('request_info.html')
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
