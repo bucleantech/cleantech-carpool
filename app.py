@@ -7,6 +7,7 @@ Created on Mon Sep  9 14:21:53 2019
 """
 
 #example from https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world
+from crypt import methods
 import profile
 import sqlite3
 import json
@@ -531,7 +532,7 @@ def setup():
 
 def sendMsg(recipientEmail, msgTxt):
     msg = Message(
-                'Hello',
+                'Email from RhettRides',
                 sender ='bucleantechclub@gmail.com',
                 recipients = [recipientEmail]
             )
@@ -609,7 +610,7 @@ def trip_info():
                 msgTxt = "Passenger " + user_name + " (" + user_email + ") " + "decided to cancel their registration."
 
                 print(sendMsg(trip_creator_email, msgTxt))
-
+                session['tripId'] = tripid  
                 return render_template('homepage_cleantech.html', trips=trips, testcode="Successfully Canceled Reservation")
 
             else:
@@ -638,10 +639,11 @@ def trip_info():
                     conn.commit()
                     cursor.execute("SELECT starting_place,destination,date,time,user.name, user.email, seats_avail, trip_id, user.user_id, tripDriver FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
                     trips=cursor.fetchall()
+                    session['tripId'] = tripid  
                     return render_template('homepage_cleantech.html', trips=trips, testcode="Successfully Signed Up")
         else:
             tripid=request.args.get("tripid")
-            cursor.execute("SELECT starting_place, destination, date, time, seats_avail, user.name, user.email, user.user_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trip_id='{0}'".format(tripid))
+            cursor.execute("SELECT starting_place, destination, date, time, seats_avail, user.name, user.email, user.user_id, trips.trip_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trip_id='{0}'".format(tripid))
             information=cursor.fetchone()
             print("trip info: ", information)    # prints None for Shrewsbury trip info
             cursor.execute("SELECT passanger1, passanger2, passanger3,passanger4,passanger5,passanger6,passanger7,passanger8 FROM trips WHERE trip_id='{0}'".format(tripid))
@@ -657,9 +659,11 @@ def trip_info():
                     cursor.execute("SELECT name FROM user WHERE user_id='{0}'".format(passenger))
                     passengername = cursor.fetchone()[0]
                     passengernamelist.append(passengername)
-            if information[5]==userid:   
+            if information[5]==userid:
+                session['tripId'] = tripid   
                 return render_template("trip_info.html", info=information, passengerinfo=passengernamelist, passengernum = len(passengernamelist), trip=True)
             else:
+                session['tripId'] = tripid  
                 if userid in passengerinfo:
                     return render_template("trip_info.html", info=information, text="Cancel Reservation")
                 return render_template("trip_info.html", info=information, text="Reserve Seat")
@@ -667,8 +671,40 @@ def trip_info():
 
         return redirect('http://127.0.0.1:5000/login2', code=302)
 
-@app.route('/requestInfo')
+@app.route('/requestInfo', methods=["GET", "POST"])
 def requestInfo():
+    #tripId = request.args.get('tripId')
+    #print(tripId)
+    tripId = session.get('tripId', None)
+    print(tripId)
+
+    if request.method == "POST":
+        requestInfoMsg = request.form.get("txtbox")
+        print(requestInfoMsg)
+
+        userid=current_user.user_id
+        cursor=conn.cursor()
+        
+        cursor.execute("SELECT user.email, user.name FROM trips JOIN user ON user.user_id=trips.user_id WHERE trip_id='{0}'".format(tripId))
+        trip_creator_email_data = cursor.fetchall()
+        print(trip_creator_email_data)
+        trip_creator_email = trip_creator_email_data[0][0]
+        trip_creator_name = trip_creator_email_data[0][1]
+        print(trip_creator_email)
+        print(trip_creator_name)
+        conn.commit()
+        
+        cursor.execute("SELECT user.email, user.name FROM user WHERE user_id='{0}'".format(userid))
+        user_data = cursor.fetchall()
+        user_email = user_data[0][0]
+        user_name = user_data[0][1]
+        print(user_email)
+        print(user_name)
+
+        msgTxt = "Passenger " + user_name + " (" + user_email + ") " + "states: " + requestInfoMsg
+        print(msgTxt)
+
+        print(sendMsg(trip_creator_email, msgTxt))
     return render_template('request_info.html')
 
 def allowed_file(filename):

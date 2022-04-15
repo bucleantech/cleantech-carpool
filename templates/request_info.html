@@ -21,46 +21,57 @@
             height: 300px;
         }
         .center-btn{
-            display: block;
             position: relative;
             margin : 0 auto;
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #d00000;">
-        <a class="navbar-brand" href={{ url_for('begin') }}><img src="{{ url_for('static',filename='images/rhett_rides_logo.png') }}" height=50 width=70 alt="logo"/></a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    ​
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href={{ url_for('about') }}>About</a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href={{ url_for('example') }}>Example</a>
-              </li> 
-            <li class="nav-item active">
-                <a class="nav-link" href={{ url_for('enteratrip') }}>Enter a Trip</a>
-            </li> 
-                <li class="nav-item active">
-                <a class="nav-link" href={{ url_for('viewprofile') }}>View My Profile</a>
-            </li> 
-            </ul>
-            <a href={{ url_for('logout') }} class="btn btn-outline-light my-2 my-sm-0">Logout</a>
+    <section id="navbar">
+        <div class="container-fluid">
+          <div class="row">
+            <a class="navbar-brand col d-flex justify-content-center" href={{ url_for('begin') }}>
+              <div class="nav-element">
+                <img src="{{ url_for('static',filename='images/rhett_rides_logo.png') }}" width=180 alt="logo"/>
+              </div>
+            </a>
+            <div class="col d-flex justify-content-center align-items-center nav-col">
+              <div class="nav-element">
+                <a class="nav-link" href={{ url_for('begin') }}>Available Rides</a>
+              </div>
+            </div>
+            <div class="col d-flex justify-content-center align-items-center nav-col">
+              <div class="nav-element">
+                <a class="nav-link" href={{ url_for('viewprofile') }}>My Rides</a>
+              </div>    
+            </div>
+            <div class="col d-flex justify-content-center align-items-center nav-col">
+              <div class="nav-element">
+                <a class="nav-link" href={{ url_for('about') }}>About Us</a>
+              </div>          
+            </div>
+            <div class="col d-flex justify-content-center align-items-center nav-col">
+              <div class="nav-element d-flex flex-row" >
+                <a class="nav-link" href={{ url_for('logout') }}>Logout</a>
+                <img src="{{ url_for('static', filename='images/account.png')}}" width=50 alt="profile picture" />
+              </div>
+            </div>
+          </div>
         </div>
-    </nav>
-    <div class="header">
-        <h1> <b>Request Info</b> </h1>
-    </div>
-    <div>
-        <form method="POST" enctype="multipart/form-data">
+    </section>
+    <h1><b><center>Request Info</center></b></h1>
+
+    <form action="/requestInfo", method="POST">
+        <div>
             <h3 class="center">Message:</h3>
-            <textarea class="center-textBox"></textarea><br>
-            <a href={{ url_for('begin') }} style="text-decoration: none;"><button type="button" class="center-btn">Submit</button></a>
-        </form>
-    </div>
+            <textarea class="center-textBox" name="txtbox" type="submit"></textarea><br>
+            <center>
+                <button type="submit" class="center-btn">Submit</button>
+                <a href={{ url_for('begin') }} style="text-decoration: none;"><button type="button" class="center-btn">Back</button></a>
+            </center>
+            
+        </div>
+    </form>
+    
 </body>
 </html>
