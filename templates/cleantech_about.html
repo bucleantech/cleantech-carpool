@@ -55,8 +55,14 @@
           </div>
           <div class="col d-flex justify-content-center align-items-center nav-col">
             <div class="nav-element d-flex flex-row" >
-              <a class="nav-link" href={{ url_for('logout') }}>Logout</a>
-              <img src="{{ url_for('static', filename='images/account.png')}}" width=50 alt="profile picture" />
+              <div class="dropdown">
+                <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+                  <img src={{image_file}} width=50 alt="profile picture" />
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" href={{ url_for('logout') }}>Logout</a>
+                </div>
+              </div>            
             </div>
           </div>
         </div>
@@ -81,7 +87,7 @@
         <img src="{{url_for('static', filename='images/cleantech_logo.png')}}" alt="cleanTech Logo"  width=180 height=128/>
       </div>
       <div class="col d-flex justify-content-start">
-        <img src="{{url_for('static', filename='images/rhett_rides_logo_transparent.png')}}" alt="rhettRides Logo"  width=160 height=128/>
+        <img src="{{url_for('static', filename='images/rhett_rides_logo_transparent.png')}}" alt="rhettRides Logo"  height=128/>
       </div>
     </div>
 

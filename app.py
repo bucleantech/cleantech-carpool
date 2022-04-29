@@ -249,7 +249,17 @@ def to_unix_time(month, day, year, time):
 @app.route('/about/')
 @login_required
 def about():
-    return render_template('cleantech_about.html')
+    cursor=conn.cursor()
+    cursor.execute("SELECT profile_url FROM user_profile WHERE user_id='{0}'".format(current_user.user_id))
+    user_profile_url = "images/account.png"
+    user_profile_db = cursor.fetchone()
+    if user_profile_db:
+        s = ""
+        for i in user_profile_db:
+            s = s+i
+        user_profile_url = "uploads/" + s
+    image_file = url_for('static', filename=user_profile_url)
+    return render_template('cleantech_about.html', image_file=image_file)
 
 @app.route('/example/')
 @login_required
