@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Profile Page</title>
+    <title>My Rides Page</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> -->
@@ -33,7 +33,7 @@
         font-weight: normal;
         color: #000000;
 
-        background: #CC0000;
+        background: white;
         box-shadow: 0px -4px 4px rgba(0, 0, 0, 0.25);
         border-radius: 33px 33px 0px 0px;
 
@@ -72,33 +72,6 @@
         background: black;
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
         border-radius: 33px;
-    }
-
-    .email-container{
-        width:650px;
-        height: 96px;
-        margin: 30px auto;
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        background: #FFFFFF;
-        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-        border-radius: 33px;
-    }
-    .bio-container{
-        width: 650px;
-        height: 96px;
-        margin: 30px auto;
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        background: #FFFFFF;
-        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-        border-radius: 33px; 
     }
 ​
     .flex-child-photo{
@@ -298,58 +271,6 @@
         color: #000000;
     }
 
-
-    /* https://codepen.io/sahil4test/pen/xERYvX */
-    .overlay {
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: rgba(0, 0, 0, 0.7);
-        transition: opacity 500ms;
-        visibility: hidden;
-        opacity: 0;
-    }
-    .overlay:target {
-        visibility: visible;
-        opacity: 1;
-    }
-
-    .popup {
-        margin: 70px auto;
-        padding: 20px;
-        background: #fff;
-        border-radius: 5px;
-        width: 40%;
-        position: relative;
-        transition: all 5s ease-in-out;
-    }
-
-    .popup h2 {
-        margin-top: 0;
-        color: #333;
-        font-family: Tahoma, Arial, sans-serif;
-    }
-    .popup .close {
-        position: absolute;
-        top: 20px;
-        right: 30px;
-        transition: all 200ms;
-        font-size: 30px;
-        font-weight: bold;
-        text-decoration: none;
-        color: #333;
-    }
-
-    .popup .close:hover {
-        color: #06D85F;
-    }
-
-    .popup .content {
-        max-height: 30%;
-        overflow: auto;
-    }
     </style>
 </head>
 ​
@@ -397,59 +318,29 @@
    
 ​
     <div class="header">
-        <h1> <b>Profile Page</b> </h1>
+        <h1> <b>My Rides</b> </h1>
     </div>
 ​
 {% if trips %}
     <div class="main">
-        <div class="flex-child info">
-            <form method="POST" enctype="multipart/form-data">
-                <div class = "photo-container" id = "photo-displayed" name = "photo-displayed">
-                    <img src="{{ url_for('static', filename='uploads/' + profile) }}" width="350" height="350">  
-                </div>
-                <div>
-                    <input type ="file" id = "file" name = "file" accept="image/*">
-                </div>
-                <!-- <script>
-                    const imageInput = document.querySelector("#image_input")
-                    var uploadedImage = "";
-                    imageInput.addEventListener("change", function(){
-                        const reader = new FileReader();
-                        reader.addEventListener("load", () => {
-                            uploadedImage = reader.result;
-                            console.log(uploadedImage)
-                            document.querySelector("#photo-displayed").style.backgroundImage = `url(${uploadedImage})`
-                        });
-                        reader.readAsDataURL(this.files[0])
-                    })
-                </script> -->
-                <div class="info-container">
-                    <h1>College <b><input type="text" id="college" name="college" value="Boston University"}><br></b> Class of <b><input type="text" id="year" name="year" value={{info[1]}}><br></b></h1>
-                </div>
-                <div class="email-container">
-                    <h1>Email <b><input type="text" id="email" name="email" value={{info[2]}}><br></b></h1>
-                </div>
-                <div class="bio-container">
-                    <h1>Bio goes here: <b><input type="text" id="bio" name="bio" value={{info[3]}}><br></b></h1>
-                </div>
-                <center>
-                    <input type="submit" value="Edit">
-                    <a href={{ url_for('begin') }}><button type="button">Back</button></a>
-                </center>
-            </form>
-        </div>
 ​
         <div class="center">
             <table class = "trips-table">
                 <thead>
-                <!-- <tr>
-                    <th colspan="4">Upcoming Trips</th>
-                </tr> -->
                     <tr>
-                    <th>Most Recent</th>
-                    <th>All Point A's</th>
-                    <th>All Point B's</th>
-                    <th>All Drivers</th>
+                    <th>You have hosted a total of 1 ride and are making a difference!</th>
+                    <th>Start a new ride</th>
+                </tr>
+                </thead>
+            </table>
+
+            <table class = "trips-table">
+                <thead>
+                    <tr>
+                    <th>Departure</th>
+                    <th>Starting From</th>
+                    <th>Going to</th>
+                    <th>Seats Available</th>
                 </tr>
                 </thead>
             </table>
@@ -462,62 +353,13 @@
                         <span>{{trip[2]}} ~ {{trip[3]}}</span>
                         <span>{{trip[0]}}</span>
                         <span>{{trip[1]}}</span>
-                        <span>{{trip[4]}}</span>
+                        <span>{{trip[5]}}</span>
                     </div>
                     {% endfor %}
                 <!-- {% endif %} -->
                 </div>
             </div>
         </div>
-    </div>
-{% else %}
-<div class="main">
-        <div class = "photo-container" id = "photo-displayed" name = "photo-displayed">
-            <img src="{{ url_for('static', filename='uploads/' + info[0]) }}" width="350" height="350">  
-        </div>
-        <div>
-            <input type ="file" id = "file" name = "file" accept="image/*">
-        </div>
-        <div class="info-container">
-            <h1>Boston University, Class of {{info[1]}}</h1>
-        </div>
-        <div class="email-container">
-            <h1>{{info[2]}}</h1>
-        </div>
-        <div class="bio-container">
-            <h1>{{info[3]}}</h1>
-        </div>
-
-        <!-- https://codepen.io/sahil4test/pen/xERYvX -->
-        <div class="report-container">
-	        <a class="button" href="#popup1">Report this user</a>
-        </div>
-
-        <div id="popup1" class="overlay">
-            <center>
-	        <div class="popup" style="background: #3A3A3A;">
-                <!-- <form method="POST"> -->
-                <div class= "info-container">
-                    <a href='/reportUser/"Violated app rules"'> <h2>Violated app rules</h2></a>
-                </div>
-                <div class= "info-container">
-                    <a href='/reportUser/"Suspicious profile"'> <h2>Suspicious profile</h2></a>
-                </div>
-                <div class= "info-container">
-                    <a href='/reportUser/"Suspicious trip listing"'> <h2>Suspicious trip listing</h2></a>
-                </div>
-                <div class= "info-container">
-                    <a href='/reportUser/"Trip canceled without notice"'> <h2>Trip canceled without notice</h2></a>
-                </div>
-		        <a class="close" href="#">&times;</a>
-		        <div class="content" style="color: white;">
-			    <i>Any illegal activity must be reported immediately to BUPD</i>
-		        </div>
-                <!-- </form> -->
-            </div>
-            </center>
-        </div>
-    <!-- </body> -->
     </div>
 {% endif %}
 </body>

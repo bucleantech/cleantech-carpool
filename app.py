@@ -268,6 +268,23 @@ def about():
     image_file = getUserProfilePicture(current_user.user_id)
     return render_template('cleantech_about.html', image_file=image_file)
 
+@app.route('/myrides', methods=['GET', 'POST'])
+def myrides():
+    cursor=conn.cursor()
+    uid=current_user.user_id
+    image_file = getUserProfilePicture(uid)
+    cursor.execute("SELECT user_id FROM user_profile WHERE user_id='{0}'".format(uid))
+    count = cursor.fetchone()
+    if (count):
+        print("ok")
+    else:
+        default_url = 'default-profile-pic.jpg'
+        cursor.execute("INSERT INTO user_profile (user_id, profile_url) VALUES ('{0}', '{1}')".format(uid, default_url))
+    
+    cursor.execute("SELECT starting_place,destination,date,time,user.name,seats_avail, trip_id, user.user_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE user.user_id='{0}'".format(uid))
+    trips=cursor.fetchall()
+    return render_template('myrides.html', trips=trips, image_file=image_file)
+
 @app.route('/example/')
 @login_required
 def example():
@@ -320,7 +337,6 @@ def trip_request(trip_id): #to keep this simple we could make it unclickable if 
         else:
             return('Saving failed')
         
-
 
 @app.route('/cleantech/trip/', methods = ['GET', 'POST'])
 @login_required
@@ -743,41 +759,49 @@ def requestInfo():
         print(sendMsg(trip_creator_email, msgTxt))
     return render_template('request_info.html')
 
-@app.route('/reportUser', methods=["GET", "POST"])
-def reportUser():
+@app.route('/reportUser/<message>', methods=["GET", "POST"])
+def reportUser(message):
     #tripId = request.args.get('tripId')
     #print(tripId)
     tripId = session.get('tripId', None)
     print(tripId)
 
-    if request.method == "POST":
-        requestInfoMsg = request.form.get("txtbox")
-        print(requestInfoMsg)
+    userid=current_user.user_id
+    cursor=conn.cursor()
+    image_file = getUserProfilePicture(userid)
+    cursor.execute("SELECT starting_place,destination,date,time,user.name, user.email, seats_avail, trip_id, user.user_id, tripDriver FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
+    trips=cursor.fetchall()
 
-        userid=current_user.user_id
-        cursor=conn.cursor()
-        
-        cursor.execute("SELECT user.email, user.name FROM trips JOIN user ON user.user_id=trips.user_id WHERE trip_id='{0}'".format(tripId))
-        trip_creator_email_data = cursor.fetchall()
-        print(trip_creator_email_data)
-        trip_creator_email = trip_creator_email_data[0][0]
-        trip_creator_name = trip_creator_email_data[0][1]
-        print(trip_creator_email)
-        print(trip_creator_name)
-        conn.commit()
-        
-        cursor.execute("SELECT user.email, user.name FROM user WHERE user_id='{0}'".format(userid))
-        user_data = cursor.fetchall()
-        user_email = user_data[0][0]
-        user_name = user_data[0][1]
-        print(user_email)
-        print(user_name)
+    # if request.method == "POST":
+    # print("Yaaaay")
+    userid=current_user.user_id
+    cursor=conn.cursor()
+    
+    # image_file = getUserProfilePicture(userid)
+    # cursor.execute("SELECT starting_place,destination,date,time,user.name, user.email, seats_avail, trip_id, user.user_id, tripDriver FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
+    # trips=cursor.fetchall()
 
-        msgTxt = "Passenger " + user_name + " (" + user_email + ") " + "states: " + requestInfoMsg
-        print(msgTxt)
+    emailRecipient = "bucleantechclub@gmail.com"
+    
+    cursor.execute("SELECT user.email, user.name FROM trips JOIN user ON user.user_id=trips.user_id WHERE trip_id='{0}'".format(tripId))
+    trip_creator_email_data = cursor.fetchall()
+    trip_creator_email = trip_creator_email_data[0][0]
+    trip_creator_name = trip_creator_email_data[0][1]
+    conn.commit()
 
-        print(sendMsg(trip_creator_email, msgTxt))
-    return render_template('request_info.html')
+    cursor.execute("SELECT user.email, user.name FROM user WHERE user_id='{0}'".format(userid))
+    user_data = cursor.fetchall()
+    user_email = user_data[0][0]
+    user_name = user_data[0][1]
+
+    msgTxt = "Passenger " + user_name + " (" + user_email + ") " + "reports user " + trip_creator_name + " (" + trip_creator_email + "): " + message[1:-1]
+    print(msgTxt)
+
+    print(sendMsg(emailRecipient, msgTxt))
+    return render_template('homepage_cleantech.html', trips=trips, testcode="Reported User!", image_file=image_file)
+    # else:
+    #     print("nay")
+    #     return render_template('homepage_cleantech.html', trips=trips, image_file=image_file)
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
