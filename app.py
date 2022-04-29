@@ -639,7 +639,24 @@ def trip_info():
                     conn.commit()
                     cursor.execute("SELECT starting_place,destination,date,time,user.name, user.email, seats_avail, trip_id, user.user_id, tripDriver FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
                     trips=cursor.fetchall()
+                    cursor.execute("SELECT user.email, user.name FROM trips JOIN user ON user.user_id=trips.user_id WHERE trip_id='{0}'".format(tripid))
+                    trip_creator_email_data = cursor.fetchall()
+                    trip_creator_email = trip_creator_email_data[0][0]
+                    trip_creator_name = trip_creator_email_data[0][1]
+                    print(trip_creator_email)
+                    print(trip_creator_name)
+                    conn.commit()
+                    cursor.execute("SELECT user.email, user.name FROM user WHERE user_id='{0}'".format(userid))
+                    user_data = cursor.fetchall()
+                    user_email = user_data[0][0]
+                    user_name = user_data[0][1]
+                    print(user_email)
+                    print(user_name)
+
+                    msgTxt = "Passenger " + user_name + " (" + user_email + ") " + "has reserved a seat on your ride."
+                    print(sendMsg(trip_creator_email, msgTxt))
                     session['tripId'] = tripid  
+
                     return render_template('homepage_cleantech.html', trips=trips, testcode="Successfully Signed Up")
         else:
             tripid=request.args.get("tripid")
@@ -723,12 +740,14 @@ def viewprofile():
     else:
         default_url = 'default-profile-pic.jpg'
         cursor.execute("INSERT INTO user_profile (user_id, profile_url) VALUES ('{0}', '{1}')".format(uid, default_url))
+    
     cursor.execute("SELECT name, classof, email, bio FROM user WHERE user_id='{0}'".format(uid))
     information=cursor.fetchone()
     cursor.execute("SELECT starting_place,destination,date,time, user.name, seats_avail, trip_id, tripDriver FROM trips JOIN user ON user.user_id=trips.user_id WHERE (user.user_id ='{0}' OR trips.passanger1 ='{0}' OR trips.passanger2 ='{0}' OR trips.passanger3 ='{0}' OR trips.passanger4 ='{0}' OR trips.passanger5 ='{0}' OR trips.passanger6 ='{0}' OR trips.passanger7 ='{0}' OR trips.passanger8 ='{0}')".format(uid))
     trips=cursor.fetchall()
     cursor.execute("SELECT profile_url FROM user_profile WHERE user_id='{0}'".format(uid))
     profilepic = cursor.fetchone()
+    profilepic = profilepic[0]
     print(profilepic)
     if request.method=='POST':
         filename = ""

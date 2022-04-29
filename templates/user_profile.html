@@ -330,7 +330,7 @@
         <div class="flex-child info">
             <form method="POST" enctype="multipart/form-data">
                 <div class = "photo-container" id = "photo-displayed" name = "photo-displayed">
-                    <img src="{{ url_for('static', filename='uploads/' + info[0]) }}" width="350" height="350">  
+                    <img src="{{ url_for('static', filename='uploads/' + profile) }}" width="350" height="350">  
                 </div>
                 <div>
                     <input type ="file" id = "file" name = "file" accept="image/*">
