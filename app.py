@@ -30,7 +30,7 @@ from user import User, trip
 #https://stackoverflow.com/questions/22947905/flask-example-with-post
 app = Flask(__name__)
 mail = Mail(app)
-UPLOAD_FOLDER = 'Static/uploads/'
+UPLOAD_FOLDER = 'static/uploads/'
 app.secret_key = 'super-duper-secret'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
