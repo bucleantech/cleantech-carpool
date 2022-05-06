@@ -283,7 +283,10 @@ def myrides():
     
     cursor.execute("SELECT starting_place,destination,date,time,user.name,seats_avail, trip_id, user.user_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE user.user_id='{0}'".format(uid))
     trips=cursor.fetchall()
-    return render_template('myrides.html', trips=trips, image_file=image_file)
+    cursor.execute("SELECT COUNT(*) FROM trips JOIN user ON user.user_id=trips.user_id WHERE user.user_id = '{0}'".format(uid))
+    countTuple = cursor.fetchone()
+    countRides = countTuple[0]
+    return render_template('myrides.html', trips=trips, countRides=countRides, image_file=image_file)
 
 @app.route('/example/')
 @login_required

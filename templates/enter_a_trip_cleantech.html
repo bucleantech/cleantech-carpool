@@ -5,11 +5,12 @@
 	<title>forms</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles/enter_a_trip_cleantech.css')}}">
+
 </head>
 
 
 
-<body>
+<body style="background-color: #d73b3e;">
 
 	<section id="navbar">
 		<div class="container-fluid">
@@ -53,20 +54,17 @@
 
 	{{trip1}}
 	<center>
-	<div class="wrapper">
+	<div class="wrapper" style="color: white;">
 		<div>
-			<h1>Trip Information</h1>
+			<h1><strong>Create New Trip</strong></h1>
 		</div>
 		<div class="container">
 
 		<form action="#" method="post">
 
-			<div>
-				<strong>Starting Point</strong>
-				</div>
 				<div>
-				<label> State:
-				<select class="starting_point" name=state required>
+				<label> Start State:
+				<select class="starting_point" name=state style="border-radius: 30px;" required>
 					<option value="AL">AL</option>
 					<option value="AK">AK</option>
 					<option value="AZ">AZ</option>
@@ -119,68 +117,60 @@
 					<option value="WY">WY</option>
 				</select>
 				</label>
-				<label> City:
-					<input class="starting_point" name=citystart type="text" placeholder="City" required>
+				<label> Start City:
+					<input class="starting_point" name=citystart type="text" placeholder="City" style="border-radius: 30px;" required>
 				</label>
 				</div>
 
 			<div>
-			<strong>Destination</strong>
-			</div>
-
-			<div>
-			<label> City:
-				<input class="starting_point" name=citystart type="text" placeholder="City" required>
+			<label> End City:
+				<input class="starting_point" name=citystart type="text" placeholder="City" style="border-radius: 30px;" required>
 			</label>
 
-			<label> Address:
-				<input class="starting_point" name=addressstart type="text" placeholder="Address" required>
+			<label> End Address:
+				<input class="starting_point" name=addressstart type="text" placeholder="Address" style="border-radius: 30px;" required>
 			</label>
 			</div>
 
+			<div>
+			<label> Day:
+				<input class="date" name=day type="date" style="border-radius: 30px;" required>
+			</label>
+
+			<label>Time:
+				<input class="time" name="time" type="time" style="border-radius: 30px;" required>
+			</label>
+			</div>
+
+			<label> Google Maps Route URL:
+				<input class="url" name=mapurl type="url" style="border-radius: 30px;">
+			</label>
 
 			<div>
-			<Label>
-			<strong>Time and Day</strong>
-			</Label>
-			</div>
-			<label for="date">Enter Date of Trip:</label>
-			<input type="date" name="date" required="TRUE" /><br />
-			<label for="date">Enter Time of Trip:</label>
-			<input type="time" name="time" required="TRUE" /><br />
-		
-			<div>
-				<strong>Vehicle Information</strong>
-			</div>
-			<div>
-			<label> Make:
-				<input class="vehicle" name=name type="text" placeholder="Make" required>
+			<label> Seats:
+				<input class="vehicle" name=seats type="number" style="border-radius: 30px;" placeholder="Enter a number" required>
 			</label>
-			
-			<label> Model:  
-				<input class="vehicle" name = model type="text"placeholder="Model" required> 
-			</label>
-			
+
 			<label> Driver:
-				<select class="driver" name=Driver required>
+				<select class="driver" name=Driver style="border-radius: 30px;" required>
 					<option value="me">Me</option>
 					<option value="uber">Uber</option>
 					<option value="other">Taxi</option>
 					<option value="other">Other</option>
 				</select>
 			</label>
+			</div>
 
-			<label> Seats Available:
-				<input class="vehicle" name=seats type="number" placeholder="Enter a number" required>
+			<label> Description/Comments:<br>
+				<input class="Comments" name=comment type="text" style="border-radius: 30px; height: 100px; width: 1000px;">
 			</label>
-			</div>
 
-			<div>
-				<input type="submit" value="Create trip"/>
-			</div>
+			<center>
+				<input type="submit" style="border-radius: 30px;" value="Create trip"/>
+				<a href={{ url_for('myrides') }}><button type="button" style="border-radius: 30px;">Cancel</button></a>
+			</center>
 
 		</form>
-	<!-- </label> -->
 	</div>
 </center>
 
