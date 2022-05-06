@@ -899,6 +899,9 @@ def begin():
         conn.commit()
         cursor.execute("SELECT starting_place,destination,date,time,user.name,user.email,seats_avail, trip_id, user.user_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
         trips=cursor.fetchall()
+        cursor.execute("SELECT user.name, user.email FROM user")
+        ppl = cursor.fetchall()
+        print(ppl)
         return render_template('homepage_cleantech.html',trips=trips,image_file=image_file) #redirect('http://127.0.0.1:5000/cleantech/', code=302)
     elif (current_user.is_authenticated):
         return redirect('http://127.0.0.1:5000/nobu', code=302)
