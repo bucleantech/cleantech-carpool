@@ -22,6 +22,8 @@ from flask_login import LoginManager, current_user, login_required, login_user, 
 
 from oauthlib.oauth2 import WebApplicationClient
 import requests
+import datetime
+from datetime import date
 
 from typing import List
 from db import init_db_command
@@ -39,7 +41,7 @@ set_up = False #if server has been initalized
 app.config['MAIL_SERVER']='smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USERNAME'] = 'bucleantechclub@gmail.com'
-app.config['MAIL_PASSWORD'] = 'Rhettrecycles1!'
+app.config['MAIL_PASSWORD'] = ''
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 mail = Mail(app)
@@ -201,14 +203,10 @@ client = WebApplicationClient(client_id) if (set_up) else WebApplicationClient(c
 # Don't want to needlessly open files
 ############################################
 
-
 # Flask-Login helper to retrieve a user from our db
 @login_manager.user_loader
 def load_user(user_id):
     return User.get(user_id)
-
-
-
 
 def fix_location(l1): #fixes GPS coordinates as stored on DB
     l1 = l1.replace('D', ', ')
@@ -262,6 +260,32 @@ def getUserProfilePicture(userid):
         image_file = url_for('static', filename=user_profile_url)
         return image_file
 
+@app.route('/home/')
+@login_required
+def home(): 
+    cursor = conn.cursor()
+    cursor.execute("SELECT COUNT(trip_id) FROM trips")
+    val = cursor.fetchone()
+    no_of_trips = val[0]
+    cursor.execute("SELECT COUNT(trip_id) FROM trips WHERE date > '{0}'".format(date.today()))
+    no_of_trips_today = cursor.fetchone()[0]
+    print(no_of_trips_today)
+    cursor.execute("SELECT COUNT(trip_id) FROM trips WHERE date >= '{0}' AND date <= '{1}' ".format(date.today() - datetime.timedelta(days=7), date.today()))
+    no_of_trips_week = cursor.fetchone()[0]
+    cursor.execute("SELECT COUNT(trip_id) FROM trips WHERE date >= '{0}' AND date <= '{1}' ".format(date.today() - datetime.timedelta(days=30), date.today()))
+    no_of_trips_month = cursor.fetchone()[0]
+    cursor.execute("SELECT COUNT(trip_id) FROM trips WHERE date >= '{0}' AND date <= '{1}' ".format(date.today() - datetime.timedelta(days=365), date.today()))
+    no_of_trips_year = cursor.fetchone()[0]
+    info_arr = [no_of_trips, no_of_trips_today, no_of_trips_week, no_of_trips_month, no_of_trips_year]
+    cursor.execute("SELECT COUNT(trip_id) FROM trips WHERE (user_id = '{2}' OR passanger1 = '{2}' OR passanger2 = '{2}' OR passanger3 = '{2}' OR passanger4 = '{2}' OR passanger5 = '{2}' OR passanger6 = '{2}' OR passanger7 = '{2}') AND date >= '{0}' AND date <= '{1}' ".format(date.today() - datetime.timedelta(days=7), date.today(), current_user.user_id))
+    no_of_trips_user_week = cursor.fetchone()[0]
+    cursor.execute("SELECT COUNT(trip_id) FROM trips WHERE (user_id = '{2}' OR passanger1 = '{2}' OR passanger2 = '{2}' OR passanger3 = '{2}' OR passanger4 = '{2}' OR passanger5 = '{2}' OR passanger6 = '{2}' OR passanger7 = '{2}') AND date >= '{0}' AND date <= '{1}' ".format(date.today() - datetime.timedelta(days=30), date.today(), current_user.user_id))
+    no_of_trips_user_month = cursor.fetchone()[0]
+    cursor.execute("SELECT COUNT(trip_id) FROM trips WHERE (user_id = '{2}' OR passanger1 = '{2}' OR passanger2 = '{2}' OR passanger3 = '{2}' OR passanger4 = '{2}' OR passanger5 = '{2}' OR passanger6 = '{2}' OR passanger7 = '{2}') AND date >= '{0}' AND date <= '{1}' ".format(date.today() - datetime.timedelta(days=365), date.today(), current_user.user_id))
+    no_of_trips_user_year = cursor.fetchone()[0]
+    info_arr_user = [no_of_trips_user_week, no_of_trips_user_month, no_of_trips_user_year]
+    image_file = getUserProfilePicture(current_user.user_id)
+    return render_template('home_page.html', image_file=image_file, info = info_arr, info_user = info_arr_user)
 @app.route('/about/')
 @login_required
 def about():
@@ -558,6 +582,10 @@ def success():
     whereto = 'http://127.0.0.1:5000/'
     return redirect(whereto, code=302)
 
+@app.route('/entertrip', methods=['GET', 'POST'])
+def enter_trip():
+    return render_template('enter_a_trip_cleantech.html')
+
 @app.route('/setup/')
 def setup():
     global set_up #flag for initialization
@@ -837,16 +865,16 @@ def viewprofile():
         file = request.files["file"]
         if file.filename == '':
             print('No image selected for uploading')
-            return redirect(request.url)
+            #return redirect(request.url)
         if file and allowed_file(file.filename): 
            filename = secure_filename(file.filename)
            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+           cursor.execute("UPDATE user_profile SET profile_url='{0}' WHERE user_id='{1}'".format(filename, uid))
         classyear=request.form.get("year")
         print("classyear = ", classyear)
         bio=request.form.get("bio")
         print("bio = ", bio)
         cursor.execute("UPDATE user SET classof='{0}', bio='{1}' WHERE user_id='{2}'".format(classyear, bio, uid))
-        cursor.execute("UPDATE user_profile SET profile_url='{0}' WHERE user_id='{1}'".format(filename, uid))
         conn.commit()
         cursor.execute("SELECT starting_place,destination,date,time,user.name,seats_avail, trip_id, user.user_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
         trips=cursor.fetchall()

@@ -11,7 +11,7 @@
   <section id="navbar">
     <div class="container-fluid">
       <div class="row">
-        <a class="navbar-brand col d-flex justify-content-center" href={{ url_for('begin') }}>
+        <a class="navbar-brand col d-flex justify-content-center" href={{ url_for('home') }}>
           <div class="nav-element">
             <img src="{{ url_for('static',filename='images/rhett_rides_logo.png') }}" width=180 alt="logo"/>
           </div>
@@ -49,12 +49,14 @@
 </section>
 
 <div class="center">
-<h1>Welcome {{current_user.name}}!</h1>
+<!-- <h1>Welcome {{current_user.name}}!</h1>
 <h3><center>{{testcode}}</center></h3>
 <p>Your email is {{current_user.email}}!</p>
-<p>Your id is {{current_user.user_id}}!</p>
+<p>Your id is {{current_user.user_id}}!</p> -->
 
 <h1><b>Available Rides</b></h1>
+
+<a href='/entertrip' style="text-decoration: none; color: black;"><div class="info" style="width: 94%; margin-top: 50px;font-size: larger;"><span><b>Start a New Ride</b></span></div></a>
 
 <table class = "trips-table">
   <thead>
@@ -68,7 +70,7 @@
   </thead>
 </table>
 
-<div class="info-container">
+<div>
   <div class="info-table">
     {% if trips %}
 		  {% for trip in trips %}
@@ -122,4 +124,10 @@
 
 
 </body>
+
+<footer class="footer-container" style="margin-top: 40px;">
+  <div class="row d-flex justify-content-center">
+    <p class="footer-text my-4">Boston University CleanTech Club</p>
+  </div>
+</footer>
 </html>

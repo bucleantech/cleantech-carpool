@@ -24,7 +24,7 @@
     .main{
         position: relative;
         width: 100%;
-        height: 2000px;
+        height: fit-content;
         left: 0px;
         padding-top: 30px;
 
@@ -59,6 +59,17 @@
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
         border-radius: 33px;
     }
+    .xline {
+        list-style: none;
+        text-decoration: none;
+        display: grid;
+        grid-template-columns: repeat(4, auto);
+        justify-content: flex-start;
+        /* controls height and width location of lessons */
+        grid-gap: 50px;
+        align-items: center;
+        justify-content: center;
+    }   
 
     .report-container{
         width: 650px;
@@ -350,6 +361,21 @@
         max-height: 30%;
         overflow: auto;
     }
+
+    .container {
+        width: 500px;
+        height: 300px;
+        background: #fff;
+        box-shadow: 0px 5px 7px 1px #888888;
+        -moz-box-shadow: 0 0 3px grey;
+        border-radius: 40px;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .container-text {
+        margin-top: 70px;
+    }
     </style>
 </head>
 ​
@@ -358,7 +384,7 @@
 	<section id="navbar">
 		<div class="container-fluid">
 		  <div class="row">
-			<a class="navbar-brand col d-flex justify-content-center" href={{ url_for('begin') }}>
+			<a class="navbar-brand col d-flex justify-content-center" href={{ url_for('home') }}>
 			  <div class="nav-element">
 				<img src="{{ url_for('static',filename='images/rhett_rides_logo.png') }}" width=180 alt="logo"/>
 			  </div>
@@ -404,12 +430,33 @@
     <div class="main">
         <div class="flex-child info">
             <form method="POST" enctype="multipart/form-data">
-                <div class = "photo-container" id = "photo-displayed" name = "photo-displayed">
-                    <img src="{{ url_for('static', filename='uploads/' + profile) }}" width="350" height="350">  
+                <div class="xline">
+                    <div>
+                        <div class = "photo-container ml-4" id = "photo-displayed" name = "photo-displayed">
+                            <img src="{{ url_for('static', filename='uploads/' + profile) }}" width="350" height="350">  
+                        </div>
+                        <div>
+                            <input class = "ml-4" type ="file" id = "file" name = "file" accept="image/*">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="info-container">
+                            <h1>College <b><input type="text" id="college" name="college" value="Boston University"}><br></b> Class of <b><input type="text" id="year" name="year" value={{info[1]}}><br></b></h1>
+                        </div>
+                        <div class="email-container">
+                            <h1>Email <b><input type="text" id="email" name="email" value={{info[2]}}><br></b></h1>
+                        </div>
+                        <div class="bio-container">
+                            <h1>Bio: <b><input type="text" id="bio" name="bio" value={{info[3]}}><br></b></h1>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <input type ="file" id = "file" name = "file" accept="image/*">
+                <div class="mt-4">
+                    <input type="submit" value="Edit">
+                    <a href={{ url_for('begin') }}><button type="button">Back</button></a>
                 </div>
+
+                
                 <!-- <script>
                     const imageInput = document.querySelector("#image_input")
                     var uploadedImage = "";
@@ -423,20 +470,43 @@
                         reader.readAsDataURL(this.files[0])
                     })
                 </script> -->
-                <div class="info-container">
-                    <h1>College <b><input type="text" id="college" name="college" value="Boston University"}><br></b> Class of <b><input type="text" id="year" name="year" value={{info[1]}}><br></b></h1>
-                </div>
-                <div class="email-container">
-                    <h1>Email <b><input type="text" id="email" name="email" value={{info[2]}}><br></b></h1>
-                </div>
-                <div class="bio-container">
-                    <h1>Bio goes here: <b><input type="text" id="bio" name="bio" value={{info[3]}}><br></b></h1>
-                </div>
-                <center>
-                    <input type="submit" value="Edit">
-                    <a href={{ url_for('begin') }}><button type="button">Back</button></a>
-                </center>
+                
             </form>
+        </div>
+
+        <div class="xline mt-5" >
+            <div class="container" style="width: 275px">
+                <div class="container-text">
+                    <h4 class="mb-4">This Week</h4>
+                    <h2 style="color: green;" class="mb-4"></h2>
+                    <h4>Rides Shared</h4>
+                    <h5>(Hosted)</h5>
+                </div>
+              </div>
+              <div class="container" style="width: 275px">
+                  <div class="container-text">
+                      <h4 class="mb-4">This Month</h4>
+                      <h2 style="color: green;" class="mb-4"></h2>
+                      <h4>Rides Shared</h4>
+                      <h5>(Hosted)</h5>
+                  </div>
+              </div>
+              <div class="container" style="width: 275px">
+                  <div class="container-text">
+                      <h4 class="mb-4">This Year</h4>
+                      <h2 style="color: green;" class="mb-4">{{info[4]}}</h2>
+                      <h4>Rides Shared</h4>
+                      <h5>(Hosted)</h5>
+                  </div>
+              </div>
+              <div class="container" style="width: 275px">
+                <div class="container-text">
+                    <h4 class="mb-4">All Time</h4>
+                    <h2 style="color: green;" class="mb-4">{{info[4]}}</h2>
+                    <h4>Rides Shared</h4>
+                    <h5>(Hosted)</h5>
+                </div>
+            </div>
         </div>
 ​
         <div class="center">
@@ -471,54 +541,7 @@
         </div>
     </div>
 {% else %}
-<div class="main">
-        <div class = "photo-container" id = "photo-displayed" name = "photo-displayed">
-            <img src="{{ url_for('static', filename='uploads/' + info[0]) }}" width="350" height="350">  
-        </div>
-        <div>
-            <input type ="file" id = "file" name = "file" accept="image/*">
-        </div>
-        <div class="info-container">
-            <h1>Boston University, Class of {{info[1]}}</h1>
-        </div>
-        <div class="email-container">
-            <h1>{{info[2]}}</h1>
-        </div>
-        <div class="bio-container">
-            <h1>{{info[3]}}</h1>
-        </div>
-
-        <!-- https://codepen.io/sahil4test/pen/xERYvX -->
-        <div class="report-container">
-	        <a class="button" href="#popup1">Report this user</a>
-        </div>
-
-        <div id="popup1" class="overlay">
-            <center>
-	        <div class="popup" style="background: #3A3A3A;">
-                <!-- <form method="POST"> -->
-                <div class= "info-container">
-                    <a href='/reportUser/"Violated app rules"'> <h2>Violated app rules</h2></a>
-                </div>
-                <div class= "info-container">
-                    <a href='/reportUser/"Suspicious profile"'> <h2>Suspicious profile</h2></a>
-                </div>
-                <div class= "info-container">
-                    <a href='/reportUser/"Suspicious trip listing"'> <h2>Suspicious trip listing</h2></a>
-                </div>
-                <div class= "info-container">
-                    <a href='/reportUser/"Trip canceled without notice"'> <h2>Trip canceled without notice</h2></a>
-                </div>
-		        <a class="close" href="#">&times;</a>
-		        <div class="content" style="color: white;">
-			    <i>Any illegal activity must be reported immediately to BUPD</i>
-		        </div>
-                <!-- </form> -->
-            </div>
-            </center>
-        </div>
-    <!-- </body> -->
-    </div>
+<div></div>
 {% endif %}
 </body>
 </html>
