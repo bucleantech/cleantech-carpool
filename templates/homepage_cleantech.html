@@ -55,38 +55,38 @@
 <p>Your id is {{current_user.user_id}}!</p> -->
 
 <h1><b>Available Rides</b></h1>
-
-<a href='/entertrip' style="text-decoration: none; color: black;"><div class="info" style="width: 94%; margin-top: 50px;font-size: larger;"><span><b>Start a New Ride</b></span></div></a>
-
-<table class = "trips-table">
-  <thead>
-    <tr>
-      <th>Departure</th>
-      <th>Starting From...</th>
-      <th>Going To...</th>
-      <th>Driver</th>
-      <th>Seats Available</th>
-    </tr>
-  </thead>
-</table>
-
 <div>
-  <div class="info-table">
-    {% if trips %}
-		  {% for trip in trips %}
-      <a href='/tripinfo?tripid={{trip[7]}}' style="text-decoration: none;">
-        <div class="info">
-          <span>{{trip[2]}} ~ {{trip[3]}}</span>
-          <span>{{trip[0]}}</span>
-          <span>{{trip[1]}}</span>
-          <span>{{trip[4]}}</span>
-          <span>{{trip[6]}}</span>
-        </div>
-      </a> 
-      {% endfor %}
-  {% endif %}
+  <a href='/entertrip' style="text-decoration: none; color: black;"><div class="info" style="width: 94%; margin-top: 50px;font-size: larger;"><span><b>Start a New Ride</b></span></div></a>
+
+  <table class = "trips-table">
+    <thead>
+      <tr>
+        <th>Departure</th>
+        <th>Starting From...</th>
+        <th>Going To...</th>
+        <th>Driver</th>
+        <th>Seats Available</th>
+      </tr>
+    </thead>
+  </table>
+
+  <div>
+    <div class="info-table">
+      {% if trips %}
+        {% for trip in trips %}
+        <a href='/tripinfo?tripid={{trip[7]}}' style="text-decoration: none;">
+          <div class="info">
+            <span>{{trip[2]}} ~ {{trip[3]}}</span>
+            <span>{{trip[0]}}</span>
+            <span>{{trip[1]}}</span>
+            <span>{{trip[4]}}</span>
+            <span>{{trip[6]}}</span>
+          </div>
+        </a> 
+        {% endfor %}
+    {% endif %}
+    </div>
   </div>
-</div>
 
 
 
@@ -116,18 +116,21 @@
   </tbody>
 </table> -->
 	
-
-</div>
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
 
+
+
+
+
 </body>
 
-<footer class="footer-container" style="margin-top: 40px;">
+<footer class="footer-container" style="margin-top: 40px; width: 100%">
   <div class="row d-flex justify-content-center">
     <p class="footer-text my-4">Boston University CleanTech Club</p>
   </div>
 </footer>
+
 </html>
