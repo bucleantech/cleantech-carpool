@@ -16,7 +16,6 @@ import os #for supressing https warnings
 import urllib.request
 from flask_mail import Mail, Message
 from werkzeug.utils import secure_filename
-import bs4
 
 from flask import Flask, request, redirect, url_for, render_template, session, flash
 from flask_login import LoginManager, current_user, login_required, login_user, logout_user
@@ -110,12 +109,7 @@ CREATE TABLE IF NOT EXISTS user_profile (
 	profile_url TEXT NOT NULL
 );  
 """)
-curs.execute("""
-CREATE TABLE IF NOT EXISTS trip_urls (
-    trip_id INT PRIMARY KEY,
-	trip_url TEXT
-);  
-""")
+
 client_id = ''
 client_secret = ''
 discovery_url = 'https://accounts.google.com/.well-known/openid-configuration'
@@ -323,7 +317,7 @@ def myrides():
 def example():
     return render_template('example_trip.html')
 
-@app.route('/entertrip/',methods=['GET', 'POST'])
+@app.route('/enteratrip/',methods=['GET', 'POST'])
 def enteratrip():
     substring = "@bu.edu"
     if (current_user.is_authenticated) and substring in current_user.email:
@@ -335,10 +329,6 @@ def enteratrip():
             date=request.form.get("date")
             time=request.form.get("time")
             model=request.form.get("model")
-            trip_url = request.form.get("mapurl")
-            url = bs4.BeautifulSoup(trip_url, "html.parser")
-            url = url.iframe['src']
-            print(url)
             uid=current_user.user_id
             seats_avail=request.form.get("seats")
             cursor.execute("SELECT max(trip_id) FROM trips")
@@ -352,8 +342,6 @@ def enteratrip():
                 cursor.execute("SELECT name from user WHERE user_id='{0}'".format(uid))
                 driver = cursor.fetchone()
             cursor.execute("INSERT INTO trips (trip_id,user_id,starting_place,destination,date,vehicle,comments,active,time,seats_avail,tripDriver) VALUES ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}')".format(tid,uid,start,dest,date,model,'NONE',1,time,seats_avail,driver))
-            print(tid)
-            cursor.execute("INSERT INTO trip_urls (trip_id, trip_url) VALUES ('{0}', '{1}')".format(tid, url))
             conn.commit()
             return render_template('enter_a_trip_cleantech.html', image_file=image_file)
         else:
@@ -520,7 +508,6 @@ def login():
     return redirect(request_uri)
 
 
-
 @app.route("/login/success")
 def success():
     # Get authorization code Google sent back to you
@@ -595,7 +582,9 @@ def success():
     whereto = 'http://127.0.0.1:5000/'
     return redirect(whereto, code=302)
 
-
+@app.route('/entertrip', methods=['GET', 'POST'])
+def enter_trip():
+    return render_template('enter_a_trip_cleantech.html')
 
 @app.route('/setup/')
 def setup():
@@ -738,13 +727,7 @@ def trip_info():
         else:
             tripid=request.args.get("tripid")
             cursor.execute("SELECT starting_place, destination, date, time, seats_avail, user.name, user.email, user.user_id, trips.trip_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trip_id='{0}'".format(tripid))
-            information=list(cursor.fetchone())
-            cursor.execute("SELECT trip_url FROM trip_urls WHERE trip_id='{0}'".format(tripid))
-            url = cursor.fetchone()
-            if url is not None:
-                information.append(url[0])
-            else:
-                information.append("No URL")
+            information=cursor.fetchone()
             print("trip info: ", information)    # prints None for Shrewsbury trip info
             cursor.execute("SELECT passanger1, passanger2, passanger3,passanger4,passanger5,passanger6,passanger7,passanger8 FROM trips WHERE trip_id='{0}'".format(tripid))
             passengerinfo=cursor.fetchone()

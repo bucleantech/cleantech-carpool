@@ -47,8 +47,3 @@ CREATE TABLE user_profile (
 	user_id TEXT PRIMARY KEY,
 	profile_url TEXT NOT NULL 
 )
-
-CREATE TABLE trip_urls (
-	trip_id INT PRIMARY KEY,
-	trip_url TEXT
-)

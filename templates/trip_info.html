@@ -117,33 +117,10 @@ h1{
     color: #000000;
 }
 
-.xline {
-        list-style: none;
-        text-decoration: none;
-        display: grid;
-        grid-template-columns: repeat(4, auto);
-        justify-content: flex-start;
-        /* controls height and width location of lessons */
-        grid-gap: 50px;
-        align-items: center;
-        justify-content: center;
-}  
-
-.corner-wrapper {
-  display: flex;
-  overflow: hidden;
-  width: 500;
-  height: 550;
-  border-radius: 10px;
-  transform: translateZ(0px);
-  border: 2px solid #CC0000;
-  margin-left: 20;
-}
-
 </style>
 </head>
 
-<body onload="initMap()">
+<body>
   <section id="navbar">
 		<div class="container-fluid">
 		  <div class="row">
@@ -189,161 +166,67 @@ h1{
     </div>
     {% if trip %}
     <center>
-    <div class="justify-content: center; align-items: center; text-align: center">
         <div class="main">
-          <div class = xline>
-            <iframe
-              width="450"
-              height="250"
-              frameborder="0" style="border:0"
-              referrerpolicy="no-referrer-when-downgrade"
-              src="https://www.google.com/maps/embed/v1/directions?key=AIzaSyByXVfdSdeAqwgJ16j2UGZn8kneGzztsno&origin=Oslo+Norway&destination=Telemark+Norway"
-              allowfullscreen>
-            </iframe>
-          
-            <form method="POST">
+        <form method="POST">
+            <div class="route-container">
+                <h1>From <b><input type="text" name="from" value="{{info[0]}}"}><br></b> </h1>
+               </div>
+               <div class="route-container">
+                <h1>To <b><input type="text" name="to" value={{info[1]}}><br></b></h1>
+                </div>
                 <div class="route-container">
-                    <h1>From <b><input type="text" name="from" value="{{info[0]}}"}><br></b> </h1>
-                  </div>
-                  <div class="route-container">
-                    <h1>To <b><input type="text" name="to" value={{info[1]}}><br></b></h1>
-                    </div>
-                    <div class="route-container">
-                    <h1> Leaves <b><input type="date" name="leaves" value={{info[2]}}><br></b></h1>
-                    </div>
-                    <div class="route-container">
-                    <h1> At <b><input type="time" name="at" value={{info[3]}}><br></b></h1>
-                    </div>
-                    <div class="route-container">
-                    <h1> Seats Available <b><input type="text" name="seatsavail" value={{info[4]}}><br></b></h1>
-                    </div>
-                    {% if passengernum > 0 %}
-                        {% for passenger in passengerinfo %}
-                            <div class="route-container">
-                                <h1> Passengers <b><input type="text" name="passengers" value={{passenger}}><br></b></h1>
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                    <input type="submit" name="edit" value="Save">
-                    <input type="submit" name="delete" value="Delete Trip">
-                    <a href={{ url_for('begin') }}><button type="button">Back</button></a>
-                    
-            </form>
-            
-          </div>
-        </div>
+                <h1> Leaves <b><input type="date" name="leaves" value={{info[2]}}><br></b></h1>
+                </div>
+                <div class="route-container">
+                <h1> At <b><input type="time" name="at" value={{info[3]}}><br></b></h1>
+                </div>
+                <div class="route-container">
+                <h1> Seats Available <b><input type="text" name="seatsavail" value={{info[4]}}><br></b></h1>
+                </div>
+                {% if passengernum > 0 %}
+                    {% for passenger in passengerinfo %}
+                        <div class="route-container">
+                            <h1> Passengers <b><input type="text" name="passengers" value={{passenger}}><br></b></h1>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                <input type="submit" name="edit" value="Save">
+                <input type="submit" name="delete" value="Delete Trip">
+                <a href={{ url_for('begin') }}><button type="button">Back</button></a>
+                
+        </form>
     </div>
+
     </center>
 
     {% else %}
     <div class="main">
-      <div class="xline">
-        <!-- src="https://www.google.com/maps/embed/v1/directions?key=AIzaSyByXVfdSdeAqwgJ16j2UGZn8kneGzztsno&origin={{info[0]}}&destination={{info[1]}}" -->
-        <div class="corner-wrapper">
-          <!-- <iframe
-            width="500"
-            height="500"
-            frameborder="0" style="border:0"
-            referrerpolicy="no-referrer-when-downgrade"
-            src="https://www.google.com/maps/embed/v1/directions?key=AIzaSyByXVfdSdeAqwgJ16j2UGZn8kneGzztsno&origin={{info[0]}}&destination={{info[1]}}"
-            allowfullscreen>
-          </iframe> -->
-          <iframe
-            width="500"
-            height="500"
-            frameborder="0" style="border:0"
-            referrerpolicy="no-referrer-when-downgrade"
-            src = {{info[9]}}
-            allowfullscreen>
-          </iframe>
+        <div class="route-container">
+            <h1>From <b>{{info[0]}}</b> to <b>{{info[1]}}</b></h1>
+        </div>
+        <div class="timedate-container">
+            <h1>Leaves <b>{{info[2]}}</b> at <b>{{info[3]}}</b></h1>
+        </div>
+        <div class="seats-container">
+            <h1>Seats Available <b>{{info[4]}}</b></h1>
+        </div>
+        <form method="POST">
+        <div class="driver-container" class= "color: black">
+            <a href='/viewotherprofile/{{info[7]}}' class="btn btn-outline-light my-2 my-sm-0"> <h1>{{info[5]}}</h1></a>
+            <!-- <h1>Driver <b>{{info[5]}}</b></h1> -->
         </div>
 
-        <!-- <iframe src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d758538.5482696851!2d-72.51737374624976!3d42.042296771410946!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e0!4m5!1s0x89e379ef6ac61539%3A0x528fd50a8206dceb!2sBoston%20University%20College%20of%20Arts%20%26%20Sciences%2C%20725%20Commonwealth%20Ave%2C%20Boston%2C%20MA%2002215!3m2!1d42.3502789!2d-71.105441!4m5!1s0x89e7ae16abb5a00b%3A0xd18cd2b24e6ea2a7!2sFarmington%2C%20CT!3m2!1d41.7360305!2d-72.79502699999999!5e0!3m2!1sen!2sus!4v1679091830478!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> -->
-        <div>
-          <div class="route-container">
-              <h1>From <b>{{info[0]}}</b> to <b>{{info[1]}}</b></h1>
-          </div>
-          <div class="timedate-container">
-              <h1>Leaves <b>{{info[2]}}</b> at <b>{{info[3]}}</b></h1>
-          </div>
-          <div class="seats-container">
-              <h1>Seats Available <b>{{info[4]}}</b></h1>
-          </div>
-          <form method="POST">
-          <div class="driver-container" class= "color: black">
-              <a href='/viewotherprofile/{{info[7]}}' class="btn btn-outline-light my-2 my-sm-0"> <h1>{{info[5]}}</h1></a>
-              <!-- <h1>Driver <b>{{info[5]}}</b></h1> -->
-          </div>
-
-            <center>
-              <a href = {{ url_for('requestInfo') }}><button type="button">Request Info</button></a>
-              <input type="submit" value="{{text}}">
-              <a href={{ url_for('begin') }}><button type="button">Back</button></a>
-            </center>
-          </form>
-        </div>
-      </div>
+         <center>
+          <a href = {{ url_for('requestInfo') }}><button type="button">Request Info</button></a>
+          <input type="submit" value="{{text}}">
+          <a href={{ url_for('begin') }}><button type="button">Back</button></a>
+        </center>
+         </form>
     </div>
     {% endif %}
     {% if message %}
 <center>{{message}}</center>
 
 {% endif %}
-
-<!-- <script src="https://maps.googleapis.com/maps/api/js?key=API_KEY"></script>
-  <script>
-    function initMap() {
-      // Create a map object
-      var map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: 37.7749, lng: -122.4194},
-        zoom: 12
-      });
-
-      // Initialize the DirectionsService and DirectionsRenderer objects
-      var directionsService = new google.maps.DirectionsService();
-      var directionsRenderer = new google.maps.DirectionsRenderer({
-        map: map
-      });
-
-      // Define the origin and destination
-      var origin = 'San Francisco, CA';
-      var destination = 'Oakland, CA';
-
-      // Define the travel mode
-      var travelMode = google.maps.TravelMode.DRIVING;
-
-      // Define the route request
-      var routeRequest = {
-        origin: origin,
-        destination: destination,
-        travelMode: travelMode,
-        provideRouteAlternatives: true // Allow for multiple paths
-      };
-
-      // Call the DirectionsService.route() method
-      directionsService.route(routeRequest, function(response, status) {
-        if (status === 'OK') {
-          // Display the routes on the map using the DirectionsRenderer object
-          directionsRenderer.setDirections(response);
-
-          // Provide the user with a way to select which route they prefer
-          var routes = response.routes;
-          for (var i = 0; i < routes.length; i++) {
-            var route = routes[i];
-            var routeButton = document.createElement('button');
-            routeButton.innerHTML = 'Route ' + (i+1);
-            routeButton.addEventListener('click', function() {
-              directionsRenderer.setDirections(response);
-              directionsRenderer.setRouteIndex(i);
-            });
-            document.getElementById('route-buttons').appendChild(routeButton);
-          }
-        }
-      });
-    }
-  </script>
-  <div id="map" style="height: 500px; width: 100%;"></div>
-  <div id="route-buttons"></div>
-  </body> -->
 </body>
 </html>
