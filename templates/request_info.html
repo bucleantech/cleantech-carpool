@@ -27,38 +27,7 @@
     </style>
 </head>
 <body>
-    <section id="navbar">
-        <div class="container-fluid">
-          <div class="row">
-            <a class="navbar-brand col d-flex justify-content-center" href={{ url_for('home') }}>
-              <div class="nav-element">
-                <img src="{{ url_for('static',filename='images/rhett_rides_logo.png') }}" width=180 alt="logo"/>
-              </div>
-            </a>
-            <div class="col d-flex justify-content-center align-items-center nav-col">
-              <div class="nav-element">
-                <a class="nav-link" href={{ url_for('begin') }}>Available Rides</a>
-              </div>
-            </div>
-            <div class="col d-flex justify-content-center align-items-center nav-col">
-              <div class="nav-element">
-                <a class="nav-link" href={{ url_for('myrides') }}>My Rides</a>
-              </div>    
-            </div>
-            <div class="col d-flex justify-content-center align-items-center nav-col">
-              <div class="nav-element">
-                <a class="nav-link" href={{ url_for('about') }}>About Us</a>
-              </div>          
-            </div>
-            <div class="col d-flex justify-content-center align-items-center nav-col">
-              <div class="nav-element d-flex flex-row" >
-                <a class="nav-link" href={{ url_for('logout') }}>Logout</a>
-                <img src="{{ url_for('static', filename='images/account.png')}}" width=50 alt="profile picture" />
-              </div>
-            </div>
-          </div>
-        </div>
-    </section>
+  {% include 'navbar.html' %}
     <h1><b><center>Request Info</center></b></h1>
 
     <form action="/requestInfo", method="POST">

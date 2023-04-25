@@ -6,69 +6,7 @@
 	<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles/home.css')}}">
 </head>
 <body>
-	<!-- <nav class="navbar navbar-expand-lg navbar-light">
-    <a class="navbar-brand" href={{ url_for('begin') }}><img src="{{ url_for('static',filename='images/rhett_rides_logo.png') }}" height=50 width=70 alt="logo"/></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href={{ url_for('about') }}>About</a>
-        </li>
-        <li class="nav-item active">
-          <a class="nav-link" href={{ url_for('example') }}>Example</a>
-        </li> 
-        <li class="nav-item active">
-          <a class="nav-link" href={{ url_for('enteratrip') }}>Enter a Trip</a>
-        </li>
-        <li class="nav-item active">
-          <a class="nav-link" href={{ url_for('logout') }}>Logout</a>
-        </li>
-      </ul>
-        <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Sign Up/Login</button>   
-    </div>
-  </nav> -->
-  <section id="navbar">
-      <div class="container-fluid">
-        <div class="row">
-          <a class="navbar-brand col d-flex justify-content-center" href={{ url_for('home') }}>
-            <div class="nav-element">
-              <img src="{{ url_for('static',filename='images/rhett_rides_logo.png') }}" width=180 alt="logo"/>
-            </div>
-          </a>
-          <div class="col d-flex justify-content-center align-items-center nav-col">
-            <div class="nav-element">
-              <a class="nav-link" href={{ url_for('begin') }}>Available Rides</a>
-            </div>
-          </div>
-          <div class="col d-flex justify-content-center align-items-center nav-col">
-            <div class="nav-element">
-              <a class="nav-link" href={{ url_for('myrides') }}>My Rides</a>
-            </div>    
-          </div>
-          <div class="col d-flex justify-content-center align-items-center nav-col">
-            <div class="nav-element">
-              <a class="nav-link" href={{ url_for('about') }}>About Us</a>
-            </div>          
-          </div>
-          <div class="col d-flex justify-content-center align-items-center nav-col">
-            <div class="nav-element d-flex flex-row" >
-              <div class="dropdown">
-                <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
-                  <img src={{image_file}} width=50 alt="profile picture" />
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a class="dropdown-item" href={{ url_for('logout') }}>Logout</a>
-                  <a class="dropdown-item" href={{ url_for('viewprofile') }}>View Profile</a>
-                </div>
-              </div>            
-            </div>
-          </div>
-        </div>
-      </div>
-  </section>
+  {% include 'navbar.html' %}
 
 <div class="page-container">
     <div class="xline" style="grid-gap:0px">
@@ -152,9 +90,9 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
   </body>
-  <footer class="footer-container">
-    <div class="row d-flex justify-content-center">
-      <p class="footer-text my-4">Boston University CleanTech Club</p>
+  <footer>
+    <div class="footer-container">
+      <p>Boston University CleanTech Club</p>
     </div>
   </footer>
 </html>

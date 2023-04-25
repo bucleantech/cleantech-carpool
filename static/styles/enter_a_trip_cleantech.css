@@ -11,22 +11,3 @@ select {width: 30%;}
 .date {width: 18.8%;}
 .time {width: 32.9%;}
 .vehicle {width: 16.5%;}
-
-#navbar {
-    background: #FFFFFF;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-}
-
-.nav-col {
-    border: 1px solid #E5E5E5;
-    box-sizing: border-box;
-    border-radius: 0px;
-}
-
-.nav-link {
-    font-style: normal;
-    font-weight: 500;
-    font-size: 24px;
-    line-height: 28px;
-    color: #000000;
-}

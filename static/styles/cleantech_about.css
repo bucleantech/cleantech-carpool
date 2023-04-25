@@ -2,13 +2,18 @@ html {
     font-size: 16px;
 }
 
-.footer-text {
-    color:white;
-}
-
+footer {
+	display: flex;
+	align-items: center;
+	justify-content: center; 
+	height: 70px; 
+	background-color: #d00000;
+  }
+  
 .footer-container {
-    background-color: #d00000;
-    width: 100%; 
+	margin-top: 10px;
+	text-align: center;
+	color: white;
 }
 
 .divider {

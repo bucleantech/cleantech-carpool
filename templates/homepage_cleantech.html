@@ -2,57 +2,14 @@
 <html>
 <head>
 	<title>Homepage</title>
+ 
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles/homepage_cleantech.css')}}">
 </head>
 
 <body>
-
-  <section id="navbar">
-    <div class="container-fluid">
-      <div class="row">
-        <a class="navbar-brand col d-flex justify-content-center" href={{ url_for('home') }}>
-          <div class="nav-element">
-            <img src="{{ url_for('static',filename='images/rhett_rides_logo.png') }}" width=180 alt="logo"/>
-          </div>
-        </a>
-        <div class="col d-flex justify-content-center align-items-center nav-col">
-          <div class="nav-element">
-            <a class="nav-link" href={{ url_for('begin') }}>Available Rides</a>
-          </div>
-        </div>
-        <div class="col d-flex justify-content-center align-items-center nav-col">
-          <div class="nav-element">
-            <a class="nav-link" href={{ url_for('myrides') }}>My Rides</a>
-          </div>    
-        </div>
-        <div class="col d-flex justify-content-center align-items-center nav-col">
-          <div class="nav-element">
-            <a class="nav-link" href={{ url_for('about') }}>About Us</a>
-          </div>          
-        </div>
-        <div class="col d-flex justify-content-center align-items-center nav-col">
-          <div class="nav-element d-flex flex-row" >
-            <div class="dropdown">
-              <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
-                <img src={{image_file}} width=50 alt="profile picture" />
-              </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href={{ url_for('logout') }}>Logout</a>
-                <a class="dropdown-item" href={{ url_for('viewprofile') }}>View Profile</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-</section>
-
-<div class="center">
-<!-- <h1>Welcome {{current_user.name}}!</h1>
-<h3><center>{{testcode}}</center></h3>
-<p>Your email is {{current_user.email}}!</p>
-<p>Your id is {{current_user.user_id}}!</p> -->
+  {% include 'navbar.html' %}
+<div >
 
 <h1><b>Available Rides</b></h1>
 
@@ -102,9 +59,9 @@
 
 </body>
 
-<footer class="footer-container">
-  <div class="row d-flex justify-content-center">
-    <p class="footer-text my-4">Boston University CleanTech Club</p>
+<footer>
+  <div class="footer-container">
+    <p>Boston University CleanTech Club</p>
   </div>
 </footer>
 
