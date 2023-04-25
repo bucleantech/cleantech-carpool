@@ -1,114 +1,107 @@
 /*body{background: #88fff1;}*/
 h1 {
-	width: 95%;
-	margin-left: 5%;
+	width: 100vw;
+	margin-left: 0;
     margin: 25px 0;
 	text-align: center;
 	margin-top: 20px;	
 }
 
-
 .link_to_trip {
 	color: black;
 }
 
-.footer-container {
-    background-color: #d00000;
-    width: 100%; 
-}
-
-.footer-text {
-    color:white;
-}
-
-
 .trips-table {
-	width: 95%;
-	margin-left: 5%;
-    margin: 25px 0;
+	width: 90vw;
     font-size: 1.2em;
     font-family: sans-serif;
 	border-collapse: separate;
 	border-spacing: 15px;
   	border: none
-}.center { /*background: rgb(245,245,245);*/
-	margin-left: 5%;
-	/*margin-right: 5%;*/
+
+}
+
+/* center had welcome text it was commented out though*/
+.center { /*background: rgb(245,245,245);*/
+	margin-left: 0;
 	margin-top: 30px;
-	height: 700px;
-	/*border: 2px solid #d00000;*/
+	height: 200px;
 }
 
-.trips-table thead tr th {
-	border-radius: 30px 30px 30px 30px;
-	border: 1px gray;
-	border-spacing: 20px;
+.main {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+
 }
 
-
-.trips-table tr {
-	background-color: white;
-	box-shadow: 10px ;
-}
+/* departure, starting from, going to, etc. boxes */
 
 .trips-table td, th {
 	padding: 10px;	
 }
 
 .trips-table th {
-	padding-top: 12px;
-    padding-bottom: 15px;
     text-align: center;
     background-color: white;
-	padding: 10px;
-  	box-shadow: 0px 5px 5px 2px #888888;
     color: black;
 }
 
-.trips-table tbody tr{
-	border-spacing: 0px;
-}
+.trips-table th {
+	border-right: 2px solid black;
+  }
+  .trips-table th:last-child {
+	border-right: none;
+  }
 
 .info-table {
-	width: 94%;
-	margin-left: 5%;
-    margin: 0px 0px -20px 10px;
+	width: 90vw;
 	color: black;
 	text-align: center;
-}.center { /*background: rgb(245,245,245);*/
-	margin-left: 5%;
-	/*margin-right: 5%;*/
-	margin-top: 30px;
-	height: 700px;
-	/*border: 2px solid #d00000;*/
 }
-  
-.headings, .info {
+
+.trips-table th:nth-child(1),
+.info span:nth-child(1) {
+  width: 20%;
+}
+.trips-table th:nth-child(2),
+.info span:nth-child(2) {
+  width: 20%;
+}
+.trips-table th:nth-child(3),
+.info span:nth-child(3) {
+  width: 20%;
+}
+.trips-table th:nth-child(4),
+.info span:nth-child(4) {
+  width: 20%;
+}
+.trips-table th:nth-child(5),
+.info span:nth-child(5) {
+  width: 20%;
+}
+
+/* start a new ride button */
+.info {
 	display: -webkit-box;
 	display: -ms-flexbox;
 	display: flex;
 	-webkit-box-pack: justify;
 	-ms-flex-pack: justify;
-	justify-content: space-between;
-	margin-bottom: 1em;
 	padding: 1em;
-}
 
-
-.info {
+	width: 90vw;
 	border-radius: 2em;
-	background-color: white;
 	margin-bottom: 20px;
-	-moz-box-shadow: 0 0 3px grey;
 	-webkit-box-shadow: 0 0 3px grey;
 	box-shadow: 0px 5px 7px 1px #888888;
+	
 	color: black;
 	text-decoration: none; 
 	background-color: none;
 	text-align: center;
-	justify-content: center;
-	padding-right: 20px;
-	
+	justify-content: center;	
 	
 }
 
@@ -119,6 +112,7 @@ h1 {
 span {
 	flex-basis: 20%;
 }
+
 
 #navbar {
     background: #FFFFFF;
@@ -139,6 +133,12 @@ span {
     color: #000000;
 }
   
+.footer-container {
+	margin-top: 40px;
+    background-color: #d00000;
+    width: 100vw; 
+}
 
-
-  
+.footer-text {
+    color:white;
+}
