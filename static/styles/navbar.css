@@ -38,15 +38,25 @@
     .nav-link {
         display: none;
     }
-    .row .nav-col {
+    .row .nav-col,  .nav-col{
         display: none;
+        margin: 0;
+        padding: 0;
         border: none;
     } .nav-col:not(:last-child):hover {
         background-color: white;
     }
 
+    .dropdown {
+        display: none;
+    }
+
     .row .burger {
         display: unset
+    }
+    .navbar-brand {
+        margin: 0;
+        padding: 0;
     }
 }
 @media screen and (min-width: 821px) {
@@ -65,7 +75,7 @@
     display: none;
     width: 45px;
     height: 45px;
-    background-color: transparent;
+    background-color: white;
     border: none;
 }
 
@@ -80,6 +90,10 @@
 
 .hidden {
     display: none;
+}
+
+.patty1 {
+    box-shadow: inset 0px 4px 3px -1px rgba(0, 0, 0, 0.25);
 }
 
 .patty {

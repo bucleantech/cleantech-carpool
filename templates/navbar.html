@@ -13,7 +13,7 @@
 </script>
 
 <section id="navbar" onload="toggleClass('hidden')">
-    <div class="container-fluid">
+    <nav class="container-fluid">
       <div class="row">
         <a class="navbar-brand col d-flex justify-content-center" href={{ url_for('home') }}>
           <div class="nav-element">
@@ -61,12 +61,15 @@
             </button>
           </div>
       </div>
-    </div>
+    </nav>
 
     <div class="burger-content hidden">
-        <a class="patty" href={{ url_for('begin') }}>Available Rides</a>
+        <a class="patty patty1" href={{ url_for('begin') }}>Available Rides</a>
         <a class="patty" href={{ url_for('myrides') }}>My Rides</a>
         <a class="patty" href={{ url_for('about') }}>About Us</a>
+        <a class="patty" href={{ url_for('viewprofile') }}>View Profile</a>
+        <a class="patty" href={{ url_for('logout') }}>Logout</a>
+
     </div>
       
 </section>
