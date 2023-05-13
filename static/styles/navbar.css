@@ -1,0 +1,125 @@
+#navbar {
+    background: #FFFFFF;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    top: 0;
+    left: 0;
+    margin-bottom: 40px;
+}
+
+.nav-col:not(:nth-child(5)) {
+    border: 1px solid #E5E5E5;
+    box-sizing: border-box;
+    border-radius: 0px;
+}
+
+.nav-link {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    text-align: center;
+    line-height: 28px;
+    color: #000000;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.nav-col:not(:nth-child(5)):hover {
+    background-color: #CC0000;
+    color: white;
+    text-decoration: none;
+}
+
+.nav-col:not(:nth-child(5)):hover .nav-link {
+    color: white;
+}
+  
+.dropdown-item:hover {
+    background-color: #FFBBBB;
+}
+
+@media screen and (max-width: 775px) {
+    .nav-link {
+        display: none;
+    }
+    .row .nav-col,  .nav-col{
+        display: none;
+        margin: 0;
+        padding: 0;
+        border: none;
+    } .nav-col:not(:last-child):hover {
+        background-color: white;
+    }
+
+    .dropdown {
+        display: none;
+    }
+
+    .row .burger {
+        display: unset
+    }
+    .navbar-brand {
+        margin: 0;
+        padding: 0;
+    }
+}
+@media screen and (min-width: 776px) {
+    .burger-content {
+      display: none;
+    }
+  }
+
+/* manually making a burger: */
+.burger-container {
+    margin-top: 25px;
+    margin-right: 12px;
+}
+
+.burger {
+    display: none;
+    width: 45px;
+    height: 45px;
+    background-color: white;
+    border: none;
+}
+
+.burger .line {
+    width: 100%;
+    float: left;
+    height: 3px;
+    background-color: black;;
+    margin-bottom: 5px;
+}
+/* end of burger making */
+
+.hidden {
+    display: none;
+}
+
+.patty1 {
+    box-shadow: inset 0px 4px 3px -1px rgba(0, 0, 0, 0.25);
+}
+
+.patty {
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    text-align: center;
+    line-height: 28px;
+    color: #000000;
+}
+
+.patty:hover {
+    background-color: #CC0000;
+    color: white;
+    text-decoration: none;
+}
+
+.visible {
+    display: unset;
+}
