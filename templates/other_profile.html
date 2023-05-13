@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/trip_info.css') }}">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta charset="UTF-8">
+
+   <style>
+   .body{
+    margin: 0px;
+    padding: 0px;
+}
+.header {
+    width: 100%;
+    text-align: center;
+
+    background: #FFFFFF;
+    box-shadow: 0px 4px 3px rgba(0, 0, 0, 0.25);
+}
+.main{
+    position: relative;
+    width: 100%;
+    height: 924px;
+    left: 0px;
+    padding-top: 30px;
+
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    color: #000000;
+
+    background: #CC0000;
+    box-shadow: 0px -4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 33px 33px 0px 0px;
+
+    display: flex;
+}
+
+h1{
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: px;
+    color: #000000;
+}
+.info-container{
+    width: 600px;
+    height: 100px;
+    margin: 30px auto;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: #FFFFFF;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 33px;
+}
+.email-container{
+    width: 600px;
+    height: 100px;
+    margin: 30px auto;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: #FFFFFF;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 33px;
+}
+.bio-container{
+    width: 600px;
+    height: 100px;
+    margin: 30px auto;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: #FFFFFF;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 33px; 
+}
+
+.flex-child {
+    flex: 1;
+    border: 5px solid white;
+}  
+
+figure {
+    display: inline-block;
+    overflow:hidden;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    border-radius: 33px;  
+    margin: 25px auto;
+    margin-left: 100px;
+}
+
+figcaption {
+    position: absolute;
+    height: 65px;
+    width:100%;
+    bottom: 0;
+
+    background: #FFFFFF;
+    border: 1px solid #C4C4C4;
+    box-sizing: border-box;
+    border-radius: 0px 0px 33px 33px;
+
+    bottom: 0px;
+    transition: bottom 0.5s ease;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+button{
+    width: 736px;
+    height: 96px;
+    margin: 30px auto;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: #FFFFFF;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 33px;
+    font-family : inherit;
+    font-size: 30px;
+}
+</style>
+</head>
+
+<body>
+    <section id="navbar">
+		<div class="container-fluid">
+		  <div class="row">
+			<a class="navbar-brand col d-flex justify-content-center" href={{ url_for('home') }}>
+			  <div class="nav-element">
+				<img src="{{ url_for('static',filename='images/rhett_rides_logo.png') }}" width=180 alt="logo"/>
+			  </div>
+			</a>
+			<div class="col d-flex justify-content-center align-items-center nav-col">
+			  <div class="nav-element">
+				<a class="nav-link" href={{ url_for('begin') }}>Available Rides</a>
+			  </div>
+			</div>
+			<div class="col d-flex justify-content-center align-items-center nav-col">
+			  <div class="nav-element">
+				<a class="nav-link" href={{ url_for('myrides') }}>My Rides</a>
+			  </div>    
+			</div>
+			<div class="col d-flex justify-content-center align-items-center nav-col">
+			  <div class="nav-element">
+				<a class="nav-link" href={{ url_for('about') }}>About Us</a>
+			  </div>          
+			</div>
+			<div class="col d-flex justify-content-center align-items-center nav-col">
+			  <div class="nav-element d-flex flex-row" >
+                <div class="dropdown">
+                    <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+                      <img src={{image_file}} width=50 alt="profile picture" />
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                      <a class="dropdown-item" href={{ url_for('logout') }}>Logout</a>
+                      <a class="dropdown-item" href={{ url_for('viewprofile') }}>View Profile</a>
+                    </div>
+                  </div>
+			  </div>
+			</div>
+		  </div>
+		</div>
+	</section>
+    <div class="header">
+        <h1> <b>Profile Page</b> </h1>
+    </div>
+    
+    <div class="main">
+        <div class="flex-child photo">
+            <figure>
+                <img src='http://placehold.it/350x350' alt='profile-photo' />
+                <figcaption>{{info[0]}}</figcaption>
+            </figure>
+        </div>
+    
+        <div class="flex-child info">
+                <div class="username-container">
+                    <h1>{{info[0]}}</h1>
+                </div>
+                <div class="info-container">
+                    <h1>College <b>Boston University<br></b> Class of <b>{{info[1]}}<br></b></h1>
+                </div>
+                <div class="email-container">
+                    <h1>{{info[2]}}</h1><br>
+                </div>
+                <div class="bio-container">
+                    <h1>{{info[3]}}
+                </div>
+        </div>
+    </div>
+</body>
+</html>

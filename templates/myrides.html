@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>My Rides Page</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> -->
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/trip_info.css') }}">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta charset="UTF-8">
+​
+   <style>
+   .body{
+        margin: 0px;
+        padding: 0px;
+    }
+    .header {
+        width: 100%;
+        text-align: center;
+
+        background:  #FFFFFF;
+        box-shadow: 0px 4px 3px rgba(0, 0, 0, 0.25);
+    }
+    .main{
+        position: relative;
+        width: 100%;
+        height: 2000px;
+        left: 0px;
+        padding-top: 30px;
+
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: normal;
+        color: #000000;
+
+        background: white;
+        box-shadow: 0px -4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 33px 33px 0px 0px;
+
+        text-align:center
+    }
+    h1{
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 30px;
+        color: #000000;
+    }
+    .info-container{
+        width: 650px;
+        height: 96px;
+        margin: 30px auto;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        background: #FFFFFF;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 33px;
+    }
+
+    .report-container{
+        width: 650px;
+        height: 96px;
+        margin: 30px auto;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        background: black;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 33px;
+    }
+​
+    .flex-child-photo{
+        display:inline-flex
+    }
+
+    .photo-container{
+        width: 350px;
+        height: 350px;
+        margin: 30px auto;
+
+        display: inline-block;
+        justify-content: center;
+        align-items: center;
+
+        background: #FFFFFF;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 33px;
+        background-position: center;
+        background-size: cover;
+    }
+
+    .photo-container img{
+        border-radius: 33px;
+    }
+​
+    .flex-child info{
+        display:inline-block
+    }  
+
+    
+    .trips-table {
+        border-radius: 30px;
+        /* background-color:green; */
+        width: 95%;
+        margin-left: 5%;
+        margin: 25px 0;
+        font-size: 1.2em;
+        font-family: sans-serif;
+        border-collapse: separate;
+        border-spacing: 15px;
+        border: none
+    }
+    
+    .center { /*background: rgb(245,245,245);*/
+        margin-left: 5%;
+        /*margin-right: 5%;*/
+        margin-top: 30px;
+        height: 700px;
+        /*border: 2px solid #d00000;*/
+    }
+
+    .trips-table thead tr th {
+        border-radius: 30px; /*30px 30px 30px 30px;*/
+        border: 1px gray;
+        border-spacing: 20px;
+    }
+
+    .trips-table thead {
+        border-radius: 30px;
+        background-color: transparent;
+    }
+
+    .trips-table tr {
+        background-color: transparent;
+        box-shadow: 10px ;
+    }
+
+    .trips-table td, .trips-table th {
+        padding: 10px;	
+        border-radius: 30px;
+        background-color: white;
+    }
+
+    .trips-table th {
+        padding-top: 12px;
+        padding-bottom: 15px;
+        text-align: center;
+        background-color: white;
+        padding: 10px;
+        box-shadow: 0px 5px 5px 2px #888888;
+        color: black;
+    }
+
+    .trips-table tbody tr{
+        border-spacing: 0px;
+    }
+
+    .tripinfo-table {
+        width: 94%;
+        margin-left: 5%;
+        margin: 0px 0px -20px 10px;
+        color: black;
+        text-align: center;
+    
+    }.center { /*background: rgb(245,245,245);*/
+        margin-left: 5%;
+        /*margin-right: 5%;*/
+        margin-top: 30px;
+        height: 300px;
+        text-align: center;
+        /*border: 2px solid #d00000;*/
+    }
+    
+    .headings, .tripinfo {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        margin-bottom: 1em;
+        padding: 1em;
+        text-align: center;
+    }
+
+
+    .tripinfo {
+        border-radius: 2em;
+        background-color: white;
+        margin-bottom: 20px;
+        -moz-box-shadow: 0 0 3px grey;
+        -webkit-box-shadow: 0 0 3px grey;
+        box-shadow: 0px 5px 7px 1px #888888;
+        color: black;
+        text-decoration: none; 
+        background-color: none;
+        text-align: center;
+    }
+
+    span {
+	    flex-basis: 25%;
+    }
+    
+    figure {
+        display: inline-block;
+        overflow:hidden;
+        filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+        border-radius: 33px;  
+        margin: 25px auto;
+  
+        align-items: center;
+        justify-content: center;
+    }
+    figcaption {
+        position: absolute;
+        height: 65px;
+        width:100%;
+        bottom: 0;
+
+        background: #FFFFFF;
+        border: 1px solid #C4C4C4;
+        box-sizing: border-box;
+        border-radius: 0px 0px 33px 33px;
+
+        bottom: 0px;
+        transition: bottom 0.5s ease;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+ 
+    style-button{
+        width: 736px;
+        height: 96px;
+        margin: 30px auto;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        background: #FFFFFF;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 33px;
+        font-family : inherit;
+        font-size: 30px;
+    }
+
+
+    #navbar {
+        background: #FFFFFF;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    }
+
+    .nav-col {
+        border: 1px solid #E5E5E5;
+        box-sizing: border-box;
+        border-radius: 0px;
+    }
+
+    .nav-link {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 24px;
+        line-height: 28px;
+        color: #000000;
+    }
+
+    </style>
+</head>
+​
+<body>
+    
+	<section id="navbar">
+		<div class="container-fluid">
+		  <div class="row">
+			<a class="navbar-brand col d-flex justify-content-center" href={{ url_for('home') }}>
+			  <div class="nav-element">
+				<img src="{{ url_for('static',filename='images/rhett_rides_logo.png') }}" width=180 alt="logo"/>
+			  </div>
+			</a>
+			<div class="col d-flex justify-content-center align-items-center nav-col">
+			  <div class="nav-element">
+				<a class="nav-link" href={{ url_for('begin') }}>Available Rides</a>
+			  </div>
+			</div>
+			<div class="col d-flex justify-content-center align-items-center nav-col">
+			  <div class="nav-element">
+				<a class="nav-link" href={{ url_for('myrides') }}>My Rides</a>
+			  </div>    
+			</div>
+			<div class="col d-flex justify-content-center align-items-center nav-col">
+			  <div class="nav-element">
+				<a class="nav-link" href={{ url_for('about') }}>About Us</a>
+			  </div>          
+			</div>
+			<div class="col d-flex justify-content-center align-items-center nav-col">
+			  <div class="nav-element d-flex flex-row" >
+                <div class="dropdown">
+                    <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+                      <img src={{image_file}} width=50 alt="profile picture" />
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                      <a class="dropdown-item" href={{ url_for('logout') }}>Logout</a>
+                      <a class="dropdown-item" href={{ url_for('viewprofile') }}>View Profile</a>
+                    </div>
+                  </div>
+			  </div>
+			</div>
+		  </div>
+		</div>
+	</section>
+   
+​
+    <div class="header">
+        <h1> <b>My Rides</b> </h1>
+    </div>
+​
+{% if trips %}
+    <div class="main">
+​
+        <div class="center">
+            <table class = "trips-table">
+                <thead>
+                    <tr>
+                    <th>You have hosted a total of {{countRides}} rides and are making a difference!</th>
+                    <th> <a href='/enteratrip' style="color: black">Start a new ride</a></th>
+                </tr>
+                </thead>
+            </table>
+
+            <table class = "trips-table">
+                <thead>
+                    <tr>
+                    <th>Departure</th>
+                    <th>Starting From...</th>
+                    <th>Going to...</th>
+                    <th>Seats Available</th>
+                </tr>
+                </thead>
+            </table>
+            
+            <div class="tripinfo-container">
+                <div class="tripinfo-table">
+                <!-- {% if trips %} -->
+                    {% for trip in trips %}
+                    <div class="tripinfo">
+                        <span>{{trip[2]}} ~ {{trip[3]}}</span>
+                        <span>{{trip[0]}}</span>
+                        <span>{{trip[1]}}</span>
+                        <span>{{trip[5]}}</span>
+                    </div>
+                    {% endfor %}
+                <!-- {% endif %} -->
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+</body>
+</html>

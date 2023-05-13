@@ -5,17 +5,26 @@ Created on Mon Sep  9 14:21:53 2019
 @author: Felipe Dale Figeman
 
 """
-#example from https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world
 
+#example from https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world
+from crypt import methods
+from getpass import getuser
+import profile
 import sqlite3
 import json
 import os #for supressing https warnings
+import urllib.request
+from flask_mail import Mail, Message
+from werkzeug.utils import secure_filename
+import bs4
 
-from flask import Flask, request, redirect, url_for, render_template
+from flask import Flask, request, redirect, url_for, render_template, session, flash
 from flask_login import LoginManager, current_user, login_required, login_user, logout_user
 
 from oauthlib.oauth2 import WebApplicationClient
 import requests
+import datetime
+from datetime import date
 
 from typing import List
 from db import init_db_command
@@ -23,12 +32,90 @@ from user import User, trip
 
 #https://stackoverflow.com/questions/22947905/flask-example-with-post
 app = Flask(__name__)
+mail = Mail(app)
+UPLOAD_FOLDER = 'static/uploads/'
 app.secret_key = 'super-duper-secret'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 set_up = False #if server has been initalized
+
+app.config['MAIL_SERVER']='smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'bucleantechclub@gmail.com'
+app.config['MAIL_PASSWORD'] = ''
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+mail = Mail(app)
 
 yall : List[User] = []
 all_trips : List[trip] = []
+conn=sqlite3.connect('BUcleantech.db',check_same_thread=False)
+curs=conn.cursor()
+curs.execute("""
+CREATE TABLE IF NOT EXISTS user (
+  user_id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  emissions_avoided int,
+  email TEXT UNIQUE NOT NULL,
+  venmo TEXT UNIQUE,
+  classof INTEGER,
+  bio TEXT
+);
+""")
+curs.execute("""
+CREATE TABLE IF NOT EXISTS trips (
+	trip_id INT PRIMARY KEY,
+	user_id TEXT NOT NULL,
+	starting_place TEXT NOT NULL,
+	destination TEXT NOT NULL,
+	stops int,
+    time TIME,
+	passanger1 TEXT,
+	passanger2 TEXT,
+	passanger3 TEXT,
+	passanger4 TEXT,
+	passanger5 TEXT,
+	passanger6 TEXT,
+	passanger7 TEXT,
+	passanger8 TEXT,
+    seats_avail INTEGER NOT NULL,
+	vehicle TEXT NOT NULL,
+	comments TEXT NOT NULL,
+    active INTEGER NOT NULL,
+    tripDriver TEXT NOT NULL,
+	FOREIGN KEY(user_id) REFERENCES user(user_id)
+);
+""")
+curs.execute("""
+CREATE TABLE IF NOT EXISTS trip_requests (
+	request_id int4,
+	driver TEXT,
+	rider TEXT,
+	trip int4,
+	PRIMARY KEY(request_id),
+	FOREIGN KEY(trip) REFERENCES trips(trip_id)
+);
+""")
+curs.execute("""
+CREATE TABLE IF NOT EXISTS car (
+    name TEXT PRIMARY KEY,
+    capacity int4,
+    fuel_efficiency TEXT NOT NULL
+);
+""")
 
+curs.execute("""
+CREATE TABLE IF NOT EXISTS user_profile (
+    user_id TEXT PRIMARY KEY,
+	profile_url TEXT NOT NULL
+);  
+""")
+curs.execute("""
+CREATE TABLE IF NOT EXISTS trip_urls (
+    trip_id INT PRIMARY KEY,
+	trip_url TEXT
+);  
+""")
 client_id = ''
 client_secret = ''
 discovery_url = 'https://accounts.google.com/.well-known/openid-configuration'
@@ -38,27 +125,46 @@ def get_google_config():
 
 #if you say this isn't secure enough
 #it was secure enough for my internship at a cyber security company
+#def custom_id_getter(withreturn=False):
+#    id_file = open('whomst.txt', 'r')
+#    whomst = id_file.read()
+#    id_file.close()
+#    global client_id
+#    client_id = whomst
+#    if (withreturn):
+#        return client_id
+#    else:
+#        return
+
+#def custom_secret_getter(withreturn=False):
+ #   secret_file = open('notouch.txt', 'r')
+ #   secret = secret_file.read()
+ #   secret_file.close()
+ #   global client_secret
+ #   client_secret = secret
+ #   if (withreturn):
+ #       return client_secret
+ #   else:
+ #       return
+
 def custom_id_getter(withreturn=False):
-    id_file = open('whomst.txt', 'r')
-    whomst = id_file.read()
-    id_file.close()
+    whomst = os.environ.get("GOOGLE_CLIENT_ID", None)
     global client_id
     client_id = whomst
     if (withreturn):
         return client_id
     else:
-        return
+        return 
 
 def custom_secret_getter(withreturn=False):
-    secret_file = open('notouch.txt', 'r')
-    secret = secret_file.read()
-    secret_file.close()
+    secret = os.environ.get("GOOGLE_CLIENT_SECRET", None)
     global client_secret
     client_secret = secret
     if (withreturn):
         return client_secret
     else:
         return
+
 
 #################################################
 
@@ -71,6 +177,10 @@ def get_logged_in_user(user_id, index=False):
         if (int(yall[i].user_id) == uid):
             loc = i
             break
+    curs.execute("""
+    SELECT user_id 
+    FROM user
+    """)
     if (loc >= 0):
         usr = yall[loc]
         return loc if (index) else usr
@@ -99,14 +209,10 @@ client = WebApplicationClient(client_id) if (set_up) else WebApplicationClient(c
 # Don't want to needlessly open files
 ############################################
 
-
 # Flask-Login helper to retrieve a user from our db
 @login_manager.user_loader
 def load_user(user_id):
     return User.get(user_id)
-
-
-
 
 def fix_location(l1): #fixes GPS coordinates as stored on DB
     l1 = l1.replace('D', ', ')
@@ -142,10 +248,122 @@ def save_trip_request(trp, usr):
     return 0
 
 def to_unix_time(month, day, year, time):
-    #TODO find library that does this
+    #TODO find library that does thiçs
     return (time + 'on ' + str(month) + '/' + str(day) + '/' + str(year))
 
+def getUserProfilePicture(userid):
+        cursor = conn.cursor()
+        cursor.execute("SELECT profile_url FROM user_profile WHERE user_id='{0}'".format(userid))
+        user_profile_url = "images/account.png"
+        user_profile_db = cursor.fetchone()
+        if user_profile_db:
+            s = ""
+            for i in user_profile_db:
+                s = s+i
+            user_profile_url = "uploads/" + s
 
+        print("this is the profile", user_profile_url)
+        image_file = url_for('static', filename=user_profile_url)
+        return image_file
+
+@app.route('/home/')
+@login_required
+def home(): 
+    cursor = conn.cursor()
+    cursor.execute("SELECT COUNT(trip_id) FROM trips")
+    val = cursor.fetchone()
+    no_of_trips = val[0]
+    cursor.execute("SELECT COUNT(trip_id) FROM trips WHERE date > '{0}'".format(date.today()))
+    no_of_trips_today = cursor.fetchone()[0]
+    print(no_of_trips_today)
+    cursor.execute("SELECT COUNT(trip_id) FROM trips WHERE date >= '{0}' AND date <= '{1}' ".format(date.today() - datetime.timedelta(days=7), date.today()))
+    no_of_trips_week = cursor.fetchone()[0]
+    cursor.execute("SELECT COUNT(trip_id) FROM trips WHERE date >= '{0}' AND date <= '{1}' ".format(date.today() - datetime.timedelta(days=30), date.today()))
+    no_of_trips_month = cursor.fetchone()[0]
+    cursor.execute("SELECT COUNT(trip_id) FROM trips WHERE date >= '{0}' AND date <= '{1}' ".format(date.today() - datetime.timedelta(days=365), date.today()))
+    no_of_trips_year = cursor.fetchone()[0]
+    info_arr = [no_of_trips, no_of_trips_today, no_of_trips_week, no_of_trips_month, no_of_trips_year]
+    cursor.execute("SELECT COUNT(trip_id) FROM trips WHERE (user_id = '{2}' OR passanger1 = '{2}' OR passanger2 = '{2}' OR passanger3 = '{2}' OR passanger4 = '{2}' OR passanger5 = '{2}' OR passanger6 = '{2}' OR passanger7 = '{2}') AND date >= '{0}' AND date <= '{1}' ".format(date.today() - datetime.timedelta(days=7), date.today(), current_user.user_id))
+    no_of_trips_user_week = cursor.fetchone()[0]
+    cursor.execute("SELECT COUNT(trip_id) FROM trips WHERE (user_id = '{2}' OR passanger1 = '{2}' OR passanger2 = '{2}' OR passanger3 = '{2}' OR passanger4 = '{2}' OR passanger5 = '{2}' OR passanger6 = '{2}' OR passanger7 = '{2}') AND date >= '{0}' AND date <= '{1}' ".format(date.today() - datetime.timedelta(days=30), date.today(), current_user.user_id))
+    no_of_trips_user_month = cursor.fetchone()[0]
+    cursor.execute("SELECT COUNT(trip_id) FROM trips WHERE (user_id = '{2}' OR passanger1 = '{2}' OR passanger2 = '{2}' OR passanger3 = '{2}' OR passanger4 = '{2}' OR passanger5 = '{2}' OR passanger6 = '{2}' OR passanger7 = '{2}') AND date >= '{0}' AND date <= '{1}' ".format(date.today() - datetime.timedelta(days=365), date.today(), current_user.user_id))
+    no_of_trips_user_year = cursor.fetchone()[0]
+    info_arr_user = [no_of_trips_user_week, no_of_trips_user_month, no_of_trips_user_year]
+    image_file = getUserProfilePicture(current_user.user_id)
+    return render_template('home_page.html', image_file=image_file, info = info_arr, info_user = info_arr_user)
+@app.route('/about/')
+@login_required
+def about():
+    image_file = getUserProfilePicture(current_user.user_id)
+    return render_template('cleantech_about.html', image_file=image_file)
+
+@app.route('/myrides', methods=['GET', 'POST'])
+def myrides():
+    cursor=conn.cursor()
+    uid=current_user.user_id
+    image_file = getUserProfilePicture(uid)
+    cursor.execute("SELECT user_id FROM user_profile WHERE user_id='{0}'".format(uid))
+    count = cursor.fetchone()
+    if (count):
+        print("ok")
+    else:
+        default_url = 'default-profile-pic.jpg'
+        cursor.execute("INSERT INTO user_profile (user_id, profile_url) VALUES ('{0}', '{1}')".format(uid, default_url))
+    
+    cursor.execute("SELECT starting_place,destination,date,time,user.name,seats_avail, trip_id, user.user_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE user.user_id='{0}'".format(uid))
+    trips=cursor.fetchall()
+    cursor.execute("SELECT COUNT(*) FROM trips JOIN user ON user.user_id=trips.user_id WHERE user.user_id = '{0}'".format(uid))
+    countTuple = cursor.fetchone()
+    countRides = countTuple[0]
+    return render_template('myrides.html', trips=trips, countRides=countRides, image_file=image_file)
+
+@app.route('/example/')
+@login_required
+def example():
+    return render_template('example_trip.html')
+
+@app.route('/entertrip/',methods=['GET', 'POST'])
+def enteratrip():
+    substring = "@bu.edu"
+    if (current_user.is_authenticated) and substring in current_user.email:
+        image_file = getUserProfilePicture(current_user.user_id)
+        if request.method=='POST':
+            cursor=conn.cursor()
+            start=request.form.get("citystart")
+            dest=request.form.get("city")
+            date=request.form.get("date")
+            time=request.form.get("time")
+            model=request.form.get("model")
+            trip_url = request.form.get("mapurl")
+            url = bs4.BeautifulSoup(trip_url, "html.parser")
+            url = url.iframe['src']
+            print(url)
+            uid=current_user.user_id
+            seats_avail=request.form.get("seats")
+            cursor.execute("SELECT max(trip_id) FROM trips")
+            driver=request.form.get("driver")
+            tid=cursor.fetchall()[0][0]
+            if tid is None:
+                tid=1
+            else:
+                tid=tid+1
+            if driver == "me":
+                cursor.execute("SELECT name from user WHERE user_id='{0}'".format(uid))
+                driver = cursor.fetchone()
+            cursor.execute("INSERT INTO trips (trip_id,user_id,starting_place,destination,date,vehicle,comments,active,time,seats_avail,tripDriver) VALUES ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}')".format(tid,uid,start,dest,date,model,'NONE',1,time,seats_avail,driver))
+            print(tid)
+            cursor.execute("INSERT INTO trip_urls (trip_id, trip_url) VALUES ('{0}', '{1}')".format(tid, url))
+            conn.commit()
+            return render_template('enter_a_trip_cleantech.html', image_file=image_file)
+        else:
+            return render_template('enter_a_trip_cleantech.html', image_file=image_file)
+    else:
+        return redirect('http://127.0.0.1:5000/nobu', code=302)
+
+@app.route('/login2/')
+def login2():
+    return render_template('login2.html')
 
 @app.route('/cleantech/trip/<trip_id>/requestspot', methods = ['GET', 'POST'])
 @login_required
@@ -157,19 +375,21 @@ def trip_request(trip_id): #to keep this simple we could make it unclickable if 
             return('Trip saved')
         else:
             return('Saving failed')
+        
 
 @app.route('/cleantech/trip/', methods = ['GET', 'POST'])
+@login_required
 def view_trips():
     #TODO:
     #Page that shows all open trips
     if (request.method == 'GET'):
-
+        image_file = getUserProfilePicture(current_user.user_id)
         if (len(all_trips) > 0):
             print('Trips: ' + str(len(all_trips)))
             for i in range(len(all_trips)):
                 if ((all_trips[i].trip_id != None) and (all_trips[i].trip_id != 0)):
                     print(all_trips[i].trip_id)
-                    return render_template('homepage_cleantech.html', place=all_trips[i].trip_id, starting=all_trips[i].starting_place, ending=all_trips[i].destination, date=all_trips[i].date, driver=all_trips[i].owner)
+                    return render_template('homepage_cleantech.html', place=all_trips[i].trip_id, starting=all_trips[i].starting_place, ending=all_trips[i].destination, date=all_trips[i].date, driver=all_trips[i].owner, image_file=image_file)
                 else:
                     print(all_trips[i].date + all_trips[i].vehicle + str(all_trips[i].trip_id))
         return 'Not possible'
@@ -212,10 +432,6 @@ def reroutetouser():
         whereto = 'http://127.0.0.1:5000/cleantech/user/' + uid
         return redirect(whereto, code=302)
 
-@app.route('/cleantech/')
-def home(): #Home page ish kinda thing
-    return render_template('homepage.html')
-
 
 @app.route('/cleantech/add_trip/')
 @login_required
@@ -238,7 +454,7 @@ def make_trip(usr_id, comments):
             #usr.save_trip(usr.user_id, usr, date, stops, passangers, vehicle, starting_location, ending_location, comments)
             #trp = trip('Never', 'Tesla' '42.348097D-71.105963', '40.748298D-73.984827', 2, comments) #never instantiate a trip in this ever
             #usr.my_trips.append(trp)
-            return render_template('Enter_a_trip_cleantech.html')
+            return render_template('enter_a_trip_cleantech.html')
             
             whereto = 'http://127.0.0.1:5000/cleantech/user/'+str(usr.id)
             return redirect(whereto, code=302)
@@ -268,11 +484,7 @@ def make_trip(usr_id, comments):
             return redirect(whereto, code=302)
                    
 
-
-
-
-
-@app.route('/')
+@app.route('/cleantech')
 @login_required
 def rut():
     if (current_user.is_authenticated):
@@ -290,7 +502,8 @@ def login():
         custom_secret_getter()
     if (current_user.is_authenticated):
         uid = current_user.get_id()
-        whereto = 'http://127.0.0.1:5000/cleantech/users/' + uid
+        whereto = 'http://127.0.0.1:5000/'
+        #this was in the original code - not sure if I can take out or not so I'm just commenting it: whereto = 'http://127.0.0.1:5000/cleantech/users/' + uid
         return redirect(whereto, code=302)
 
     google_config = get_google_config()
@@ -340,7 +553,7 @@ def success():
     if userinfo_response.json().get("email_verified"):
         unique_id = userinfo_response.json()["sub"]
         users_email = userinfo_response.json()["email"]
-#        picture = userinfo_response.json()["picture"] # todo: from exaple breaks without.
+        picture = userinfo_response.json()["picture"] # todo: from exaple breaks without.
         users_name = userinfo_response.json()["given_name"]
     else:
         return "User email not available or not verified by Google.", 400
@@ -349,7 +562,6 @@ def success():
     # by Google
     user = User(
         user_id=unique_id, name=users_name, email=users_email)
-
     # Doesn't exist? Add it to the database.
     if not User.get(unique_id):
         User.create(unique_id, users_name, users_email)
@@ -379,8 +591,11 @@ def success():
     user.loaded = True
     #print(user)
     # Send user back to homepage
-    whereto = 'http://127.0.0.1:5000/cleantech/user/'+str(user.id)
+    #this was in the original code - not sure if I can take out or not so I'm just commenting it: whereto = 'http://127.0.0.1:5000/cleantech/user/'+str(user.id)
+    whereto = 'http://127.0.0.1:5000/'
     return redirect(whereto, code=302)
+
+
 
 @app.route('/setup/')
 def setup():
@@ -391,19 +606,357 @@ def setup():
         set_up = True
     return redirect('http://127.0.0.1:5000/', code=302)
 
+def sendMsg(recipientEmail, msgTxt):
+    msg = Message(
+                'Email from RhettRides',
+                sender ='bucleantechclub@gmail.com',
+                recipients = [recipientEmail]
+            )
+    msg.body = msgTxt
+    mail.send(msg)
+    return 'Sent'
+
+
+@app.route('/tripinfo', methods=['GET', 'POST'])
+def trip_info():
+    substring = "@bu.edu"
+    if (current_user.is_authenticated) and substring in current_user.email:
+        userid=current_user.user_id
+        cursor=conn.cursor()
+        image_file = getUserProfilePicture(userid)
+        if request.method=='POST':
+            tripid=request.args.get("tripid")
+            cursor.execute("SELECT starting_place, destination, date, time, seats_avail, user_id FROM trips WHERE trip_id='{0}'".format(tripid))
+            information=cursor.fetchone()
+            cursor.execute("SELECT passanger1, passanger2, passanger3,passanger4,passanger5,passanger6,passanger7,passanger8 FROM trips WHERE trip_id='{0}'".format(tripid))
+            passengerinfo=cursor.fetchone()
+            if information[5]==userid:
+                if request.form.get("edit"):
+                    start=request.form.get("from")
+                    finish=request.form.get("to")
+                    begindate=request.form.get("leaves")
+                    begintime=request.form.get("at")
+                    seatsavail=request.form.get("seatsavail")
+                    cursor.execute("UPDATE trips SET starting_place='{0}', destination='{1}', date='{2}', time='{3}', seats_avail='{4}' WHERE trip_id='{5}'".format(start,finish,begindate,begintime,seatsavail,tripid))
+                    conn.commit()
+                    cursor.execute("SELECT starting_place,destination,date,time,user.name, user.email, seats_avail, trip_id, user.user_id, tripDriver FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
+                    trips=cursor.fetchall()
+                    return render_template('homepage_cleantech.html', trips=trips, testcode="SUCCESSFULLY Updated", image_file=image_file)
+                else:
+                    cursor.execute("DELETE FROM trips WHERE trip_id='{0}'".format(tripid))
+                    cursor.execute("SELECT starting_place,destination,date,time,user.name, user.email, seats_avail, trip_id, user.user_id, tripDriver FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
+                    trips=cursor.fetchall()
+                    conn.commit()
+                    return render_template('homepage_cleantech.html', trips=trips, testcode="SUCCESSFULLY Deleted", image_file=image_file)
+            elif userid in passengerinfo:
+                if passengerinfo[0] == userid:
+                    cursor.execute("UPDATE trips SET passanger1=NULL WHERE trip_id='{0}'".format(tripid))
+                elif passengerinfo[1]==userid:
+                    cursor.execute("UPDATE trips SET passanger2=NULL WHERE trip_id='{0}'".format(tripid))
+                elif passengerinfo[2]==userid:
+                    cursor.execute("UPDATE trips SET passanger3=NULL WHERE trip_id='{0}'".format(tripid))
+                elif passengerinfo[3]==userid:
+                    cursor.execute("UPDATE trips SET passanger4=NULL WHERE trip_id='{0}'".format(tripid))
+                elif passengerinfo[4]==userid:
+                    cursor.execute("UPDATE trips SET passanger5=NULL WHERE trip_id='{0}'".format(tripid))
+                elif passengerinfo[5]==userid:
+                    cursor.execute("UPDATE trips SET passanger6=NULL WHERE trip_id='{0}'".format(tripid))
+                elif passengerinfo[6]==userid:
+                    cursor.execute("UPDATE trips SET passanger7=NULL WHERE trip_id='{0}'".format(tripid))
+                else:
+                    cursor.execute("UPDATE trips SET passanger8=NULL WHERE trip_id='{0}'".format(tripid))
+                cursor.execute("UPDATE trips SET seats_avail=seats_avail+1 WHERE trip_id='{0}'".format(tripid))
+                conn.commit()
+                cursor.execute("SELECT starting_place,destination,date,time,user.name, user.email, seats_avail, trip_id, user.user_id, tripDriver FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
+                trips=cursor.fetchall()
+
+                cursor.execute("SELECT user.email, user.name FROM trips JOIN user ON user.user_id=trips.user_id WHERE trip_id='{0}'".format(tripid))
+                trip_creator_email_data = cursor.fetchall()
+                trip_creator_email = trip_creator_email_data[0][0]
+                trip_creator_name = trip_creator_email_data[0][1]
+                print(trip_creator_email)
+                print(trip_creator_name)
+                conn.commit()
+                cursor.execute("SELECT user.email, user.name FROM user WHERE user_id='{0}'".format(userid))
+                user_data = cursor.fetchall()
+                user_email = user_data[0][0]
+                user_name = user_data[0][1]
+                print(user_email)
+                print(user_name)
+
+                msgTxt = "Passenger " + user_name + " (" + user_email + ") " + "decided to cancel their registration."
+
+                print(sendMsg(trip_creator_email, msgTxt))
+                session['tripId'] = tripid  
+                return render_template('homepage_cleantech.html', trips=trips, testcode="Successfully Canceled Reservation",image_file=image_file)
+
+            else:
+                if information[4]==0:
+                    cursor.execute("SELECT starting_place,destination,date,time,user.name, user.email, seats_avail, trip_id, user.user_id, tripDriver FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
+                    trips=cursor.fetchall()
+                    return render_template('homepage_cleantech.html', trips=trips, testcode="NO SEATS AVAILABLE", image_file=image_file)
+                else:
+                    if passengerinfo[0] is None:
+                        cursor.execute("UPDATE trips SET passanger1='{0}' WHERE trip_id='{1}'".format(userid,tripid))
+                    elif passengerinfo[1] is None:
+                        cursor.execute("UPDATE trips SET passanger2='{0}' WHERE trip_id='{1}'".format(userid,tripid))
+                    elif passengerinfo[2] is None:
+                        cursor.execute("UPDATE trips SET passanger3='{0}' WHERE trip_id='{1}'".format(userid,tripid))
+                    elif passengerinfo[3] is None:
+                        cursor.execute("UPDATE trips SET passanger4='{0}' WHERE trip_id='{1}'".format(userid,tripid))
+                    elif passengerinfo[4] is None:
+                        cursor.execute("UPDATE trips SET passanger5='{0}' WHERE trip_id='{1}'".format(userid,tripid))
+                    elif passengerinfo[5] is None:
+                        cursor.execute("UPDATE trips SET passanger6='{0}' WHERE trip_id='{1}'".format(userid,tripid))
+                    elif passengerinfo[6] is None:
+                        cursor.execute("UPDATE trips SET passanger7='{0}' WHERE trip_id='{1}'".format(userid,tripid))
+                    else:
+                        cursor.execute("UPDATE trips SET passanger8='{0}' WHERE trip_id='{1}'".format(userid,tripid))
+                    cursor.execute("UPDATE trips SET seats_avail=seats_avail-1 WHERE trip_id='{0}'".format(tripid))
+                    conn.commit()
+                    cursor.execute("SELECT starting_place,destination,date,time,user.name, user.email, seats_avail, trip_id, user.user_id, tripDriver FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
+                    trips=cursor.fetchall()
+                    cursor.execute("SELECT user.email, user.name FROM trips JOIN user ON user.user_id=trips.user_id WHERE trip_id='{0}'".format(tripid))
+                    trip_creator_email_data = cursor.fetchall()
+                    trip_creator_email = trip_creator_email_data[0][0]
+                    trip_creator_name = trip_creator_email_data[0][1]
+                    print(trip_creator_email)
+                    print(trip_creator_name)
+                    conn.commit()
+                    cursor.execute("SELECT user.email, user.name FROM user WHERE user_id='{0}'".format(userid))
+                    user_data = cursor.fetchall()
+                    user_email = user_data[0][0]
+                    user_name = user_data[0][1]
+                    print(user_email)
+                    print(user_name)
+
+                    msgTxt = "Passenger " + user_name + " (" + user_email + ") " + "has reserved a seat on your ride."
+                    print(sendMsg(trip_creator_email, msgTxt))
+                    session['tripId'] = tripid  
+
+                    return render_template('homepage_cleantech.html', trips=trips, testcode="Successfully Signed Up",image_file=image_file)
+        else:
+            tripid=request.args.get("tripid")
+            cursor.execute("SELECT starting_place, destination, date, time, seats_avail, user.name, user.email, user.user_id, trips.trip_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trip_id='{0}'".format(tripid))
+            information=list(cursor.fetchone())
+            cursor.execute("SELECT trip_url FROM trip_urls WHERE trip_id='{0}'".format(tripid))
+            url = cursor.fetchone()
+            if url is not None:
+                information.append(url[0])
+            else:
+                information.append("No URL")
+            print("trip info: ", information)    # prints None for Shrewsbury trip info
+            cursor.execute("SELECT passanger1, passanger2, passanger3,passanger4,passanger5,passanger6,passanger7,passanger8 FROM trips WHERE trip_id='{0}'".format(tripid))
+            passengerinfo=cursor.fetchone()
+            print("passengerinfo: ", passengerinfo)  # prints None for Shrewsbury passenger info
+            passengeridlist = [];
+            passengernamelist = [];
+            for passenger in passengerinfo:
+                if passenger != None:
+                    passengeridlist.append(passenger);
+            if len(passengeridlist) != 0:
+                for passenger in passengeridlist:
+                    cursor.execute("SELECT name FROM user WHERE user_id='{0}'".format(passenger))
+                    passengername = cursor.fetchone()[0]
+                    passengernamelist.append(passengername)
+            if information[5]==userid:
+                session['tripId'] = tripid   
+                return render_template("trip_info.html", info=information, passengerinfo=passengernamelist, passengernum = len(passengernamelist), trip=True, image_file=image_file)
+            else:
+                session['tripId'] = tripid  
+                if userid in passengerinfo:
+                    return render_template("trip_info.html", info=information, text="Cancel Reservation", image_file=image_file)
+                return render_template("trip_info.html", info=information, text="Reserve Seat", image_file=image_file)
+    else:
+
+        return redirect('http://127.0.0.1:5000/login2', code=302)
+
+@app.route('/requestInfo', methods=["GET", "POST"])
+def requestInfo():
+    #tripId = request.args.get('tripId')
+    #print(tripId)
+    tripId = session.get('tripId', None)
+    print(tripId)
+
+    if request.method == "POST":
+        requestInfoMsg = request.form.get("txtbox")
+        print(requestInfoMsg)
+
+        userid=current_user.user_id
+        cursor=conn.cursor()
+        
+        cursor.execute("SELECT user.email, user.name FROM trips JOIN user ON user.user_id=trips.user_id WHERE trip_id='{0}'".format(tripId))
+        trip_creator_email_data = cursor.fetchall()
+        print(trip_creator_email_data)
+        trip_creator_email = trip_creator_email_data[0][0]
+        trip_creator_name = trip_creator_email_data[0][1]
+        print(trip_creator_email)
+        print(trip_creator_name)
+        conn.commit()
+        
+        cursor.execute("SELECT user.email, user.name FROM user WHERE user_id='{0}'".format(userid))
+        user_data = cursor.fetchall()
+        user_email = user_data[0][0]
+        user_name = user_data[0][1]
+        print(user_email)
+        print(user_name)
+
+        msgTxt = "Passenger " + user_name + " (" + user_email + ") " + "states: " + requestInfoMsg
+        print(msgTxt)
+
+        print(sendMsg(trip_creator_email, msgTxt))
+    return render_template('request_info.html')
+
+@app.route('/reportUser/<message>', methods=["GET", "POST"])
+def reportUser(message):
+    #tripId = request.args.get('tripId')
+    #print(tripId)
+    tripId = session.get('tripId', None)
+    print(tripId)
+
+    userid=current_user.user_id
+    cursor=conn.cursor()
+    image_file = getUserProfilePicture(userid)
+    cursor.execute("SELECT starting_place,destination,date,time,user.name, user.email, seats_avail, trip_id, user.user_id, tripDriver FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
+    trips=cursor.fetchall()
+
+    # if request.method == "POST":
+    # print("Yaaaay")
+    userid=current_user.user_id
+    cursor=conn.cursor()
+    
+    # image_file = getUserProfilePicture(userid)
+    # cursor.execute("SELECT starting_place,destination,date,time,user.name, user.email, seats_avail, trip_id, user.user_id, tripDriver FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
+    # trips=cursor.fetchall()
+
+    emailRecipient = "bucleantechclub@gmail.com"
+    
+    cursor.execute("SELECT user.email, user.name FROM trips JOIN user ON user.user_id=trips.user_id WHERE trip_id='{0}'".format(tripId))
+    trip_creator_email_data = cursor.fetchall()
+    trip_creator_email = trip_creator_email_data[0][0]
+    trip_creator_name = trip_creator_email_data[0][1]
+    conn.commit()
+
+    cursor.execute("SELECT user.email, user.name FROM user WHERE user_id='{0}'".format(userid))
+    user_data = cursor.fetchall()
+    user_email = user_data[0][0]
+    user_name = user_data[0][1]
+
+    msgTxt = "Passenger " + user_name + " (" + user_email + ") " + "reports user " + trip_creator_name + " (" + trip_creator_email + "): " + message[1:-1]
+    print(msgTxt)
+
+    print(sendMsg(emailRecipient, msgTxt))
+    return render_template('homepage_cleantech.html', trips=trips, testcode="Reported User!", image_file=image_file)
+    # else:
+    #     print("nay")
+    #     return render_template('homepage_cleantech.html', trips=trips, image_file=image_file)
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/viewprofile', methods=['GET', 'POST'])
+def viewprofile():
+    cursor=conn.cursor()
+    uid=current_user.user_id
+    image_file = getUserProfilePicture(uid)
+    cursor.execute("SELECT user_id FROM user_profile WHERE user_id='{0}'".format(uid))
+    count = cursor.fetchone()
+    print(count)
+    # if count[0]:
+    if (count):
+        print("ok")
+    else:
+        default_url = 'default-profile-pic.jpg'
+        cursor.execute("INSERT INTO user_profile (user_id, profile_url) VALUES ('{0}', '{1}')".format(uid, default_url))
+    
+    cursor.execute("SELECT name, classof, email, bio FROM user WHERE user_id='{0}'".format(uid))
+    information=cursor.fetchone()
+    cursor.execute("SELECT starting_place,destination,date,time, user.name, seats_avail, trip_id, tripDriver FROM trips JOIN user ON user.user_id=trips.user_id WHERE (user.user_id ='{0}' OR trips.passanger1 ='{0}' OR trips.passanger2 ='{0}' OR trips.passanger3 ='{0}' OR trips.passanger4 ='{0}' OR trips.passanger5 ='{0}' OR trips.passanger6 ='{0}' OR trips.passanger7 ='{0}' OR trips.passanger8 ='{0}')".format(uid))
+    trips=cursor.fetchall()
+    cursor.execute("SELECT profile_url FROM user_profile WHERE user_id='{0}'".format(uid))
+    profilepic = cursor.fetchone()
+    profilepic = profilepic[0]
+    print(profilepic)
+    if request.method=='POST':
+        filename = ""
+        file = request.files["file"]
+        if file.filename == '':
+            print('No image selected for uploading')
+            #return redirect(request.url)
+        if file and allowed_file(file.filename): 
+           filename = secure_filename(file.filename)
+           file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+           cursor.execute("UPDATE user_profile SET profile_url='{0}' WHERE user_id='{1}'".format(filename, uid))
+        classyear=request.form.get("year")
+        print("classyear = ", classyear)
+        bio=request.form.get("bio")
+        print("bio = ", bio)
+        cursor.execute("UPDATE user SET classof='{0}', bio='{1}' WHERE user_id='{2}'".format(classyear, bio, uid))
+        conn.commit()
+        cursor.execute("SELECT starting_place,destination,date,time,user.name,seats_avail, trip_id, user.user_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
+        trips=cursor.fetchall()
+        return render_template('homepage_cleantech.html', trips=trips, image_file=image_file)
+    else:
+        return render_template('user_profile.html', info=information, trips = trips, profile = profilepic, image_file=image_file)
+
+
+@app.route('/display/<filename>')
+def display_image(filename):
+    return redirect(url_for('static', filename = 'uploads/' + filename), code = 301)
+
+@app.route('/viewotherprofile/<driverid>', methods=['GET'])
+def viewotherprofile(driverid):
+    uid = current_user.user_id
+    cursor=conn.cursor()
+    image_file = getUserProfilePicture(uid)
+    cursor.execute("SELECT name, classof, email, bio FROM user WHERE user_id='{0}'".format(driverid))
+    information=cursor.fetchone()
+    cursor.execute("SELECT starting_place,destination,date,time, user.name, seats_avail, trip_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE (user.user_id ='{0}' OR trips.passanger1 ='{0}' OR trips.passanger2 ='{0}' OR trips.passanger3 ='{0}' OR trips.passanger4 ='{0}' OR trips.passanger5 ='{0}' OR trips.passanger6 ='{0}' OR trips.passanger7 ='{0}' OR trips.passanger8 ='{0}')".format(uid))
+    trips = cursor.fetchall()
+    if uid==driverid:
+        return render_template('user_profile.html', info=information, trips=trips, image_file=image_file)
+    else:
+        return render_template('user_profile.html', info=information, image_file=image_file)
+
+
 
 #http://127.0.0.1:5000/
 @app.route('/')
 def begin():
-    global set_up
-    if (not set_up):
-        return redirect('http://127.0.0.1:5000/setup/', code=302)
+   # global set_up
+   # if (not set_up):
+      #  return redirect('http://127.0.0.1:5000/setup/', code=302)
         #redirects to setup page
-    if (current_user.is_authenticated):
-        return redirect('http://127.0.0.1:5000/cleantech/', code=302)
+    substring = "@bu.edu"
+    if (current_user.is_authenticated) and substring in current_user.email:
+        cursor=conn.cursor()
+        image_file = getUserProfilePicture(current_user.user_id)
+        cursor.execute("SELECT email FROM user WHERE email='{0}'".format(current_user.email))
+        list1=cursor.fetchone()
+        if list1 is None:
+            cursor.execute("INSERT INTO User (user_id,name, email) VALUES ('{0}','{1}','{2}')".format(current_user.user_id,current_user.name,current_user.email))
+        cursor.execute("SELECT user_id FROM user WHERE user_id=1")
+        list2=cursor.fetchone()
+        if list2 is None:
+            cursor.execute("INSERT INTO user (user_id, name, email) VALUES ('{0}', '{1}', '{2}')".format(1,"test","test@bu.edu"))
+            conn.commit()
+            cursor.execute("INSERT INTO trips (trip_id, user_id, starting_place, destination, seats_avail,vehicle, comments, active, tripDriver) VALUES ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}')".format(0,1,"Miami","Boston",8,"Honda","No new comments",1,current_user.name))
+        conn.commit()
+        cursor.execute("SELECT starting_place,destination,date,time,user.name,user.email,seats_avail, trip_id, user.user_id FROM trips JOIN user ON user.user_id=trips.user_id WHERE trips.active=1")
+        trips=cursor.fetchall()
+        cursor.execute("SELECT user.name, user.email FROM user")
+        ppl = cursor.fetchall()
+        print(ppl)
+        return render_template('homepage_cleantech.html',trips=trips,image_file=image_file) #redirect('http://127.0.0.1:5000/cleantech/', code=302)
+    elif (current_user.is_authenticated):
+        return redirect('http://127.0.0.1:5000/nobu', code=302)
     else:
-        return render_template('login.html')
+        return redirect('http://127.0.0.1:5000/login2', code=302)
     #redirects to setup page
+@app.route("/nobu")
+@login_required
+def nobu():
+    return render_template('nobu.html')
 
 @app.route("/logout")
 @login_required
@@ -427,4 +980,4 @@ os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 
 if __name__=='__main__':
-    app.run()
+    app.run(debug="true")

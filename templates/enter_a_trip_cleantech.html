@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>forms</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles/enter_a_trip_cleantech.css')}}">
+
+</head>
+
+
+
+<body style="background-color: #CC0000;">
+
+	<section id="navbar">
+		<div class="container-fluid">
+		  <div class="row">
+			<a class="navbar-brand col d-flex justify-content-center" href={{ url_for('home') }}>
+			  <div class="nav-element">
+				<img src="{{ url_for('static',filename='images/rhett_rides_logo.png') }}" width=180 alt="logo"/>
+			  </div>
+			</a>
+			<div class="col d-flex justify-content-center align-items-center nav-col">
+			  <div class="nav-element">
+				<a class="nav-link" href={{ url_for('begin') }}>Available Rides</a>
+			  </div>
+			</div>
+			<div class="col d-flex justify-content-center align-items-center nav-col">
+			  <div class="nav-element">
+				<a class="nav-link" href={{ url_for('myrides') }}>My Rides</a>
+			  </div>    
+			</div>
+			<div class="col d-flex justify-content-center align-items-center nav-col">
+			  <div class="nav-element">
+				<a class="nav-link" href={{ url_for('about') }}>About Us</a>
+			  </div>          
+			</div>
+			<div class="col d-flex justify-content-center align-items-center nav-col">
+			  <div class="nav-element d-flex flex-row" >
+                <div class="dropdown">
+                    <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+                      <img src={{image_file}} width=50 alt="profile picture" />
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                      <a class="dropdown-item" href={{ url_for('logout') }}>Logout</a>
+                      <a class="dropdown-item" href={{ url_for('viewprofile') }}>View Profile</a>
+                    </div>
+                  </div>
+			  </div>
+			</div>
+		  </div>
+		</div>
+	</section>
+
+	{{trip1}}
+	<center>
+	<div class="wrapper" style="color: white;">
+		<div>
+			<h1><strong>Create New Trip</strong></h1>
+		</div>
+		<div class="container">
+
+		<form action="#" method="post">
+
+				<div>
+				<label> Start State:
+				<select class="starting_point" name=state style="border-radius: 30px;" required>
+					<option value="AL">AL</option>
+					<option value="AK">AK</option>
+					<option value="AZ">AZ</option>
+					<option value="AR">AR</option>
+					<option value="CA">CA</option>
+					<option value="CO">CO</option>
+					<option value="CT">CT</option>
+					<option value="DE">DE</option>
+					<option value="FL">FL</option>
+					<option value="GA">GA</option>
+					<option value="HI">HI</option>
+					<option value="ID">ID</option>
+					<option value="IL">IL</option>
+					<option value="IN">IN</option>
+					<option value="IA">IA</option>
+					<option value="KS">KS</option>
+					<option value="KY">KY</option>
+					<option value="LA">LA</option>
+					<option value="ME">ME</option>
+					<option value="MD">MD</option>
+					<option value="MA">MA</option>
+					<option value="MI">MI</option>
+					<option value="MN">MN</option>
+					<option value="MS">MS</option>
+					<option value="MO">MO</option>
+					<option value="MT">MT</option>
+					<option value="NE">NE</option>
+					<option value="NV">NV</option>
+					<option value="NH">NH</option>
+					<option value="NJ">NJ</option>
+					<option value="NM">NM</option>
+					<option value="NY">NY</option>
+					<option value="NC">NC</option>
+					<option value="ND">ND</option>
+					<option value="OH">OH</option>
+					<option value="OK">OK</option>
+					<option value="OR">OR</option>
+					<option value="PA">PA</option>
+					<option value="RI">RI</option>
+					<option value="SC">SC</option>
+					<option value="SD">SD</option>
+					<option value="TN">TN</option>
+					<option value="TX">TX</option>
+					<option value="UT">UT</option>
+					<option value="VT">VT</option>
+					<option value="VA">VA</option>
+					<option value="WA">WA</option>
+					<option value="WV">WV</option>
+					<option value="WI">WI</option>
+					<option value="WY">WY</option>
+				</select>
+				</label>
+				<label> Start City:
+					<input class="starting_point" name=citystart type="text" placeholder="City" style="border-radius: 30px;" required>
+				</label>
+				</div>
+
+			<div>
+			<label> End City:
+				<input class="starting_point" name=citystart type="text" placeholder="City" style="border-radius: 30px;" required>
+			</label>
+
+			<label> End Address:
+				<input class="starting_point" name=addressstart type="text" placeholder="Address" style="border-radius: 30px;" required>
+			</label>
+			</div>
+
+			<div>
+			<label> Day:
+				<input class="date" name=day type="date" style="border-radius: 30px;" required>
+			</label>
+
+			<label>Time:
+				<input class="time" name="time" type="time" style="border-radius: 30px;" required>
+			</label>
+			</div>
+
+			<label> Google Maps Route URL:
+				<input class="url" name=mapurl type="" style="border-radius: 30px;">
+			</label>
+
+			<div>
+			<label> Seats:
+				<input class="vehicle" name=seats type="number" style="border-radius: 30px;" placeholder="Enter a number" required>
+			</label>
+
+			<label> Driver:
+				<select class="driver" name=Driver style="border-radius: 30px;" required>
+					<option value="me">Me</option>
+					<option value="uber">Uber</option>
+					<option value="other">Taxi</option>
+					<option value="other">Other</option>
+				</select>
+			</label>
+			</div>
+
+			<label> Description/Comments:<br>
+				<input class="Comments" name=comment type="text" style="border-radius: 30px; height: 100px; width: 1000px;">
+			</label>
+
+			<center>
+				<input type="submit" style="border-radius: 30px;" value="Create trip"/>
+				<a href={{ url_for('myrides') }}><button type="button" style="border-radius: 30px;">Cancel</button></a>
+			</center>
+
+		</form>
+	</div>
+</center>
+
+	</body>
+</html>

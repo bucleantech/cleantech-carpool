@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/trip_info.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    
+    <style>
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .center-textBox {
+            position: relative;
+            display: block;
+            margin : 0 auto;
+            width: 500px;
+            height: 300px;
+        }
+        .center-btn{
+            position: relative;
+            margin : 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <section id="navbar">
+        <div class="container-fluid">
+          <div class="row">
+            <a class="navbar-brand col d-flex justify-content-center" href={{ url_for('home') }}>
+              <div class="nav-element">
+                <img src="{{ url_for('static',filename='images/rhett_rides_logo.png') }}" width=180 alt="logo"/>
+              </div>
+            </a>
+            <div class="col d-flex justify-content-center align-items-center nav-col">
+              <div class="nav-element">
+                <a class="nav-link" href={{ url_for('begin') }}>Available Rides</a>
+              </div>
+            </div>
+            <div class="col d-flex justify-content-center align-items-center nav-col">
+              <div class="nav-element">
+                <a class="nav-link" href={{ url_for('myrides') }}>My Rides</a>
+              </div>    
+            </div>
+            <div class="col d-flex justify-content-center align-items-center nav-col">
+              <div class="nav-element">
+                <a class="nav-link" href={{ url_for('about') }}>About Us</a>
+              </div>          
+            </div>
+            <div class="col d-flex justify-content-center align-items-center nav-col">
+              <div class="nav-element d-flex flex-row" >
+                <a class="nav-link" href={{ url_for('logout') }}>Logout</a>
+                <img src="{{ url_for('static', filename='images/account.png')}}" width=50 alt="profile picture" />
+              </div>
+            </div>
+          </div>
+        </div>
+    </section>
+    <h1><b><center>Request Info</center></b></h1>
+
+    <form action="/requestInfo", method="POST">
+        <div>
+            <h3 class="center">Message:</h3>
+            <textarea class="center-textBox" name="txtbox" type="submit"></textarea><br>
+            <center>
+                <button type="submit" class="center-btn">Submit</button>
+                <a href={{ url_for('begin') }} style="text-decoration: none;"><button type="button" class="center-btn">Back</button></a>
+            </center>
+            
+        </div>
+    </form>
+    
+</body>
+</html>
