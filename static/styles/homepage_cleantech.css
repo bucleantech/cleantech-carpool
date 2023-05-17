@@ -1,0 +1,126 @@
+h1 {
+	width: 100%;
+	text-align: center;
+	margin: 50px 0;	
+}
+
+.link_to_trip {
+	color: black;
+}
+
+.trips-table {
+	width: 90%;
+    font-size: 1.2em;
+    font-family: sans-serif;
+	border-collapse: separate;
+	border-spacing: 15px;
+  	border: none
+
+}
+
+.main {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+
+}
+
+/* departure, starting from, going to, etc. boxes */
+
+.trips-table td, th {
+	padding: 10px;	
+}
+
+.trips-table th {
+    text-align: center;
+    background-color: white;
+    color: black;
+}
+
+.trips-table th {
+	border-right: 2px solid black;
+}
+.trips-table th:last-child {
+	border-right: none;
+}
+
+.info-table {
+	width: 90vw;
+	color: black;
+	text-align: center;
+	margin-bottom: 100px;
+}
+
+.trips-table th:nth-child(1),
+.info span:nth-child(1) {
+  width: 20%;
+}
+.trips-table th:nth-child(2),
+.info span:nth-child(2) {
+  width: 20%;
+}
+.trips-table th:nth-child(3),
+.info span:nth-child(3) {
+  width: 20%;
+}
+.trips-table th:nth-child(4),
+.info span:nth-child(4) {
+  width: 20%;
+}
+.trips-table th:nth-child(5),
+.info span:nth-child(5) {
+  width: 20%;
+}
+
+/* buttons */
+.info {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 1em;
+
+	width: 90vw;
+	border-radius: 2em;
+	margin-bottom: 20px;
+	box-shadow: 0px 5px 7px 1px #888888;
+	
+	color: black;
+	text-decoration: none; 
+	text-align: center;
+	justify-content: center;	
+	
+}
+
+span {
+	width: 100%;
+	text-align: center;
+}
+
+.info:hover {
+	background-color: #65B360;
+	color: black;
+	text-decoration: none;
+}
+  
+a:hover {
+	text-decoration: none;
+}
+
+span {
+	flex-basis: 20%;
+}
+  
+footer {
+	display: flex;
+	align-items: center;
+	justify-content: center; 
+	height: 70px; 
+	background-color: #d00000;
+  }
+  
+.footer-container {
+	margin-top: 10px;
+	text-align: center;
+	color: white;
+}

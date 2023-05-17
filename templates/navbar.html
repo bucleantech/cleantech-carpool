@@ -1,0 +1,64 @@
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/navbar.css') }}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('.burger').click(function() {
+            $('.burger-content').toggleClass('hidden');
+        });
+    });
+</script>
+
+<section id="navbar" onload="toggleClass('hidden')">
+    <nav class="container-fluid">
+      <div class="row">
+        <a class="navbar-brand col d-flex justify-content-center" href={{ url_for('home') }}>
+          <div class="nav-element">
+            <img src="{{ url_for('static',filename='images/rhett_rides_logo.png') }}" width=180 alt="logo"/>
+          </div>
+        </a>
+
+        <a class="nav-link col nav-col nav-element" href={{ url_for('begin') }}>Available Rides</a>
+
+        <a class="nav-link col nav-col nav-element" href={{ url_for('myrides') }}>My Rides</a>
+
+        <a class="nav-link col nav-col nav-element" href={{ url_for('about') }}>About Us</a>
+
+        <div class="col d-flex justify-content-center align-items-center nav-col">
+          <div class="nav-element d-flex flex-row" >
+            <div class="dropdown">
+                <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+                  <img src={{image_file}} width=50 alt="profile picture" />
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" href={{ url_for('logout') }}>Logout</a>
+                  <a class="dropdown-item" href={{ url_for('viewprofile') }}>View Profile</a>
+                </div>
+              </div>
+          </div>
+        </div>
+
+        <div class="burger-container">
+            <button class="burger"> 
+                <span class="line"></span> 
+                <span class="line"></span> 
+                <span class="line"></span>
+            </button>
+          </div>
+      </div>
+    </nav>
+
+    <div class="burger-content hidden">
+        <a class="patty patty1" href={{ url_for('begin') }}>Available Rides</a>
+        <a class="patty" href={{ url_for('myrides') }}>My Rides</a>
+        <a class="patty" href={{ url_for('about') }}>About Us</a>
+        <a class="patty" href={{ url_for('viewprofile') }}>View Profile</a>
+        <a class="patty" href={{ url_for('logout') }}>Logout</a>
+
+    </div>
+      
+</section>

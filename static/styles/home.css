@@ -1,0 +1,63 @@
+#navbar {
+    background: #FFFFFF;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.nav-col {
+    border: 1px solid #E5E5E5;
+    box-sizing: border-box;
+    border-radius: 0px;
+}
+
+.nav-link {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 28px;
+    color: #000000;
+}
+
+.xline {
+    list-style: none;
+    text-decoration: none;
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    justify-content: flex-start;
+    /* controls height and width location of lessons */
+    grid-gap: 50px;
+}
+
+.container {
+    width: 400px;
+    height: 300px;
+    box-shadow: 0px 5px 7px 1px #888888;
+    -moz-box-shadow: 0 0 3px grey;
+    border-radius: 40px;
+    justify-content: center;
+    text-align: center;
+}
+
+.container-text {
+    margin-top: 70px;
+}
+
+.page-container {
+    padding: 50px;
+    width: 100%;
+    height: 100%
+
+}
+
+.top-half {
+    width: 75%;
+    height: 100%
+}
+
+.footer-text {
+    color:white;
+}
+
+.footer-container {
+    background-color: #d00000;
+    width: 100%; 
+}

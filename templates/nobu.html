@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>No BU</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+
+	<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #d00000;">
+  <a class="navbar-brand" href="#"><img src="{{ url_for('static',filename='images/rhett_rides_logo.png') }}" height=50 width=70 alt="logo"/></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href={{ url_for('begin') }}>Home<span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href={{ url_for('about') }}>About</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href={{ url_for('example') }}>Example</a>
+      </li> 
+      <li class="nav-item active">
+        <a class="nav-link" href={{ url_for('enteratrip') }}>Enter a Trip</a>
+      </li> <!--
+      <li class="nav-item active">
+        <a class="nav-link" href={{ url_for('login2') }}>Login/Sign Up</a>
+      </li> -->
+      <li class="nav-item active">
+        <a class="nav-link" href={{ url_for('logout') }}>Logout</a>
+      </li>
+    </ul>
+      <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Sign Up/Login</button>   
+  </div>
+</nav>
+
+	<p>You must be signed in with a BU account to access this page. Please log out of your email account and sign back in with your BU email.</p>
+
+</body>
+</html>

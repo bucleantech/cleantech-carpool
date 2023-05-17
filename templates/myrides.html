@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>My Rides</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles/trip_info.css')}}">
+</head>
+
+<body>
+    {% include 'navbar.html' %}
+    <h1> <b>My Rides</b> </h1>
+
+{% if trips %}
+    <div class="main">
+​
+        <div class="center">
+            <table class = "trips-table">
+                <thead>
+                    <tr>
+                    <th>You have hosted a total of {{countRides}} rides and are making a difference!</th>
+                    <th> <a href='/enteratrip' style="color: black">Start a new ride</a></th>
+                </tr>
+                </thead>
+            </table>
+
+            <table class = "trips-table">
+                <thead>
+                    <tr>
+                    <th>Departure</th>
+                    <th>Starting From...</th>
+                    <th>Going to...</th>
+                    <th>Seats Available</th>
+                </tr>
+                </thead>
+            </table>
+            
+            <div class="tripinfo-container">
+                <div class="tripinfo-table">
+                <!-- {% if trips %} -->
+                    {% for trip in trips %}
+                    <div class="tripinfo">
+                        <span>{{trip[2]}} ~ {{trip[3]}}</span>
+                        <span>{{trip[0]}}</span>
+                        <span>{{trip[1]}}</span>
+                        <span>{{trip[5]}}</span>
+                    </div>
+                    {% endfor %}
+                <!-- {% endif %} -->
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+</body>
+</html>

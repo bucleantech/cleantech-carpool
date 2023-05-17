@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>About</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles/cleantech_about.css')}}">
+</head>
+<body>
+  {% include 'navbar.html' %}
+
+  <div class="container">
+    <div class="row mt-5 mb-3">
+      <div class="col d-flex justify-content-center">
+        <h1>About RhettRides</h1>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col d-flex justify-content-center">
+        <img class="divider" src="{{url_for('static', filename='images/Line 25.png')}}" alt="line"/>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col d-flex justify-content-end">
+        <img src="{{url_for('static', filename='images/cleantech_logo.png')}}" alt="cleanTech Logo"  width=180 height=128/>
+      </div>
+      <div class="col d-flex justify-content-start">
+        <img src="{{url_for('static', filename='images/rhett_rides_logo_transparent.png')}}" alt="rhettRides Logo"  height=128/>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col d-flex justify-content-center">
+        <div class="sub-title d-flex justify-content-center align-items-center w-75">
+          <p class="my-3 mx-5">Where sustainability meets student needs, Rhett Rides was born.</p>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="col d-flex justify-content-center">
+        <img class="vector-routes" src="{{url_for('static', filename='images/vector_routes.png')}}" alt="rhettRides Logo"/>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col d-flex justify-content-center align-items-center w-100">
+        <div class="description d-flex justify-content-center">
+          <p class="description-text my-3">Commuting home has never been a unique experience to members of the Boston University community. Traveling by car is one of the most convenient modes of travel for students making their way to and from campus. It is also, however, one of the most environmentally unfriendly.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mb-5">
+      <div class="col d-flex justify-content-center align-items-center w-100">
+        <div class="description d-flex justify-content-center">
+          <p class="description-text my-3">To reduce our carbon footprint by mitigating the amount of unnecessary vehicular travel, Rhett Rides provides BU students a platform for finding peers that are driving to the same cities and towns as them so that they can carpool, sharing the environmental expense of the ride.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+  </body>
+  
+  <footer>
+    <div class="footer-container">
+      <p>Boston University CleanTech Club</p>
+    </div>
+  </footer>
+
+</html>

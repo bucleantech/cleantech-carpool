@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Profile Page</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles/trip_info.css')}}">
+</head>
+
+<body>
+    {% include 'navbar.html' %}
+    <h1> <b>Profile Page</b> </h1>
+​
+{% if trips %}
+    <div class="main">
+        <div class="flex-child info">
+            <form method="POST" enctype="multipart/form-data">
+                <div class="xline">
+                    <div>
+                        <div class = "photo-container ml-4" id = "photo-displayed" name = "photo-displayed">
+                            <img src="{{ url_for('static', filename='uploads/' + profile) }}" width="350" height="350">  
+                        </div>
+                        <div>
+                            <input class = "ml-4" type ="file" id = "file" name = "file" accept="image/*">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="info-container">
+                            <h1>College <b><input type="text" id="college" name="college" value="Boston University"}><br></b> Class of <b><input type="text" id="year" name="year" value={{info[1]}}><br></b></h1>
+                        </div>
+                        <div class="email-container">
+                            <h1>Email <b><input type="text" id="email" name="email" value={{info[2]}}><br></b></h1>
+                        </div>
+                        <div class="bio-container">
+                            <h1>Bio: <b><input type="text" id="bio" name="bio" value={{info[3]}}><br></b></h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <input type="submit" value="Edit">
+                    <a href={{ url_for('begin') }}><button type="button">Back</button></a>
+                </div>
+
+                
+                <!-- <script>
+                    const imageInput = document.querySelector("#image_input")
+                    var uploadedImage = "";
+                    imageInput.addEventListener("change", function(){
+                        const reader = new FileReader();
+                        reader.addEventListener("load", () => {
+                            uploadedImage = reader.result;
+                            console.log(uploadedImage)
+                            document.querySelector("#photo-displayed").style.backgroundImage = `url(${uploadedImage})`
+                        });
+                        reader.readAsDataURL(this.files[0])
+                    })
+                </script> -->
+                
+            </form>
+        </div>
+
+        <div class="xline mt-5" >
+            <div class="container" style="width: 275px">
+                <div class="container-text">
+                    <h4 class="mb-4">This Week</h4>
+                    <h2 style="color: green;" class="mb-4"></h2>
+                    <h4>Rides Shared</h4>
+                    <h5>(Hosted)</h5>
+                </div>
+              </div>
+              <div class="container" style="width: 275px">
+                  <div class="container-text">
+                      <h4 class="mb-4">This Month</h4>
+                      <h2 style="color: green;" class="mb-4"></h2>
+                      <h4>Rides Shared</h4>
+                      <h5>(Hosted)</h5>
+                  </div>
+              </div>
+              <div class="container" style="width: 275px">
+                  <div class="container-text">
+                      <h4 class="mb-4">This Year</h4>
+                      <h2 style="color: green;" class="mb-4">{{info[4]}}</h2>
+                      <h4>Rides Shared</h4>
+                      <h5>(Hosted)</h5>
+                  </div>
+              </div>
+              <div class="container" style="width: 275px">
+                <div class="container-text">
+                    <h4 class="mb-4">All Time</h4>
+                    <h2 style="color: green;" class="mb-4">{{info[4]}}</h2>
+                    <h4>Rides Shared</h4>
+                    <h5>(Hosted)</h5>
+                </div>
+            </div>
+        </div>
+​
+        <div class="center">
+            <table class = "trips-table">
+                <thead>
+                <!-- <tr>
+                    <th colspan="4">Upcoming Trips</th>
+                </tr> -->
+                    <tr>
+                    <th>Most Recent</th>
+                    <th>All Point A's</th>
+                    <th>All Point B's</th>
+                    <th>All Drivers</th>
+                </tr>
+                </thead>
+            </table>
+            
+            <div class="tripinfo-container">
+                <div class="tripinfo-table">
+                <!-- {% if trips %} -->
+                    {% for trip in trips %}
+                    <div class="tripinfo">
+                        <span>{{trip[2]}} ~ {{trip[3]}}</span>
+                        <span>{{trip[0]}}</span>
+                        <span>{{trip[1]}}</span>
+                        <span>{{trip[4]}}</span>
+                    </div>
+                    {% endfor %}
+                <!-- {% endif %} -->
+                </div>
+            </div>
+        </div>
+    </div>
+{% else %}
+<div></div>
+{% endif %}
+</body>
+</html>
