@@ -144,45 +144,8 @@ h1{
 </head>
 
 <body onload="initMap()">
-  <section id="navbar">
-		<div class="container-fluid">
-		  <div class="row">
-			<a class="navbar-brand col d-flex justify-content-center" href={{ url_for('home') }}>
-			  <div class="nav-element">
-				<img src="{{ url_for('static',filename='images/rhett_rides_logo.png') }}" width=180 alt="logo"/>
-			  </div>
-			</a>
-			<div class="col d-flex justify-content-center align-items-center nav-col">
-			  <div class="nav-element">
-				<a class="nav-link" href={{ url_for('begin') }}>Available Rides</a>
-			  </div>
-			</div>
-			<div class="col d-flex justify-content-center align-items-center nav-col">
-			  <div class="nav-element">
-				<a class="nav-link" href={{ url_for('myrides') }}>My Rides</a>
-			  </div>    
-			</div>
-			<div class="col d-flex justify-content-center align-items-center nav-col">
-			  <div class="nav-element">
-				<a class="nav-link" href={{ url_for('about') }}>About Us</a>
-			  </div>          
-			</div>
-			<div class="col d-flex justify-content-center align-items-center nav-col">
-			  <div class="nav-element d-flex flex-row" >
-                <div class="dropdown">
-                    <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
-                      <img src={{image_file}} width=50 alt="profile picture" />
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                      <a class="dropdown-item" href={{ url_for('logout') }}>Logout</a>
-                      <a class="dropdown-item" href={{ url_for('viewprofile') }}>View Profile</a>
-                    </div>
-                  </div>
-			  </div>
-			</div>
-		  </div>
-		</div>
-	</section>
+  {% include 'navbar.html' %}
+
 
     <div class="header">
         <h1> <b>Available Rides</b> </h1>
